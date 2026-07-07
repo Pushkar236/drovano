@@ -1,8 +1,9 @@
 import { Button, Input } from '@drovano/ui';
 import { useNavigate } from '@tanstack/react-router';
-import { useState, type FormEvent } from 'react';
+import { useState, type SyntheticEvent } from 'react';
 
 import { authClient } from '../lib/auth-client.js';
+import { readFormValue } from '../lib/form.js';
 
 type Mode = 'sign-in' | 'sign-up';
 
@@ -13,12 +14,11 @@ export function LoginPage() {
   const [error, setError] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = (event: SyntheticEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const email = String(form.get('email') ?? '');
-    const password = String(form.get('password') ?? '');
-    const name = String(form.get('name') ?? '');
+    const email = readFormValue(event.currentTarget, 'email');
+    const password = readFormValue(event.currentTarget, 'password');
+    const name = readFormValue(event.currentTarget, 'name');
 
     setSubmitting(true);
     setError(undefined);

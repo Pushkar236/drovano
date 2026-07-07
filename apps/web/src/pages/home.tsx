@@ -1,7 +1,8 @@
 import { Button, Input } from '@drovano/ui';
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, type SyntheticEvent } from 'react';
 
 import { authClient } from '../lib/auth-client.js';
+import { readFormValue } from '../lib/form.js';
 
 function slugify(name: string): string {
   return `${name
@@ -32,9 +33,9 @@ export function HomePage() {
     }
   }, [activeOrganizationId, organizations]);
 
-  const createOrganization = (event: FormEvent<HTMLFormElement>): void => {
+  const createOrganization = (event: SyntheticEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const name = String(new FormData(event.currentTarget).get('name') ?? '').trim();
+    const name = readFormValue(event.currentTarget, 'name').trim();
     if (name === '') return;
     setCreating(true);
     setError(undefined);

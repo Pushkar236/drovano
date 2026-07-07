@@ -1,8 +1,9 @@
 import { Button, Input } from '@drovano/ui';
 import { useLiveQuery } from '@tanstack/react-db';
-import { useState, type FormEvent } from 'react';
+import { useState, type SyntheticEvent } from 'react';
 
 import { workspacesCollection } from '../data/workspaces.js';
+import { readFormValue } from '../lib/form.js';
 
 /**
  * Workspaces — the first real data surface, demonstrating the blessed
@@ -16,9 +17,9 @@ export function WorkspacesPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [renameError, setRenameError] = useState<string | undefined>(undefined);
 
-  const submitRename = (event: FormEvent<HTMLFormElement>, workspaceId: string): void => {
+  const submitRename = (event: SyntheticEvent<HTMLFormElement>, workspaceId: string): void => {
     event.preventDefault();
-    const name = String(new FormData(event.currentTarget).get('name') ?? '').trim();
+    const name = readFormValue(event.currentTarget, 'name').trim();
     setEditingId(null);
     if (name === '') return;
     setRenameError(undefined);
