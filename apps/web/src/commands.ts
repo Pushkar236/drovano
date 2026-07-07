@@ -41,6 +41,14 @@ export const commands: Command[] = [
     },
   },
   {
+    id: 'nav.pipelines',
+    name: 'Go to Pipelines',
+    group: 'navigation',
+    run: (context) => {
+      context.navigate('/lists');
+    },
+  },
+  {
     id: 'nav.workspaces',
     name: 'Go to Workspaces',
     group: 'navigation',

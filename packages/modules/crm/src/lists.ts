@@ -10,7 +10,7 @@ import {
 } from '@drovano/db';
 import { and, asc, eq, gt, inArray, isNull } from 'drizzle-orm';
 
-import type { Actor } from './definitions.js';
+import { createAttributeDefinition, type Actor } from './definitions.js';
 import { CrmError } from './errors.js';
 import { hydrateRecordValues } from './records.js';
 import { fromValueColumns, toValueColumns, type AttributeValue } from './values.js';
@@ -47,6 +47,40 @@ export async function createList(tx: TenantTransaction, input: CreateListInput) 
     detail: { objectId: input.objectId, name: input.name },
   });
   return created;
+}
+
+export interface CreatePipelineInput {
+  tenantId: string;
+  objectId: string;
+  name: string;
+  /** Lane order = option order. */
+  stages: string[];
+  actor: Actor;
+}
+
+/**
+ * A pipeline is a list whose entries carry a `stage` select attribute
+ * (data-model.md: pipelines are lists with stage semantics). Stage lives
+ * on the ENTRY plane — the record never learns its pipeline position.
+ */
+export async function createPipeline(tx: TenantTransaction, input: CreatePipelineInput) {
+  const list = await createList(tx, {
+    tenantId: input.tenantId,
+    objectId: input.objectId,
+    name: input.name,
+    actor: input.actor,
+  });
+  const stageAttribute = await createAttributeDefinition(tx, {
+    tenantId: input.tenantId,
+    listId: list.id,
+    key: 'stage',
+    name: 'Stage',
+    type: 'select',
+    config: { options: input.stages },
+    system: true,
+    actor: input.actor,
+  });
+  return { list, stageAttribute };
 }
 
 export interface AddRecordToListInput {

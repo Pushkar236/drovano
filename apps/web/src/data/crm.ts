@@ -103,6 +103,8 @@ export interface AttributeSummary {
   key: string;
   name: string;
   type: string;
+  /** Type-specific settings (select options, relation target, …). */
+  config?: unknown;
   system: boolean;
   archived: boolean;
 }

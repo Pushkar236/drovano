@@ -1,6 +1,7 @@
 import {
   addRecordToList,
   createList,
+  createPipeline,
   createRecord,
   createSavedView,
   CrmError,
@@ -80,6 +81,7 @@ export const crmRouter = router({
             key: attributeDefinitions.key,
             name: attributeDefinitions.name,
             type: attributeDefinitions.type,
+            config: attributeDefinitions.config,
             system: attributeDefinitions.system,
             archived: attributeDefinitions.archived,
           })
@@ -172,6 +174,21 @@ export const crmRouter = router({
         const actor = authorize(ctx, { type: 'list.create' });
         return withTenant(ctx.db, ctx.tenantId, (tx) =>
           createList(tx, { tenantId: ctx.tenantId, ...input, actor }).catch(toTrpcError),
+        );
+      }),
+
+    createPipeline: tenantProcedure
+      .input(
+        z.object({
+          objectId: z.uuid(),
+          name: z.string().trim().min(1).max(80),
+          stages: z.array(z.string().trim().min(1).max(64)).min(2).max(20),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        const actor = authorize(ctx, { type: 'list.create' });
+        return withTenant(ctx.db, ctx.tenantId, (tx) =>
+          createPipeline(tx, { tenantId: ctx.tenantId, ...input, actor }).catch(toTrpcError),
         );
       }),
 

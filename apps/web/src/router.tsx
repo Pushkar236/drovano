@@ -8,6 +8,8 @@ import {
 
 import { HomePage } from './pages/home.js';
 import { LoginPage } from './pages/login.js';
+import { PipelineBoardPage } from './pages/pipeline-board.js';
+import { PipelinesPage } from './pages/pipelines.js';
 import { RecordsPage } from './pages/records.js';
 import { SettingsPage } from './pages/settings.js';
 import { WorkspacesPage } from './pages/workspaces.js';
@@ -43,6 +45,20 @@ const recordsRoute = createRoute({
   head: () => ({ meta: [{ title: 'Records · Drovano' }] }),
 });
 
+const pipelinesRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/lists',
+  component: PipelinesPage,
+  head: () => ({ meta: [{ title: 'Pipelines · Drovano' }] }),
+});
+
+const pipelineBoardRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/lists/$listId',
+  component: PipelineBoardPage,
+  head: () => ({ meta: [{ title: 'Pipeline · Drovano' }] }),
+});
+
 const workspacesRoute = createRoute({
   getParentRoute: () => appRoute,
   path: '/workspaces',
@@ -59,7 +75,14 @@ const settingsRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   loginRoute,
-  appRoute.addChildren([homeRoute, recordsRoute, workspacesRoute, settingsRoute]),
+  appRoute.addChildren([
+    homeRoute,
+    recordsRoute,
+    pipelinesRoute,
+    pipelineBoardRoute,
+    workspacesRoute,
+    settingsRoute,
+  ]),
 ]);
 
 /** Router factory: tests pass a memory history; the app uses the browser's. */

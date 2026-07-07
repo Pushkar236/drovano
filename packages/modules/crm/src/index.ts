@@ -21,6 +21,8 @@ export {
 export {
   addRecordToList,
   createList,
+  createPipeline,
+  type CreatePipelineInput,
   listListEntries,
   removeRecordFromList,
   setListEntryValues,

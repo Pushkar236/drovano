@@ -133,6 +133,31 @@ describe('crm tRPC surface (real database, real sessions)', () => {
     expect(entries.items.map((item) => item.recordId)).toContain(record.id);
   });
 
+  it('pipelines: createPipeline seeds the stage attribute; moves ride setEntryValues', async () => {
+    const record = await ownerCaller.crm.records.create({
+      objectId: companyObjectId,
+      values: { name: 'Board Co' },
+    });
+    const { list, stageAttribute } = await ownerCaller.crm.lists.createPipeline({
+      objectId: companyObjectId,
+      name: 'Sales pipeline',
+      stages: ['Lead', 'Won'],
+    });
+    expect(stageAttribute.type).toBe('select');
+    expect(stageAttribute.config).toEqual({ options: ['Lead', 'Won'] });
+
+    const entry = await ownerCaller.crm.lists.addRecord({ listId: list.id, recordId: record.id });
+    await ownerCaller.crm.lists.setEntryValues({
+      entryId: entry.id,
+      values: { stage: 'Won' },
+    });
+    const entries = await ownerCaller.crm.lists.entries({ listId: list.id });
+    expect(entries.items[0]?.entryValues).toEqual({ stage: 'Won' });
+    // Entity truth untouched (the separation, through the API).
+    const fetched = await ownerCaller.crm.records.get({ recordId: record.id });
+    expect(fetched.values).toEqual({ name: 'Board Co' });
+  });
+
   it('members can work records but not delete them or manage objects', async () => {
     const memberHeaders = await signUp('crm-member@example.com', 'Member');
     const session = await auth.api.getSession({ headers: memberHeaders });

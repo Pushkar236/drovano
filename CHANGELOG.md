@@ -10,6 +10,16 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Pipelines & kanban (TASK-0026): `createPipeline` (list +
+  system `stage` select attribute in one call; API + service + tests);
+  `/lists` index with the create-pipeline flow; `/lists/$listId` board —
+  lanes from the stage options plus a No-stage lane, cards moved through
+  an explicit menu (the non-drag path ships first per DESIGN_SYSTEM rule 10) with optimistic entry-plane updates that roll back on refusal;
+  entries collection per list; attribute `config` now exposed by
+  `crm.objects`. Entity truth verified untouched by stage moves through
+  the API. 22 web + 24 api tests green; bundle 230/240 KiB (route
+  splitting is next M2 UI touch).
+
 - 2026-07-07 — Records grid (TASK-0025 complete): `/o/$objectKey` surface
   with object tabs, driven by live definitions; virtualized rows
   (@tanstack/react-virtual) at 32px dense rhythm; roving-focus keyboard

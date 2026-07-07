@@ -154,6 +154,15 @@ export function Shell() {
           </li>
           <li>
             <Link
+              to="/lists"
+              className={navLinkClass(pathname.startsWith('/lists'))}
+              aria-current={pathname.startsWith('/lists') ? 'page' : undefined}
+            >
+              {railCollapsed ? 'P' : 'Pipelines'}
+            </Link>
+          </li>
+          <li>
+            <Link
               to="/workspaces"
               className={navLinkClass(pathname === '/workspaces')}
               aria-current={pathname === '/workspaces' ? 'page' : undefined}

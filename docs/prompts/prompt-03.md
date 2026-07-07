@@ -6,6 +6,13 @@
 
 ## Progress log
 
+- **Session 1, kanban (2026-07-07):** TASK-0026 done. M2 at 6/11.
+  **Bundle is at 230/240 KiB — do route-level code splitting
+  (lazy routes) as the FIRST step of the next web change.** Next:
+  TASK-0027 (record timeline + peek panel — v1 source: audit_log rows
+  filtered by resourceId=recordId via a crm.records.activity procedure;
+  peek panel = the shell's context panel fed by a selected record).
+
 - **Session 1, grid (2026-07-07):** TASK-0025 fully done (engine +
   surface + grid). M2 at 5/11. Next: **TASK-0026 (kanban + pipelines)** —
   lanes from a list's select-typed attribute (groupBy in ViewConfig);
