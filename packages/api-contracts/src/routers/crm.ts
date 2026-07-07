@@ -6,8 +6,10 @@ import {
   createSavedView,
   CrmError,
   getRecord,
+  importRecords,
   listListEntries,
   listRecordActivity,
+  MAX_ROWS_PER_CALL,
   queryRecords,
   removeRecordFromList,
   seedStandardObjects,
@@ -156,6 +158,34 @@ export const crmRouter = router({
           updateRecordValues(tx, { tenantId: ctx.tenantId, ...input, actor }).catch(toTrpcError),
         );
         await ctx.invalidation.publish(ctx.tenantId, { resource: 'records' });
+      }),
+
+    import: tenantProcedure
+      .input(
+        z.object({
+          objectId: z.uuid(),
+          rows: z.array(ValuesSchema).min(1).max(MAX_ROWS_PER_CALL),
+          dedupe: z
+            .object({
+              attributeKey: z.string().min(1),
+              mode: z.enum(['skip', 'update']),
+            })
+            .optional(),
+          dryRun: z.boolean().optional(),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        const actor = authorize(ctx, { type: 'record.create' });
+        if (input.dedupe?.mode === 'update') {
+          authorize(ctx, { type: 'record.update' });
+        }
+        const result = await withTenant(ctx.db, ctx.tenantId, (tx) =>
+          importRecords(tx, { tenantId: ctx.tenantId, ...input, actor }).catch(toTrpcError),
+        );
+        if (!input.dryRun && (result.created > 0 || result.updated > 0)) {
+          await ctx.invalidation.publish(ctx.tenantId, { resource: 'records' });
+        }
+        return result;
       }),
 
     delete: tenantProcedure

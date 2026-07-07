@@ -42,6 +42,13 @@ const recordsRoute = createRoute({
   head: () => ({ meta: [{ title: 'Records · Drovano' }] }),
 });
 
+const importRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/o/$objectKey/import',
+  component: lazyRouteComponent(() => import('./pages/import.js'), 'ImportPage'),
+  head: () => ({ meta: [{ title: 'Import · Drovano' }] }),
+});
+
 const pipelinesRoute = createRoute({
   getParentRoute: () => appRoute,
   path: '/lists',
@@ -75,6 +82,7 @@ const routeTree = rootRoute.addChildren([
   appRoute.addChildren([
     homeRoute,
     recordsRoute,
+    importRoute,
     pipelinesRoute,
     pipelineBoardRoute,
     workspacesRoute,

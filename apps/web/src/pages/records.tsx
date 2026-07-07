@@ -97,9 +97,18 @@ export function RecordsPage() {
         <h1 tabIndex={-1} className="text-2xl font-semibold tracking-tight text-text-primary">
           {object.name} records
         </h1>
-        <Button variant="primary" size="sm" onClick={createRecord}>
-          New {object.name.toLowerCase()}
-        </Button>
+        <div className="flex items-center gap-3">
+          <Link
+            to="/o/$objectKey/import"
+            params={{ objectKey }}
+            className="text-base text-text-secondary underline-offset-2 hover:text-text-primary hover:underline"
+          >
+            Import CSV
+          </Link>
+          <Button variant="primary" size="sm" onClick={createRecord}>
+            New {object.name.toLowerCase()}
+          </Button>
+        </div>
       </div>
       <nav aria-label="Objects" className="mt-3 flex gap-1 border-b border-border-hairline pb-2">
         {objects.map((candidate) => (

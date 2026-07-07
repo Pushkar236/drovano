@@ -175,6 +175,38 @@ describe('crm tRPC surface (real database, real sessions)', () => {
     expect(activity.items.every((entry) => entry.actorKind === 'human')).toBe(true);
   });
 
+  it('import: dry run writes nothing; real run creates and dedupes through the API', async () => {
+    const rows = [
+      { name: 'Csv Co', domain: 'https://csv.example' },
+      { name: 'Csv Co Again', domain: 'https://csv.example' },
+    ];
+    const dry = await ownerCaller.crm.records.import({
+      objectId: companyObjectId,
+      rows,
+      dedupe: { attributeKey: 'domain', mode: 'skip' },
+      dryRun: true,
+    });
+    expect(dry).toMatchObject({ created: 1, skipped: 1, updated: 0, errors: [] });
+
+    const real = await ownerCaller.crm.records.import({
+      objectId: companyObjectId,
+      rows,
+      dedupe: { attributeKey: 'domain', mode: 'skip' },
+    });
+    expect(real).toMatchObject({ created: 1, skipped: 1 });
+
+    const found = await ownerCaller.crm.records.query({
+      objectId: companyObjectId,
+      config: {
+        filters: [{ attributeKey: 'domain', op: 'eq', value: 'https://csv.example' }],
+        sorts: [],
+        columns: [],
+      },
+    });
+    expect(found.items).toHaveLength(1);
+    expect(found.items[0]?.values.name).toBe('Csv Co');
+  });
+
   it('members can work records but not delete them or manage objects', async () => {
     const memberHeaders = await signUp('crm-member@example.com', 'Member');
     const session = await auth.api.getSession({ headers: memberHeaders });

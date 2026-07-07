@@ -10,6 +10,18 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — CSV import (TASK-0028): `crm.records.import` takes
+  structured rows (client parses + maps columns) so validation, dedupe,
+  and writes go through the SAME services as manual entry — no bulk side
+  door around audit or relation checks; per-row errors with indexes,
+  dedupe by a text-like attribute (skip or update, in-file duplicates
+  handled), dry-run classifies without writing, 500-row calls batched
+  client-side, one `record.import` audit summary per call. Import page
+  at `/o/$objectKey/import`: owned RFC 4180 parser (quoted fields,
+  embedded commas/newlines/escaped quotes — unit-tested, no dependency),
+  header auto-mapping, dedupe picker, dry-run preview, per-row error
+  listing. 29 web + 26 api + 29 crm tests green.
+
 - 2026-07-07 — Record timeline & peek panel (TASK-0027): the audit trail
   IS the timeline — `crm.records.activity` reads the same transactional
   audit rows every mutation already writes (no second write path to

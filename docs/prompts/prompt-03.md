@@ -6,6 +6,19 @@
 
 ## Progress log
 
+- **Session 1, csv import (2026-07-07):** TASK-0028 done. M2 at 8/11.
+  Next: **TASK-0029 (public API v1 read paths + webhook skeleton,
+  ADR-0005)** — REST read endpoints on the Hono app (`/v1/objects`,
+  `/v1/records?object=`, `/v1/records/:id`) deriving schemas from the
+  same zod sources; auth via per-tenant API keys (new tenant-scoped
+  `api_keys` table: hashed key, name, created_by, last_used_at; manage
+  via tRPC + settings UI; key format `drv_<random>`); webhook skeleton:
+  `webhooks` table (url, events, secret) + a dispatcher that POSTs
+  signed (HMAC) invalidation-grade events post-commit — v1 delivers
+  record.created/updated/deleted, no retries yet (documented). Then
+  0030/0031 ADRs (research → decide), then the milestone review + write
+  prompt-04.
+
 - **Session 1, timeline+peek (2026-07-07):** TASK-0027 done. M2 at 7/11.
   Next: **TASK-0028 (CSV import)** — server: an import service in the
   crm module (parse rows → map columns to attribute keys → validate via

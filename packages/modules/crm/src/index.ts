@@ -33,6 +33,13 @@ export {
   type SetListEntryValuesInput,
 } from './lists.js';
 export { listRecordActivity, type ActivityEntry, type ActivityPage } from './activity.js';
+export {
+  importRecords,
+  MAX_ROWS_PER_CALL,
+  type ImportRecordsInput,
+  type ImportResult,
+  type ImportRowError,
+} from './import.js';
 export { queryRecords, type QueryRecordsInput, type QueryRecordsPage } from './query.js';
 export {
   createSavedView,
