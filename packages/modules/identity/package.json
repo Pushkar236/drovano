@@ -14,6 +14,7 @@
   "dependencies": {
     "@better-auth/drizzle-adapter": "catalog:",
     "@drovano/db": "workspace:*",
+    "@drovano/permissions": "workspace:*",
     "@node-rs/argon2": "catalog:",
     "better-auth": "catalog:",
     "drizzle-orm": "catalog:",

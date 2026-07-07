@@ -1,0 +1,26 @@
+{
+  "name": "@drovano/api-contracts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "tRPC contracts: request context, procedures, and the app router (ADR-0005 internal surface)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@drovano/db": "workspace:*",
+    "@drovano/identity": "workspace:*",
+    "@drovano/permissions": "workspace:*",
+    "@trpc/server": "catalog:",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@drovano/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

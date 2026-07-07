@@ -37,7 +37,7 @@ describe('api over HTTP (real database)', () => {
       baseUrl: 'http://localhost:3000',
       mailer: { send: () => Promise.resolve() },
     });
-    app = createApp({ auth });
+    app = createApp({ auth, db: testDb.app.db });
   });
 
   afterAll(async () => {

@@ -1,9 +1,13 @@
+import { appRouter, createRequestContext } from '@drovano/api-contracts';
+import type { Database } from '@drovano/db';
 import type { Auth } from '@drovano/identity';
 import type { Telemetry } from '@drovano/telemetry';
+import { trpcServer } from '@hono/trpc-server';
 import { Hono } from 'hono';
 
 export interface CreateAppOptions {
   auth: Auth;
+  db: Database;
   telemetry?: Telemetry;
 }
 
@@ -12,13 +16,31 @@ export interface CreateAppOptions {
  * tests construct it against ephemeral databases; `main.ts` is the only
  * place that reads the environment.
  */
-export function createApp({ auth, telemetry }: CreateAppOptions): Hono {
+export function createApp({ auth, db, telemetry }: CreateAppOptions): Hono {
   const app = new Hono();
 
   app.get('/healthz', (c) => c.json({ status: 'ok' }));
 
   // better-auth owns everything under /api/auth/* (ADR-0008).
   app.on(['GET', 'POST'], '/api/auth/*', (c) => auth.handler(c.req.raw));
+
+  // Internal tRPC surface (ADR-0005) — the dashboard's contract.
+  app.use(
+    '/api/trpc/*',
+    trpcServer({
+      router: appRouter,
+      endpoint: '/api/trpc',
+      createContext: async (_opts, c) =>
+        // Safe: the adapter's signature is a loose Record; the router's
+        // actual context type is RequestContext and only our router
+        // receives this object.
+        (await createRequestContext({
+          db,
+          auth,
+          headers: c.req.raw.headers,
+        })) as unknown as Record<string, unknown>,
+    }),
+  );
 
   // Unexpected failures: report with request context, answer with a safe,
   // actionable envelope — internals never reach the client

@@ -13,7 +13,10 @@
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "catalog:",
+    "@drovano/api-contracts": "workspace:*",
     "@drovano/db": "workspace:*",
+    "@hono/trpc-server": "catalog:",
+    "@trpc/server": "catalog:",
     "@drovano/identity": "workspace:*",
     "@drovano/telemetry": "workspace:*",
     "@hono/node-server": "catalog:",

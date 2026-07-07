@@ -41,9 +41,16 @@
           "allow": ["shared", "data"],
         },
       },
-      "app": {
+      // API contracts sit between modules and apps: they compose module
+      // services into tRPC routers and export types to clients.
+      "contracts": {
         "dependencies": {
           "allow": ["shared", "data", "module"],
+        },
+      },
+      "app": {
+        "dependencies": {
+          "allow": ["shared", "data", "module", "contracts"],
         },
       },
     },

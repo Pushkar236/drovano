@@ -24,7 +24,7 @@ const auth = createAuth({
   mailer: createDevMailer(stdout),
 });
 
-const app = createApp({ auth, telemetry });
+const app = createApp({ auth, db: dbHandle.db, telemetry });
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
   stdout(`drovano api listening on :${String(info.port)} (${env.DEPLOY_ENV})\n`);
