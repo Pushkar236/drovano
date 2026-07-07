@@ -10,6 +10,17 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Strata component library batch 1 (TASK-0013, ADR-0009):
+  `@drovano/ui` — Button (4 variants, loading/disabled, darkening
+  interaction states), Input (Base UI Field: wired label/description/
+  error), Dialog and Menu (Base UI, trigger semantics merged onto real
+  elements — no wrapper nodes in the a11y tree, axe-verified), Table
+  shell (hairline seams, sticky header, tabular numerals); CSS Modules
+  over semantic tokens only; Storybook 10 with light/dark toolbar and
+  addon-a11y (error level); 19 behavior + axe tests in jsdom; shadow
+  token type added to the token pipeline for the one legitimate overlay
+  shadow; component specs in `docs/design-system/components/`.
+
 - 2026-07-07 — Strata design tokens (TASK-0011, ADR-0009):
   `@drovano/tokens` — DTCG `tokens.json` (OKLCH graphite neutrals, single
   ember accent, semantic status hues, 4px-grid spacing, type scale,

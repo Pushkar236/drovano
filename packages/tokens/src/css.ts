@@ -18,9 +18,13 @@ export function cssVariableName(path: string): string {
   return `--${renamed.replaceAll('.', '-')}`;
 }
 
-/** Semantic tokens drop the theme segment: `theme.light.surface-base` → `--color-surface-base`. */
-export function semanticVariableName(name: string): string {
-  return `--color-${name}`;
+/**
+ * Semantic tokens drop the theme segment: `theme.light.surface-base` →
+ * `--color-surface-base`; non-color kinds keep their own prefix from the
+ * token name (`shadow-overlay` → `--shadow-overlay`).
+ */
+export function semanticVariableName(name: string, kind: ResolvedTokenValue['kind']): string {
+  return kind === 'color' ? `--color-${name}` : `--${name}`;
 }
 
 export function serializeValue(value: ResolvedTokenValue): string {
@@ -39,6 +43,18 @@ export function serializeValue(value: ResolvedTokenValue): string {
       return String(value.weight);
     case 'number':
       return String(value.value);
+    case 'shadow':
+      return value.layers
+        .map((layer) =>
+          [
+            serializeValue({ kind: 'dimension', dimension: layer.offsetX }),
+            serializeValue({ kind: 'dimension', dimension: layer.offsetY }),
+            serializeValue({ kind: 'dimension', dimension: layer.blur }),
+            serializeValue({ kind: 'dimension', dimension: layer.spread }),
+            toCssOklch(layer.color, layer.color.alpha),
+          ].join(' '),
+        )
+        .join(', ');
   }
 }
 
@@ -49,7 +65,7 @@ function themeBlockBody(tokens: Map<string, ResolvedToken>, theme: ThemeName): s
       token.aliasOf !== undefined
         ? `var(${cssVariableName(token.aliasOf)})`
         : serializeValue(token.value);
-    lines.push(`  ${semanticVariableName(name)}: ${reference};`);
+    lines.push(`  ${semanticVariableName(name, token.value.kind)}: ${reference};`);
   }
   return lines;
 }

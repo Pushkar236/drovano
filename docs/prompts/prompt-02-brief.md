@@ -6,6 +6,17 @@
 
 ## Progress log
 
+- **Session 2, components (2026-07-07):** TASK-0013 batch 1 landed:
+  `@drovano/ui` (Button/Input/Dialog/Menu/Table shell) on Base UI 1.6
+  (note: the package is `@base-ui/react` — the old
+  `@base-ui-components/react` name is stale), Storybook 10 + addon-a11y,
+  19 jsdom tests with axe; shadow token type added to `@drovano/tokens`.
+  **Next up: TASK-0016 (app shell)** — Vite SPA, Tailwind v4 `@theme`
+  over `strata.css`, three-zone layout, dark/light, ⌘K skeleton (owned
+  implementation, no cmdk dep), designed empty state; then TASK-0019
+  (client data layer). TASK-0014/0015 (interaction/voice specs) can ride
+  along with the shell work.
+
 - **Session 2, design track (2026-07-07):** TASK-0011 landed:
   `@drovano/tokens` with the DTCG source of truth, `strata.css` build,
   and the CI contrast contract (47 tests). Remaining design track:

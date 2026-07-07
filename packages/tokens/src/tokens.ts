@@ -11,7 +11,14 @@ import { fileURLToPath } from 'node:url';
 import type { Oklch } from './color.js';
 
 export type TokenType =
-  'color' | 'dimension' | 'duration' | 'cubicBezier' | 'fontFamily' | 'fontWeight' | 'number';
+  | 'color'
+  | 'dimension'
+  | 'duration'
+  | 'cubicBezier'
+  | 'fontFamily'
+  | 'fontWeight'
+  | 'number'
+  | 'shadow';
 
 export interface ColorTokenValue extends Oklch {
   alpha?: number;
@@ -22,6 +29,14 @@ export interface DimensionTokenValue {
   unit: string;
 }
 
+export interface ShadowLayer {
+  color: ColorTokenValue;
+  offsetX: DimensionTokenValue;
+  offsetY: DimensionTokenValue;
+  blur: DimensionTokenValue;
+  spread: DimensionTokenValue;
+}
+
 export type ResolvedTokenValue =
   | { kind: 'color'; color: ColorTokenValue }
   | { kind: 'dimension'; dimension: DimensionTokenValue }
@@ -29,7 +44,8 @@ export type ResolvedTokenValue =
   | { kind: 'cubicBezier'; points: [number, number, number, number] }
   | { kind: 'fontFamily'; families: string[] }
   | { kind: 'fontWeight'; weight: number }
-  | { kind: 'number'; value: number };
+  | { kind: 'number'; value: number }
+  | { kind: 'shadow'; layers: ShadowLayer[] };
 
 export interface ResolvedToken {
   /** Dot-separated token path, e.g. `color.neutral.500`. */
@@ -61,6 +77,7 @@ const TOKEN_TYPES: readonly TokenType[] = [
   'fontFamily',
   'fontWeight',
   'number',
+  'shadow',
 ];
 
 function isTokenType(value: unknown): value is TokenType {
@@ -100,41 +117,65 @@ function collectRawTokens(
 
 const ALIAS_PATTERN = /^\{([^{}]+)\}$/;
 
+function parseColorValue(path: string, raw: unknown): ColorTokenValue {
+  if (!isRecord(raw) || raw.colorSpace !== 'oklch' || !Array.isArray(raw.components)) {
+    throw new TokenDocumentError(
+      path,
+      'color values must be { colorSpace: "oklch", components: [L, C, H] }',
+    );
+  }
+  // Array.isArray yields any[]; retype as unknown[] so the checks below narrow.
+  const components: readonly unknown[] = raw.components;
+  const [l, c, h] = components;
+  if (
+    components.length !== 3 ||
+    typeof l !== 'number' ||
+    typeof c !== 'number' ||
+    typeof h !== 'number'
+  ) {
+    throw new TokenDocumentError(path, 'oklch components must be three numbers');
+  }
+  const alpha = raw.alpha;
+  if (alpha !== undefined && typeof alpha !== 'number') {
+    throw new TokenDocumentError(path, 'alpha must be a number when present');
+  }
+  return alpha === undefined ? { l, c, h } : { l, c, h, alpha };
+}
+
+function parseDimensionValue(path: string, raw: unknown): DimensionTokenValue {
+  if (!isRecord(raw) || typeof raw.value !== 'number' || typeof raw.unit !== 'string') {
+    throw new TokenDocumentError(path, 'dimension values must be { value, unit }');
+  }
+  return { value: raw.value, unit: raw.unit };
+}
+
+function parseShadowLayer(path: string, raw: unknown): ShadowLayer {
+  if (!isRecord(raw)) {
+    throw new TokenDocumentError(path, 'shadow layers must be objects');
+  }
+  return {
+    color: parseColorValue(`${path}.color`, raw.color),
+    offsetX: parseDimensionValue(`${path}.offsetX`, raw.offsetX),
+    offsetY: parseDimensionValue(`${path}.offsetY`, raw.offsetY),
+    blur: parseDimensionValue(`${path}.blur`, raw.blur),
+    spread: parseDimensionValue(`${path}.spread`, raw.spread),
+  };
+}
+
 function parseValue(path: string, type: TokenType, raw: unknown): ResolvedTokenValue {
   switch (type) {
-    case 'color': {
-      if (!isRecord(raw) || raw.colorSpace !== 'oklch' || !Array.isArray(raw.components)) {
-        throw new TokenDocumentError(
-          path,
-          'color values must be { colorSpace: "oklch", components: [L, C, H] }',
-        );
-      }
-      // Array.isArray yields any[]; retype as unknown[] so the checks below narrow.
-      const components: readonly unknown[] = raw.components;
-      const [l, c, h] = components;
-      if (
-        components.length !== 3 ||
-        typeof l !== 'number' ||
-        typeof c !== 'number' ||
-        typeof h !== 'number'
-      ) {
-        throw new TokenDocumentError(path, 'oklch components must be three numbers');
-      }
-      const alpha = raw.alpha;
-      if (alpha !== undefined && typeof alpha !== 'number') {
-        throw new TokenDocumentError(path, 'alpha must be a number when present');
-      }
-      return { kind: 'color', color: alpha === undefined ? { l, c, h } : { l, c, h, alpha } };
-    }
+    case 'color':
+      return { kind: 'color', color: parseColorValue(path, raw) };
     case 'dimension':
-    case 'duration': {
-      if (!isRecord(raw) || typeof raw.value !== 'number' || typeof raw.unit !== 'string') {
-        throw new TokenDocumentError(path, `${type} values must be { value, unit }`);
-      }
-      const dimension = { value: raw.value, unit: raw.unit };
-      return type === 'dimension'
-        ? { kind: 'dimension', dimension }
-        : { kind: 'duration', duration: dimension };
+      return { kind: 'dimension', dimension: parseDimensionValue(path, raw) };
+    case 'duration':
+      return { kind: 'duration', duration: parseDimensionValue(path, raw) };
+    case 'shadow': {
+      const layers = Array.isArray(raw) ? (raw as unknown[]) : [raw];
+      return {
+        kind: 'shadow',
+        layers: layers.map((layer, i) => parseShadowLayer(`${path}[${String(i)}]`, layer)),
+      };
     }
     case 'cubicBezier': {
       if (!Array.isArray(raw) || raw.length !== 4 || raw.some((n) => typeof n !== 'number')) {

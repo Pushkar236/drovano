@@ -1,0 +1,47 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+}
+
+.headerCell {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-surface-base);
+  text-align: left;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  /* Hairline seams, not boxes (DESIGN_SYSTEM.md rule 3). */
+  border-bottom: 1px solid var(--color-border-hairline);
+}
+
+.cell,
+.headerCell {
+  padding: 0 var(--space-3);
+  height: 2rem; /* dense context: 32px rows, 4px grid */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row {
+  border-bottom: 1px solid var(--color-border-hairline);
+}
+
+.row:hover {
+  background-color: var(--color-surface-sunken);
+}
+
+.row[data-selected] {
+  background-color: var(--color-accent-subtle);
+}
+
+/* Every ID, metric, timestamp, and number: mono, tabular, right-aligned. */
+.numeric {
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}

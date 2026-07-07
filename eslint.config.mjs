@@ -6,7 +6,13 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['**/dist/**', '**/.turbo/**', '**/node_modules/**', 'packages/db/migrations/**'],
+    ignores: [
+      '**/dist/**',
+      '**/.turbo/**',
+      '**/node_modules/**',
+      '**/storybook-static/**',
+      'packages/db/migrations/**',
+    ],
   },
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
@@ -43,6 +49,13 @@ export default tseslint.config(
   },
   {
     files: ['**/*.{js,mjs,cjs}'],
+    ...tseslint.configs.disableTypeChecked,
+  },
+  {
+    // Storybook config files sit outside the project-service graph; they
+    // are typechecked by tsc (package tsconfig includes .storybook) but
+    // linted without type information.
+    files: ['**/.storybook/**/*.{ts,tsx}'],
     ...tseslint.configs.disableTypeChecked,
   },
 );

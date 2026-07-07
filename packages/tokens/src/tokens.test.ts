@@ -89,6 +89,12 @@ describe('css generation', () => {
     expect(cssVariableName('font.line-height.base')).toBe('--font-line-height-base');
   });
 
+  it('emits the overlay shadow per theme with its own prefix', () => {
+    expect(css).toContain('--shadow-overlay: 0px 2px 8px 0px oklch(0.13 0.004 255 / 0.08),');
+    const darkBlock = css.slice(css.indexOf("[data-theme='dark']"));
+    expect(darkBlock).toContain('--shadow-overlay: 0px 2px 8px 0px oklch(0 0 0 / 0.35),');
+  });
+
   it('serializes every token kind', () => {
     expect(serializeValue({ kind: 'fontFamily', families: ['Segoe UI', 'sans-serif'] })).toBe(
       "'Segoe UI', sans-serif",

@@ -1,0 +1,7 @@
+{
+  "extends": "@drovano/config/tsconfig/react.json",
+  "compilerOptions": {
+    "types": ["vite/client", "@testing-library/jest-dom"]
+  },
+  "include": ["src", ".storybook", "vitest.config.ts"]
+}
