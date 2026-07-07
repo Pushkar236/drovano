@@ -4,6 +4,20 @@
 > the close of Prompt 01 (M0). Prompt 01 record:
 > [`prompt-01-foundation.md`](prompt-01-foundation.md).
 
+## Progress log
+
+- **Session 1 (2026-07-07):** TASK-0004…0007 landed and green
+  (commit `080c8af`): monorepo scaffold, CI gates, `@drovano/db` with RLS
+  - nine tenant-isolation tests through the app role, verify-docs checker.
+    **Next up: TASK-0008 (auth)** — the isolation-tests gate is satisfied.
+    Notes for the auth session: research current better-auth 1.6.x docs
+    before designing (drizzle adapter + schema generation + organization
+    plugin APIs move fast); the auth tables must reconcile with the
+    `tenants` anchor table (see `packages/db/src/schema.ts` — organizations
+    map 1:1 onto `tenants`, they do not replace it); TASK-0008 also pulls in
+    the first `apps/api` Hono skeleton, since better-auth mounts as an HTTP
+    handler.
+
 ## Starting state
 
 M0 is complete: vision, research, PRD, architecture, ADR-0001…0010,
