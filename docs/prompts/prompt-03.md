@@ -6,6 +6,16 @@
 
 ## Progress log
 
+- **Session 1, relations (2026-07-07):** TASK-0023 done — write-time
+  target integrity, reverse traversal, edge removal on soft delete.
+  Many-to-many relation attributes deferred until a feature needs them
+  (single-target attributes + reverse traversal cover the standard
+  objects). Next: **TASK-0024 (lists + list-scoped attributes + saved
+  views)** — the Attio-signature separation; design note: list entries
+  are their own tenant-scoped table (list_id, record_id, position?) with
+  list-scoped attribute values reusing the typed-EAV pattern keyed by
+  (list_entry, attribute).
+
 - **Session 1, continued (2026-07-07):** TASK-0022 done — standard-object
   catalog-as-code, seeded through `afterOrganizationProvisioned`
   (app-tier composition; modules stay decoupled). Existing dev/test

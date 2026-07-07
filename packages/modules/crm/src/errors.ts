@@ -10,7 +10,9 @@ export type CrmErrorCode =
   | 'invalid-key'
   | 'duplicate-key'
   | 'unknown-object'
-  | 'unknown-record';
+  | 'unknown-record'
+  | 'unknown-relation-target'
+  | 'wrong-relation-target';
 
 export class CrmError extends Error {
   readonly code: CrmErrorCode;

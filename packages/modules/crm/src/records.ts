@@ -8,8 +8,15 @@ import {
 } from '@drovano/db';
 import { and, asc, eq, gt, inArray, isNull } from 'drizzle-orm';
 
+import { z } from 'zod';
+
 import type { Actor } from './definitions.js';
 import { CrmError } from './errors.js';
+import {
+  assertRelationTargets,
+  removeIncomingRelationEdges,
+  type RelationTargetCheck,
+} from './relations.js';
 import { fromValueColumns, toValueColumns, type AttributeValue } from './values.js';
 
 export interface HydratedRecord {
@@ -25,6 +32,7 @@ interface AttributeInfo {
   key: string;
   type: AttributeType;
   archived: boolean;
+  config: unknown;
 }
 
 async function loadAttributes(
@@ -37,10 +45,35 @@ async function loadAttributes(
       key: attributeDefinitions.key,
       type: attributeDefinitions.type,
       archived: attributeDefinitions.archived,
+      config: attributeDefinitions.config,
     })
     .from(attributeDefinitions)
     .where(eq(attributeDefinitions.objectId, objectId));
   return new Map(rows.map((row) => [row.key, row]));
+}
+
+const RELATION_CONFIG = z.object({ targetObjectId: z.uuid() });
+
+/** Collect relation-typed writes for target verification (relations.ts). */
+function relationChecks(
+  attributes: Map<string, AttributeInfo>,
+  values: Record<string, AttributeValue>,
+): RelationTargetCheck[] {
+  const checks: RelationTargetCheck[] = [];
+  for (const [key, value] of Object.entries(values)) {
+    const attribute = attributes.get(key);
+    if (attribute?.type !== 'relation' || typeof value !== 'string') continue;
+    const config = RELATION_CONFIG.safeParse(attribute.config);
+    if (!config.success) {
+      throw new CrmError('invalid-value', `"${key}" has no valid relation target configured.`);
+    }
+    checks.push({
+      attributeKey: key,
+      targetRecordId: value,
+      targetObjectId: config.data.targetObjectId,
+    });
+  }
+  return checks;
 }
 
 function buildValueRows(
@@ -81,6 +114,7 @@ export async function createRecord(
   input: CreateRecordInput,
 ): Promise<HydratedRecord> {
   const attributes = await loadAttributes(tx, input.objectId);
+  await assertRelationTargets(tx, relationChecks(attributes, input.values));
 
   const [created] = await tx
     .insert(records)
@@ -139,6 +173,7 @@ export async function updateRecordValues(
   }
 
   const attributes = await loadAttributes(tx, record.objectId);
+  await assertRelationTargets(tx, relationChecks(attributes, input.values));
   const valueRows = buildValueRows(input.tenantId, input.recordId, attributes, input.values);
 
   for (const row of valueRows) {
@@ -194,6 +229,9 @@ export async function softDeleteRecord(
   if (deleted === undefined) {
     throw new CrmError('unknown-record', 'That record does not exist.');
   }
+  // Nothing may dangle (data-model.md §3 invariant 5): incoming relation
+  // edges are removed with the record.
+  const removedEdges = await removeIncomingRelationEdges(tx, input.recordId);
   await writeAuditEntry(tx, {
     tenantId: input.tenantId,
     actorKind: input.actor.kind,
@@ -201,6 +239,7 @@ export async function softDeleteRecord(
     action: 'record.delete',
     resourceType: 'record',
     resourceId: input.recordId,
+    detail: { removedIncomingEdges: removedEdges },
   });
 }
 

@@ -10,6 +10,15 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Relations (TASK-0023): relation writes verify their target
+  exists, isn't deleted, and matches the configured object — cross-tenant
+  targets fail identically to nonexistent ones (RLS, nothing leaked);
+  reverse traversal (`listIncomingRelations`, riding the value_uuid
+  index) answers "who points here"; deleting a record removes incoming
+  edges (nothing dangles, per data-model invariant 5) with the count in
+  the delete audit. 'user'-typed values point at principals and survive
+  record deletion by design.
+
 - 2026-07-07 — Standard objects (TASK-0022): catalog-as-code in
   `@drovano/crm` — Company, Person, Deal with system attributes
   (relations wired by object key at seed time; deal stages deliberately

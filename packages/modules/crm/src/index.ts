@@ -18,5 +18,11 @@ export {
   type RecordPage,
   type UpdateRecordValuesInput,
 } from './records.js';
+export {
+  listIncomingRelations,
+  type IncomingRelation,
+  type IncomingRelationsPage,
+  type ListIncomingRelationsInput,
+} from './relations.js';
 export { seedStandardObjects, type SeedStandardObjectsInput } from './standard-objects.js';
 export { fromValueColumns, toValueColumns, type AttributeValue } from './values.js';
