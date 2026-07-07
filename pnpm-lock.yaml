@@ -200,6 +200,9 @@ importers:
       '@drovano/api-contracts':
         specifier: workspace:*
         version: link:../../packages/api-contracts
+      '@drovano/crm':
+        specifier: workspace:*
+        version: link:../../packages/modules/crm
       '@drovano/db':
         specifier: workspace:*
         version: link:../../packages/db

@@ -26,6 +26,15 @@ export interface CreateAuthOptions {
   baseUrl: string;
   mailer: Mailer;
   appName?: string;
+  /**
+   * Runs after a new organization's tenant is provisioned. Composed at the
+   * app tier (modules never import each other) — e.g. the CRM module seeds
+   * its standard objects here.
+   */
+  afterOrganizationProvisioned?: (input: {
+    tenantId: string;
+    creatorUserId: string;
+  }) => Promise<void>;
 }
 
 /**
@@ -99,6 +108,10 @@ export function createAuth(options: CreateAuthOptions) {
             await provisionTenant(db, {
               tenantId: createdOrganization.id,
               name: createdOrganization.name,
+              creatorUserId: user.id,
+            });
+            await options.afterOrganizationProvisioned?.({
+              tenantId: createdOrganization.id,
               creatorUserId: user.id,
             });
           },

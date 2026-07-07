@@ -6,6 +6,15 @@
 
 ## Progress log
 
+- **Session 1, continued (2026-07-07):** TASK-0022 done — standard-object
+  catalog-as-code, seeded through `afterOrganizationProvisioned`
+  (app-tier composition; modules stay decoupled). Existing dev/test
+  tenants predating this are unseeded — `seedStandardObjects` is
+  idempotent, so a backfill is one `withTenant` call when needed.
+  Next: TASK-0023 (relations: typed bidirectional links + tombstoning —
+  note `record_values.value_uuid` already stores relation targets; 0023
+  adds referential behavior and reverse traversal).
+
 - **Session 1 (2026-07-07):** TASK-0021 done — typed-EAV engine
   (migrations 0004/0005), `@drovano/crm` services, permission vocabulary
   extended, **1M-record NFR proven locally** (bulk-load seeding pattern

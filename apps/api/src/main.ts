@@ -2,7 +2,8 @@
 import { telemetry } from './instrument.js';
 
 import { serve } from '@hono/node-server';
-import { createDb } from '@drovano/db';
+import { seedStandardObjects } from '@drovano/crm';
+import { createDb, withTenant } from '@drovano/db';
 import { createAuth, createDevMailer } from '@drovano/identity';
 
 import { noopInvalidationPublisher } from '@drovano/api-contracts';
@@ -29,6 +30,12 @@ const auth = createAuth({
   // Dev mailer until an email provider is provisioned (needs credentials —
   // see docs/prompts/prompt-02-brief.md, open items).
   mailer: createDevMailer(stdout),
+  // Module composition happens at the app tier (ADR-0004): new tenants
+  // start with the CRM standard objects.
+  afterOrganizationProvisioned: ({ tenantId }) =>
+    withTenant(dbHandle.db, tenantId, (tx) =>
+      seedStandardObjects(tx, { tenantId, actor: { kind: 'system' } }),
+    ),
 });
 
 const app = createApp({ auth, db: dbHandle.db, telemetry, invalidation });

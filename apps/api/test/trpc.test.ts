@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto';
 
 import { createCaller, createRequestContext } from '@drovano/api-contracts';
-import { auditLog, members, withTenant } from '@drovano/db';
+import { seedStandardObjects } from '@drovano/crm';
+import { auditLog, members, objectDefinitions, withTenant } from '@drovano/db';
 import { startTestDatabase, type TestDatabase } from '@drovano/db/testing';
 import { createAuth, type Auth } from '@drovano/identity';
 import { eq } from 'drizzle-orm';
@@ -48,6 +49,11 @@ describe('tRPC surface (real database, real sessions)', () => {
       secret: 'integration-test-secret-at-least-32-chars-long', // gitleaks:allow — intentional test dummy
       baseUrl: 'http://localhost:3000',
       mailer: { send: () => Promise.resolve() },
+      // Same composition as apps/api/src/main.ts.
+      afterOrganizationProvisioned: ({ tenantId: newTenantId }) =>
+        withTenant(testDb.app.db, newTenantId, (tx) =>
+          seedStandardObjects(tx, { tenantId: newTenantId, actor: { kind: 'system' } }),
+        ),
     });
 
     ownerHeaders = await signUp('owner@example.com', 'Owner');
@@ -71,6 +77,13 @@ describe('tRPC surface (real database, real sessions)', () => {
     const caller = await callerFor(new Headers());
     await expect(caller.me.get()).rejects.toMatchObject({ code: 'UNAUTHORIZED' });
     await expect(caller.workspaces.list()).rejects.toMatchObject({ code: 'UNAUTHORIZED' });
+  });
+
+  it('organization creation seeds the standard-object catalog', async () => {
+    const objects = await withTenant(testDb.app.db, organizationId, (tx) =>
+      tx.select({ key: objectDefinitions.key }).from(objectDefinitions),
+    );
+    expect(objects.map((o) => o.key).sort()).toEqual(['company', 'deal', 'person']);
   });
 
   it('me returns the user, active organization, and role', async () => {

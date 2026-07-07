@@ -39,6 +39,8 @@ export interface CreateObjectDefinitionInput {
   tenantId: string;
   key: string;
   name: string;
+  /** 'standard' is reserved for the seeded catalog (standard-objects.ts). */
+  kind?: 'standard' | 'custom';
   actor: Actor;
 }
 
@@ -57,7 +59,12 @@ export async function createObjectDefinition(
 
   const [created] = await tx
     .insert(objectDefinitions)
-    .values({ tenantId: input.tenantId, key: input.key, name: input.name })
+    .values({
+      tenantId: input.tenantId,
+      key: input.key,
+      name: input.name,
+      kind: input.kind ?? 'custom',
+    })
     .returning();
   if (created === undefined) throw new Error('object definition insert returned no row');
 
@@ -80,6 +87,8 @@ export interface CreateAttributeDefinitionInput {
   name: string;
   type: AttributeType;
   config?: unknown;
+  /** System attributes ship with standard objects and cannot be removed. */
+  system?: boolean;
   actor: Actor;
 }
 
@@ -133,6 +142,7 @@ export async function createAttributeDefinition(
       name: input.name,
       type: input.type,
       config: input.config ?? null,
+      system: input.system ?? false,
     })
     .returning();
   if (created === undefined) throw new Error('attribute definition insert returned no row');

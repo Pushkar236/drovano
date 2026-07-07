@@ -10,6 +10,14 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Standard objects (TASK-0022): catalog-as-code in
+  `@drovano/crm` — Company, Person, Deal with system attributes
+  (relations wired by object key at seed time; deal stages deliberately
+  deferred to pipeline lists, TASK-0024/0026); seeded idempotently on
+  organization creation via a new `afterOrganizationProvisioned` hook on
+  `createAuth`, composed at the app tier so modules never import each
+  other; verified through real org creation in the API suite.
+
 - 2026-07-07 — Object-graph storage engine (M2 begins; TASK-0021):
   `object_definitions`/`attribute_definitions`/`records`/`record_values`
   — typed-EAV with one concrete column per value kind, a database CHECK
