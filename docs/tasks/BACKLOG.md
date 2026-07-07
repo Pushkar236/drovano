@@ -1,0 +1,84 @@
+# Backlog
+
+> **Status:** living document, seeded 2026-07-07 (M0). Task IDs are
+> permanent and never reused. When work on a task begins, it gets its own
+> file in this directory from
+> [`docs/templates/task-template.md`](../templates/task-template.md)
+> (e.g. `TASK-0011.md`) with full acceptance criteria; this file stays the
+> index. Sizes: S (≤1 day) · M (≤1 week) · L (multi-week, must link an
+> RFC or ADR).
+
+## M0 — Foundation
+
+| ID | Task | Area | Depends on | Size | Status |
+|---|---|---|---|---|---|
+| TASK-0001 | Documentation foundation (vision, PRD, architecture, ADR-0001…0010, standards, design language, roadmap, backlog) | process | — | L | **Done** (2026-07-07) |
+| TASK-0002 | Research snapshots: platform landscape, technology stack, design language | process | — | M | **Done** (2026-07-06) |
+| TASK-0003 | Initialize git repository; initial commit of the documentation set | process | TASK-0001 | S | **Done** (2026-07-07) |
+
+## M1 — Platform skeleton & design system
+
+| ID | Task | Area | Depends on | Size | Status |
+|---|---|---|---|---|---|
+| TASK-0004 | `scripts/verify-docs.ts` — docs consistency checker (links resolve, ADR/task IDs exist, status headers present); wired into CI | process | TASK-0005 | S | Planned |
+| TASK-0005 | Monorepo scaffold: pnpm + Turborepo + TS project references + Boundaries tags + shared config packages (ADR-0001) | infra | — | M | Planned |
+| TASK-0006 | CI pipeline & quality gates: build/lint/typecheck/tests, zero-warning ESLint, gitleaks, Renovate (CONTRIBUTING.md) | infra | TASK-0005 | M | Planned |
+| TASK-0007 | `packages/db`: Drizzle baseline, RLS policies as code, migration pipeline, Testcontainers harness, tenant-isolation test pattern (ADR-0006) | data | TASK-0005 | L | Planned |
+| TASK-0008 | Auth: better-auth + organization plugin — signup, sessions, MFA, orgs, workspaces, invitations, roles (ADR-0008) | security | TASK-0007 | L | Planned |
+| TASK-0009 | `packages/permissions`: centralized permission service with exhaustive allow/deny matrix tests (TESTING.md) | security | TASK-0007 | M | Planned |
+| TASK-0010 | Audit-log writer (transactional, append-only) + OTel 2.x + Sentry wiring (`packages/telemetry`) | backend | TASK-0007 | M | Planned |
+| TASK-0011 | Strata DTCG token set: OKLCH neutral + ember ramps, spacing, type scale, motion, elevation; contrast validation in CI → `docs/design-system/tokens.md` (ADR-0009) | design | TASK-0005 | M | Planned |
+| TASK-0012 | Typography evaluation & purchase: grotesque + mono candidates, Windows/macOS rendering tests → `docs/design-system/typography.md` | design | — | M | Planned |
+| TASK-0013 | Component specs batch 1 (button, input, menu, dialog, table shell) + Storybook with axe checks → `docs/design-system/components/` | design | TASK-0011 | L | Planned |
+| TASK-0014 | Interaction spec: keyboard map, ⌘K command surface, focus management → `docs/design-system/interaction.md` | design | — | M | Planned |
+| TASK-0015 | Voice spec: microcopy for empty/loading/error states, AI attribution language → `docs/design-system/voice.md` | design | — | S | Planned |
+| TASK-0016 | App shell: Vite SPA, TanStack Router, three-zone layout, dark/light, ⌘K skeleton (ADR-0002) | frontend | TASK-0011, TASK-0013 | L | Planned |
+| TASK-0017 | Environments: Vercel + Render + Neon; preview (per-PR, Neon branch), staging, production; migration release step | infra | TASK-0006, TASK-0007 | M | Planned |
+| TASK-0018 | Performance budgets from PRD §5 encoded in CI (Lighthouse/RUM harness + API latency assertions) | infra | TASK-0016, TASK-0017 | M | Planned |
+| TASK-0019 | Client data layer foundation: TanStack DB collections over tRPC loaders, optimistic mutation pattern (ADR-0003) | frontend | TASK-0016 | L | Planned |
+| TASK-0020 | Realtime gateway: thin WS service + Redis pub/sub per-workspace invalidation (ADR-0003) | backend | TASK-0017 | M | Planned |
+
+## M2 — Object graph & CRM core
+
+| ID | Task | Area | Depends on | Size | Status |
+|---|---|---|---|---|---|
+| TASK-0021 | Records + typed-EAV hybrid storage; custom objects/attributes without DDL; 1M-records-per-workspace benchmarks (data-model.md §4) | data | TASK-0007 | L | Planned |
+| TASK-0022 | Standard objects: People, Companies, Deals with system attributes | data | TASK-0021 | M | Planned |
+| TASK-0023 | Relations: typed bidirectional links, referential tombstoning | data | TASK-0021 | M | Planned |
+| TASK-0024 | Lists with list-scoped attributes; saved views; filters/sorts/grouping | backend | TASK-0022 | L | Planned |
+| TASK-0025 | Table view: virtualized grid, inline edit + validation, full keyboard grid model (DESIGN_SYSTEM.md §5) | frontend | TASK-0019, TASK-0024 | L | Planned |
+| TASK-0026 | Kanban view + deal pipelines with opinionated default stages | frontend | TASK-0024 | M | Planned |
+| TASK-0027 | Record timeline (append-only, provenance) + record peek panel | frontend | TASK-0022 | L | Planned |
+| TASK-0028 | CSV import: mapping, dedupe, error reporting | backend | TASK-0022 | M | Planned |
+| TASK-0029 | Public API v1 read paths (`@hono/zod-openapi`) + webhook delivery skeleton (ADR-0005) | backend | TASK-0022 | M | Planned |
+| TASK-0030 | ADR: meeting-bot vendor vs native capture (PRD §9.1) | process | — | S | Planned |
+| TASK-0031 | ADR: enrichment providers & waterfall order (PRD §9.2) | process | — | S | Planned |
+
+## M3 — Zero-entry & AI substrate
+
+| ID | Task | Area | Depends on | Size | Status |
+|---|---|---|---|---|---|
+| TASK-0032 | Gmail + Google Calendar two-way sync; auto-create/update; durable resumable ingestion (ADR-0007) | backend | TASK-0022, TASK-0020 | L | Planned |
+| TASK-0033 | Outlook / Microsoft 365 sync (parity with TASK-0032) | backend | TASK-0032 | L | Planned |
+| TASK-0034 | `packages/ai` harness: AI SDK v7, thin tool loops, provider routing, telemetry (ADR-0010) | ai | TASK-0009, TASK-0010 | L | Planned |
+| TASK-0035 | Retrieval pipeline: contextual chunking, hybrid BM25+dense, rerank; permission-filtered retrieval tools; pgvector tables | ai | TASK-0034 | L | Planned |
+| TASK-0036 | Eval scaffolding (stubbed-LLM CI tests) + scheduled scenario evals (TESTING.md AI rules) | ai | TASK-0034 | M | Planned |
+| TASK-0037 | Agent trust infrastructure: agent principals, scoped grants, session logs, spend caps, provisional-until-accepted surfaces | security | TASK-0034, TASK-0008 | L | Planned |
+| TASK-0038 | Record keeper worker: graph maintenance, merge/dedupe proposals, AI attributes (prompt-as-formula) | ai | TASK-0037, TASK-0032 | L | Planned |
+| TASK-0039 | Research assistant worker: cited web research filling attributes | ai | TASK-0037 | M | Planned |
+| TASK-0040 | Enrichment waterfall v1 (per TASK-0031 ADR) | backend | TASK-0031, TASK-0038 | M | Planned |
+
+## M4 — Wedge product & v1 GA
+
+| ID | Task | Area | Depends on | Size | Status |
+|---|---|---|---|---|---|
+| TASK-0041 | Meeting assistant end-to-end: capture → transcript → summary/actions/attribute proposals/follow-up draft (human-gated) → prep briefs | ai | TASK-0030, TASK-0037 | L | Planned |
+| TASK-0042 | Tasks + calendar module: assignable (human/agent), relations, my-day view | backend | TASK-0022 | L | Planned |
+| TASK-0043 | Notes & documents: block editor, minimal presence, indexing → ⌘K NL answers | frontend | TASK-0035 | L | Planned |
+| TASK-0044 | Automation rules v1: trigger/condition/action on graph events + NL rule drafting with confirm | backend | TASK-0037 | L | Planned |
+| TASK-0045 | Analytics: pipeline/activity reporting + NL querying (Kysely reporting layer) | backend | TASK-0024 | L | Planned |
+| TASK-0046 | Public API v1 complete + TypeScript SDK (Speakeasy) + MCP server (tenant-scoped OAuth) + API docs | backend | TASK-0029 | L | Planned |
+| TASK-0047 | GA security hardening: external pentest, incident-response runbook written **and drilled**, restore drill (RPO/RTO), prompt-injection red-team on all workers (SECURITY.md) | security | TASK-0041 | L | Planned |
+| TASK-0048 | Billing & packaging: seats + single usage meter with live view, caps, alerts, rollover (PRD §6) | backend | TASK-0008 | L | Planned |
+| TASK-0049 | Marketing site (stack ADR due at start) | frontend | — | M | Planned |
+| TASK-0050 | GA readiness review: PRD §8 metrics instrumented, NFR budgets green, docs consistency pass | process | TASK-0041…0048 | M | Planned |

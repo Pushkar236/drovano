@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds
+dist/
+build/
+.next/
+.turbo/
+out/
+coverage/
+
+# Environment & secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs & OS noise
+*.log
+.DS_Store
+Thumbs.db
+
+# Editor local state
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
