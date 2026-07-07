@@ -10,6 +10,14 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Interaction & voice specifications (TASK-0014, TASK-0015):
+  `docs/design-system/interaction.md` — global keymap, the full ⌘K
+  command-surface spec (three result groups, keyboard model, a11y
+  wiring), focus-management rules, three-zone shell behaviors;
+  `docs/design-system/voice.md` — product voice, the three unloved
+  states' copy patterns, AI attribution language, destructive-action
+  copy, transactional email rules.
+
 - 2026-07-07 — Strata component library batch 1 (TASK-0013, ADR-0009):
   `@drovano/ui` — Button (4 variants, loading/disabled, darkening
   interaction states), Input (Base UI Field: wired label/description/
