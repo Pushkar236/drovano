@@ -10,6 +10,18 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Records grid (TASK-0025 complete): `/o/$objectKey` surface
+  with object tabs, driven by live definitions; virtualized rows
+  (@tanstack/react-virtual) at 32px dense rhythm; roving-focus keyboard
+  grid (arrows/Home/End/PageUp/PageDown, Enter to edit, Esc to cancel)
+  with ARIA grid semantics; optimistic inline cell edit riding
+  crm.records.update with automatic rollback + surfaced reasons; new
+  record creation through the collection; Records nav + palette entry.
+  Test learnings baked in: an ACTIVE ResizeObserver polyfill for
+  jsdom+virtual-core, and server-faithful stubs must return fresh
+  objects (identity aliasing hid updates). 19 web tests green; bundle
+  191.6/240 KiB.
+
 - 2026-07-07 — Lists & saved views (TASK-0024): `lists`, `list_entries`,
   `list_entry_values` (typed-EAV on the ENTRY plane — the Attio-signature
   separation: process state like pipeline stage lives on list entries,

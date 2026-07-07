@@ -8,6 +8,7 @@ import {
 
 import { HomePage } from './pages/home.js';
 import { LoginPage } from './pages/login.js';
+import { RecordsPage } from './pages/records.js';
 import { SettingsPage } from './pages/settings.js';
 import { WorkspacesPage } from './pages/workspaces.js';
 import { Shell } from './shell.js';
@@ -35,6 +36,13 @@ const homeRoute = createRoute({
   head: () => ({ meta: [{ title: 'Home · Drovano' }] }),
 });
 
+const recordsRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/o/$objectKey',
+  component: RecordsPage,
+  head: () => ({ meta: [{ title: 'Records · Drovano' }] }),
+});
+
 const workspacesRoute = createRoute({
   getParentRoute: () => appRoute,
   path: '/workspaces',
@@ -51,7 +59,7 @@ const settingsRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   loginRoute,
-  appRoute.addChildren([homeRoute, workspacesRoute, settingsRoute]),
+  appRoute.addChildren([homeRoute, recordsRoute, workspacesRoute, settingsRoute]),
 ]);
 
 /** Router factory: tests pass a memory history; the app uses the browser's. */

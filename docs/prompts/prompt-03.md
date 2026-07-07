@@ -6,6 +6,31 @@
 
 ## Progress log
 
+- **Session 1, grid (2026-07-07):** TASK-0025 fully done (engine +
+  surface + grid). M2 at 5/11. Next: **TASK-0026 (kanban + pipelines)** —
+  lanes from a list's select-typed attribute (groupBy in ViewConfig);
+  server: listListEntries already returns both planes; UI: lane columns,
+  card = record summary, move-card = setListEntryValues optimistic;
+  plus a "create pipeline" flow (createList + stage attribute with
+  options). Then TASK-0027 (timeline + peek panel — needs an
+  activity/timeline read model; audit_log rows per record are the v1
+  source), 0028 CSV import (reuse bulk-load discipline), 0029 public
+  REST, 0030/0031 ADRs.
+
+- **Session 1, crm surface (2026-07-07):** TASK-0025 part 2 done — the
+  full CRM tRPC surface (routers stayed in api-contracts per the
+  boundary note; revisit if a second consumer appears). **Part 3 (the
+  grid UI) is what remains of TASK-0025:** apps/web records surface —
+  route `/o/$objectKey` driven by `crm.objects`; TanStack DB collection
+  per (object, view-config) keyed on the query input; virtualized rows
+  (add `@tanstack/react-virtual` to the catalog); keyboard grid per
+  interaction.md (arrows/Home/End/PageUp/PageDown/Enter to edit/Esc to
+  cancel) built on the ui Table shell styles; inline cell edit riding
+  `crm.records.update` optimistically; `records` realtime resource
+  already publishes. Wire nav + palette entries per object. Tests:
+  keyboard model + optimistic edit + axe (mock trpc like
+  shell.test.tsx does auth).
+
 - **Session 1, view engine (2026-07-07):** TASK-0025 part 1 done —
   `queryRecords` (EXISTS-probe filters, correlated-subquery sorts,
   keyset/offset pagination split). **Part 2 next: the CRM tRPC surface**

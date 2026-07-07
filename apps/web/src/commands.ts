@@ -33,6 +33,14 @@ export const commands: Command[] = [
     },
   },
   {
+    id: 'nav.records',
+    name: 'Go to Records',
+    group: 'navigation',
+    run: (context) => {
+      context.navigate('/o/company');
+    },
+  },
+  {
     id: 'nav.workspaces',
     name: 'Go to Workspaces',
     group: 'navigation',

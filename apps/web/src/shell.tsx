@@ -144,6 +144,16 @@ export function Shell() {
           </li>
           <li>
             <Link
+              to="/o/$objectKey"
+              params={{ objectKey: 'company' }}
+              className={navLinkClass(pathname.startsWith('/o/'))}
+              aria-current={pathname.startsWith('/o/') ? 'page' : undefined}
+            >
+              {railCollapsed ? 'R' : 'Records'}
+            </Link>
+          </li>
+          <li>
+            <Link
               to="/workspaces"
               className={navLinkClass(pathname === '/workspaces')}
               aria-current={pathname === '/workspaces' ? 'page' : undefined}
