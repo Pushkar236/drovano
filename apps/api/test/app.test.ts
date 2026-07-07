@@ -33,7 +33,7 @@ describe('api over HTTP (real database)', () => {
     testDb = await startTestDatabase();
     const auth = createAuth({
       db: testDb.app.db,
-      secret: 'integration-test-secret-at-least-32-chars-long',
+      secret: 'integration-test-secret-at-least-32-chars-long', // gitleaks:allow — intentional test dummy
       baseUrl: 'http://localhost:3000',
       mailer: { send: () => Promise.resolve() },
     });

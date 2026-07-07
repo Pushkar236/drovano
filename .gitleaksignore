@@ -1,0 +1,6 @@
+# Triaged false positives, pinned by fingerprint (commit:file:rule:line).
+# Both are the intentional test dummy 'integration-test-secret-…' — the
+# lines now also carry inline gitleaks:allow comments; these entries cover
+# the immutable history.
+e3c54762304e22e860ceb4c1fbde9c8cbc857ce0:apps/api/test/app.test.ts:generic-api-key:36
+e3c54762304e22e860ceb4c1fbde9c8cbc857ce0:packages/modules/identity/test/identity.test.ts:generic-api-key:57

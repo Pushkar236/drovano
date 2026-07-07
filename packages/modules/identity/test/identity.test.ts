@@ -54,7 +54,7 @@ describe('identity module (better-auth over the app role)', () => {
     // The app-role connection: the exact database posture of production.
     auth = createAuth({
       db: testDb.app.db,
-      secret: 'integration-test-secret-at-least-32-chars-long',
+      secret: 'integration-test-secret-at-least-32-chars-long', // gitleaks:allow — intentional test dummy
       baseUrl: 'http://localhost:3000',
       mailer,
     });
