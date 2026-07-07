@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+@import '@drovano/tokens/strata.css';
+@import '@drovano/tokens/strata-tailwind.css';
+
+/* App-level base: tokens do the theming; this file stays minimal. */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--font-line-height-base);
+  background-color: var(--color-surface-base);
+  color: var(--color-text-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 1px;
+}

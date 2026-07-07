@@ -10,6 +10,17 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — App shell (TASK-0016, ADR-0002): `@drovano/web` — Vite 8 +
+  React 19.2 SPA with TanStack Router; three-zone Strata shell (rail with
+  collapse, canvas with focus-on-navigate h1s and skip link, peek panel);
+  owned command surface (Ctrl/⌘K combobox+listbox with
+  aria-activedescendant, filter, focus restore) with the command
+  registry; light/dark/system theming persisted via `data-theme`;
+  Tailwind v4 wired through a **generated** `@theme inline` bridge from
+  the token source (`strata-tailwind.css`) so utilities can never drift
+  from tokens; 9 shell tests (keymap, palette keyboard model, theme
+  persistence, landmarks, axe); production build at ~89 kB gzip.
+
 - 2026-07-07 — Interaction & voice specifications (TASK-0014, TASK-0015):
   `docs/design-system/interaction.md` — global keymap, the full ⌘K
   command-surface spec (three result groups, keyboard model, a11y

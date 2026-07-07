@@ -6,7 +6,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./strata.css": "./dist/strata.css"
+    "./strata.css": "./dist/strata.css",
+    "./strata-tailwind.css": "./dist/strata-tailwind.css"
   },
   "scripts": {
     "build": "tsx src/build.ts",

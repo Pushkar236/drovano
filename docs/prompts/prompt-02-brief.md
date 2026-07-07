@@ -6,6 +6,16 @@
 
 ## Progress log
 
+- **Session 2, shell (2026-07-07):** TASK-0014/0015 (interaction + voice
+  specs) and TASK-0016 (app shell) landed. `@drovano/web` implements
+  interaction.md §2/§3/§6; the token build now also emits the Tailwind
+  `@theme inline` bridge. **M1 remaining:** TASK-0010b (OTel/Sentry —
+  pair with credentials), TASK-0012 (typeface — user money decision),
+  TASK-0017 (environments — **blocked on user credentials**: Neon,
+  Vercel, Render, Sentry accounts), TASK-0018 (perf budgets in CI —
+  depends on 0017 for realistic targets; a bundle-size gate can land
+  earlier), TASK-0019 (client data layer), TASK-0020 (realtime gateway).
+
 - **Session 2, components (2026-07-07):** TASK-0013 batch 1 landed:
   `@drovano/ui` (Button/Input/Dialog/Menu/Table shell) on Base UI 1.6
   (note: the package is `@base-ui/react` — the old

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { cssVariableName, renderCss, serializeValue } from './css.js';
+import { renderTailwindTheme } from './tailwind.js';
 import { getColor, loadTokens, parseTokenDocument, TokenDocumentError } from './tokens.js';
 
 describe('parseTokenDocument', () => {
@@ -87,6 +88,19 @@ describe('css generation', () => {
     expect(cssVariableName('color.neutral.50')).toBe('--color-neutral-50');
     expect(cssVariableName('easing.out')).toBe('--ease-out');
     expect(cssVariableName('font.line-height.base')).toBe('--font-line-height-base');
+  });
+
+  it('generates the Tailwind @theme inline bridge from the same map', () => {
+    const bridge = renderTailwindTheme(loadTokens());
+    expect(bridge).toContain('@theme inline {');
+    expect(bridge).toContain('--color-surface-base: var(--color-surface-base);');
+    expect(bridge).toContain('--shadow-overlay: var(--shadow-overlay);');
+    expect(bridge).toContain('--font-sans: var(--font-family-sans);');
+    expect(bridge).toContain('--text-base: 0.8125rem;');
+    expect(bridge).toContain('--spacing-4: 1rem;');
+    expect(bridge).toContain('--ease-out: cubic-bezier(0.2, 0, 0, 1);');
+    // Primitive colors never leak into the utility layer.
+    expect(bridge).not.toContain('--color-neutral-500');
   });
 
   it('emits the overlay shadow per theme with its own prefix', () => {

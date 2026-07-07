@@ -9,10 +9,17 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 import { renderCss } from './css.js';
+import { renderTailwindTheme } from './tailwind.js';
 import { loadTokens } from './tokens.js';
 
 const distDir = fileURLToPath(new URL('../dist', import.meta.url));
 mkdirSync(distDir, { recursive: true });
-const outFile = path.join(distDir, 'strata.css');
-writeFileSync(outFile, renderCss(loadTokens()), 'utf8');
-process.stdout.write(`tokens: wrote ${outFile}\n`);
+const tokens = loadTokens();
+for (const [file, content] of [
+  ['strata.css', renderCss(tokens)],
+  ['strata-tailwind.css', renderTailwindTheme(tokens)],
+] as const) {
+  const outFile = path.join(distDir, file);
+  writeFileSync(outFile, content, 'utf8');
+  process.stdout.write(`tokens: wrote ${outFile}\n`);
+}

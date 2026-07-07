@@ -7,6 +7,7 @@ export {
   type Oklch,
 } from './color.js';
 export { cssVariableName, renderCss, semanticVariableName, serializeValue } from './css.js';
+export { renderTailwindTheme } from './tailwind.js';
 export {
   getColor,
   loadTokens,
