@@ -18,4 +18,11 @@ export {
   type RequestContext,
   type SessionUser,
 } from './context.js';
+export {
+  INVALIDATION_CHANNEL_PREFIX,
+  InvalidationMessage,
+  invalidationChannel,
+  noopInvalidationPublisher,
+  type InvalidationPublisher,
+} from './invalidation.js';
 export type { WorkspaceListItem } from './routers/workspaces.js';

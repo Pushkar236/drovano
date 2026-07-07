@@ -10,6 +10,17 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Realtime gateway (TASK-0020, ADR-0003): `@drovano/realtime`
+  — session-authenticated WebSockets where the server derives the tenant
+  from the session's active organization (clients never name a channel;
+  nothing to spoof); Redis pub/sub fan-out of coarse
+  `{ resource }` invalidation events; API publishes after mutations
+  (no-op without REDIS_URL); web client reconnects with backoff and
+  invalidates the matching query key so TanStack DB live views refresh.
+  Five integration tests run the full loop against real Postgres + Redis
+  containers: authenticated connect, tenant-scoped delivery with
+  cross-tenant silence, malformed-payload resilience, cleanup.
+
 - 2026-07-07 — Client data layer + API live (TASK-0019 done, TASK-0017
   done): web app signs in (login/sign-up on better-auth client),
   onboards the first organization, and reads/writes real data through

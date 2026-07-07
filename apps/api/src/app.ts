@@ -1,4 +1,9 @@
-import { appRouter, createRequestContext } from '@drovano/api-contracts';
+import {
+  appRouter,
+  createRequestContext,
+  noopInvalidationPublisher,
+  type InvalidationPublisher,
+} from '@drovano/api-contracts';
 import type { Database } from '@drovano/db';
 import type { Auth } from '@drovano/identity';
 import type { Telemetry } from '@drovano/telemetry';
@@ -9,6 +14,7 @@ export interface CreateAppOptions {
   auth: Auth;
   db: Database;
   telemetry?: Telemetry;
+  invalidation?: InvalidationPublisher;
 }
 
 /**
@@ -16,7 +22,12 @@ export interface CreateAppOptions {
  * tests construct it against ephemeral databases; `main.ts` is the only
  * place that reads the environment.
  */
-export function createApp({ auth, db, telemetry }: CreateAppOptions): Hono {
+export function createApp({
+  auth,
+  db,
+  telemetry,
+  invalidation = noopInvalidationPublisher,
+}: CreateAppOptions): Hono {
   const app = new Hono();
 
   app.get('/healthz', (c) => c.json({ status: 'ok' }));
@@ -38,6 +49,7 @@ export function createApp({ auth, db, telemetry }: CreateAppOptions): Hono {
           db,
           auth,
           headers: c.req.raw.headers,
+          invalidation,
         })) as unknown as Record<string, unknown>,
     }),
   );

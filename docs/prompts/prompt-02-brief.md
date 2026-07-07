@@ -6,6 +6,15 @@
 
 ## Progress log
 
+- **Session 4, realtime (2026-07-07):** TASK-0020 done — gateway built
+  and container-tested end-to-end; API publisher + web client wired.
+  Production deploy of the gateway needs a Redis provider (Upstash free
+  tier — user account) and a second Render service; batch with the next
+  credentials ask. **M1 remaining: TASK-0018 part 2 only** (API-latency
+  budgets against the deployed API, measured warm — Render free tier
+  cold starts would poison p95). After that: consistency review, close
+  M1, write `docs/prompts/prompt-03.md` (M2: object graph).
+
 - **Session 4 (2026-07-07):** TASK-0019 complete end-to-end (tRPC
   contracts + principal-loaded authz on the server; login/onboarding/
   Workspaces + optimistic collection on the client). TASK-0017 complete:

@@ -7,6 +7,8 @@ const EnvSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
   /** Optional: error monitoring stays disabled without it (telemetry README). */
   SENTRY_DSN: z.string().optional(),
+  /** Optional: realtime invalidation is a no-op without it (ADR-0003). */
+  REDIS_URL: z.string().optional(),
   DEPLOY_ENV: z.enum(['development', 'staging', 'production']).default('development'),
 });
 

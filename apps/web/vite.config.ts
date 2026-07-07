@@ -9,6 +9,11 @@ export default defineConfig({
     // (production runs behind one domain; see apps/api README).
     proxy: {
       '/api': 'http://localhost:3000',
+      '/realtime': {
+        target: 'ws://localhost:3001',
+        ws: true,
+        rewrite: () => '/',
+      },
     },
   },
 });

@@ -42,6 +42,10 @@ catalog:
   '@trpc/tanstack-react-query': 11.18.0
   '@node-rs/argon2': 2.0.2
   '@testcontainers/postgresql': 12.0.4
+  '@testcontainers/redis': 12.0.4
+  '@types/ws': 8.18.1
+  ioredis: 5.11.1
+  ws: 8.21.0
   '@sentry/node': 10.63.0
   better-auth: 1.6.23
   tsup: 8.5.1

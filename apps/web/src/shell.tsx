@@ -3,7 +3,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CommandPalette } from './command-palette.js';
 import { commands, type CommandContext } from './commands.js';
+import { queryClient } from './data/workspaces.js';
 import { authClient } from './lib/auth-client.js';
+import { connectRealtime } from './lib/realtime.js';
 import { applyThemePreference } from './theme.js';
 
 /**
@@ -78,6 +80,13 @@ export function Shell() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [paletteOpen, openPalette, closePalette]);
+
+  // Realtime invalidation while signed in (ADR-0003).
+  const signedIn = session !== null;
+  useEffect(() => {
+    if (!signedIn) return;
+    return connectRealtime(queryClient);
+  }, [signedIn]);
 
   // Route changes move focus to the canvas heading (interaction.md §4).
   const previousPathname = useRef(pathname);

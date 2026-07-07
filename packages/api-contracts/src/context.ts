@@ -2,6 +2,8 @@ import type { Database } from '@drovano/db';
 import { loadPrincipalContext, type Auth } from '@drovano/identity';
 import type { PrincipalContext } from '@drovano/permissions';
 
+import { noopInvalidationPublisher, type InvalidationPublisher } from './invalidation.js';
+
 export interface SessionUser {
   id: string;
   email: string;
@@ -10,6 +12,8 @@ export interface SessionUser {
 
 export interface RequestContext {
   db: Database;
+  /** Publishes coarse cache-invalidation events after mutations (ADR-0003). */
+  invalidation: InvalidationPublisher;
   session: {
     user: SessionUser;
     /** The organization the session is acting in (better-auth org plugin). */
@@ -23,6 +27,7 @@ export interface CreateRequestContextInput {
   db: Database;
   auth: Auth;
   headers: Headers;
+  invalidation?: InvalidationPublisher;
 }
 
 /**
@@ -34,10 +39,11 @@ export async function createRequestContext({
   db,
   auth,
   headers,
+  invalidation = noopInvalidationPublisher,
 }: CreateRequestContextInput): Promise<RequestContext> {
   const sessionResult = await auth.api.getSession({ headers });
   if (sessionResult === null) {
-    return { db, session: null, principal: null };
+    return { db, invalidation, session: null, principal: null };
   }
 
   const activeOrganizationId = sessionResult.session.activeOrganizationId ?? null;
@@ -58,5 +64,5 @@ export async function createRequestContext({
           tenantId: activeOrganizationId,
         });
 
-  return { db, session, principal };
+  return { db, invalidation, session, principal };
 }

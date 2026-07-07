@@ -59,7 +59,7 @@ export const workspacesRouter = router({
         throw new TRPCError({ code: 'FORBIDDEN', message: decision.reason });
       }
 
-      return withTenant(ctx.db, ctx.tenantId, async (tx) => {
+      const result = await withTenant(ctx.db, ctx.tenantId, async (tx) => {
         const [before] = await tx
           .select({ name: workspaces.name })
           .from(workspaces)
@@ -89,5 +89,9 @@ export const workspacesRouter = router({
 
         return { id: updated.id, name: updated.name, updatedAt: updated.updatedAt.toISOString() };
       });
+
+      // After commit: tell the tenant's other clients to refetch (ADR-0003).
+      await ctx.invalidation.publish(ctx.tenantId, { resource: 'workspaces' });
+      return result;
     }),
 });
