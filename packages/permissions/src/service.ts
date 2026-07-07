@@ -42,7 +42,14 @@ export type Action =
   | { type: 'workspace.view'; workspaceId: string }
   | { type: 'workspace.update'; workspaceId: string }
   | { type: 'workspace.delete'; workspaceId: string }
-  | { type: 'workspace.manage-members'; workspaceId: string };
+  | { type: 'workspace.manage-members'; workspaceId: string }
+  // The object graph (M2): records are tenant-level; record-/object-level
+  // grants are the post-v1 seam (data-model.md §5).
+  | { type: 'record.view' }
+  | { type: 'record.create' }
+  | { type: 'record.update' }
+  | { type: 'record.delete' }
+  | { type: 'object.manage' };
 
 export interface Decision {
   allowed: boolean;
@@ -107,6 +114,24 @@ export function can(principal: PrincipalContext, action: Action): Decision {
         ? allow('workspace member may view the workspace')
         : deny('principal is not a member of this workspace');
     }
+
+    case 'record.view':
+    case 'record.create':
+    case 'record.update':
+      // Working the graph is every member's job (PRD §2 personas).
+      return allow(`organization ${principal.organizationRole} may ${action.type}`);
+
+    case 'record.delete':
+      // Destructive: managers only until record-level grants exist.
+      return isOrganizationManager(principal)
+        ? allow(`organization ${principal.organizationRole} may delete records`)
+        : deny('only organization owners/admins may delete records');
+
+    case 'object.manage':
+      // Schema shape is an admin concern (opinionated default, PRD §2).
+      return isOrganizationManager(principal)
+        ? allow(`organization ${principal.organizationRole} may manage object definitions`)
+        : deny('only organization owners/admins may manage object definitions');
 
     case 'workspace.update':
     case 'workspace.manage-members': {

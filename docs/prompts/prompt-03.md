@@ -4,6 +4,16 @@
 > Prior records: [`prompt-01-foundation.md`](prompt-01-foundation.md),
 > [`prompt-02-brief.md`](prompt-02-brief.md) (M1 progress log).
 
+## Progress log
+
+- **Session 1 (2026-07-07):** TASK-0021 done — typed-EAV engine
+  (migrations 0004/0005), `@drovano/crm` services, permission vocabulary
+  extended, **1M-record NFR proven locally** (bulk-load seeding pattern
+  in the benchmark; the naive single-statement seed killed the
+  container — twice). Next: TASK-0022 (People/Companies/Deals standard
+  objects — decide seeding via provision_tenant extension vs first-touch
+  creation), then relations (TASK-0023).
+
 ## Why this milestone is next
 
 `ROADMAP.md` sequences M2 after the walking skeleton, and M1 closed with

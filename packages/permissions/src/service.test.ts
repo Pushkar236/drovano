@@ -34,6 +34,11 @@ const ACTIONS: Action[] = [
   { type: 'workspace.update', workspaceId: WORKSPACE },
   { type: 'workspace.delete', workspaceId: WORKSPACE },
   { type: 'workspace.manage-members', workspaceId: WORKSPACE },
+  { type: 'record.view' },
+  { type: 'record.create' },
+  { type: 'record.update' },
+  { type: 'record.delete' },
+  { type: 'object.manage' },
 ];
 
 type MatrixKey = string;
@@ -53,6 +58,11 @@ const ORG_ROLE_MATRIX: Record<'owner' | 'admin' | 'member', Record<MatrixKey, bo
     'workspace.update': true,
     'workspace.delete': true,
     'workspace.manage-members': true,
+    'record.view': true,
+    'record.create': true,
+    'record.update': true,
+    'record.delete': true,
+    'object.manage': true,
   },
   admin: {
     'organization.update': true,
@@ -65,6 +75,11 @@ const ORG_ROLE_MATRIX: Record<'owner' | 'admin' | 'member', Record<MatrixKey, bo
     'workspace.update': true,
     'workspace.delete': true,
     'workspace.manage-members': true,
+    'record.view': true,
+    'record.create': true,
+    'record.update': true,
+    'record.delete': true,
+    'object.manage': true,
   },
   member: {
     'organization.update': false,
@@ -77,6 +92,11 @@ const ORG_ROLE_MATRIX: Record<'owner' | 'admin' | 'member', Record<MatrixKey, bo
     'workspace.update': false,
     'workspace.delete': false,
     'workspace.manage-members': false,
+    'record.view': true, // working the graph is every member's job
+    'record.create': true,
+    'record.update': true,
+    'record.delete': false,
+    'object.manage': false,
   },
 };
 

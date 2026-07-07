@@ -1,0 +1,25 @@
+{
+  "name": "@drovano/crm",
+  "version": "0.0.0",
+  "private": true,
+  "description": "CRM module: object/attribute definitions and record operations over the typed-EAV graph",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@drovano/db": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@drovano/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

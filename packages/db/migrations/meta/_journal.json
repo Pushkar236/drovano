@@ -29,6 +29,20 @@
       "when": 1783407220711,
       "tag": "0003_identity-hardening",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783428565101,
+      "tag": "0004_object-graph",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783428566275,
+      "tag": "0005_object-graph-hardening",
+      "breakpoints": true
     }
   ]
 }

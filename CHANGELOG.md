@@ -10,6 +10,19 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Object-graph storage engine (M2 begins; TASK-0021):
+  `object_definitions`/`attribute_definitions`/`records`/`record_values`
+  — typed-EAV with one concrete column per value kind, a database CHECK
+  enforcing single-kind rows, tenant-leading indexes, RLS + FORCE on all
+  four (migrations 0004/0005); `@drovano/crm` module — definition and
+  record services (13 attribute types zod-validated, cursor pagination,
+  soft delete, provenance, transactional audit) with typed `CrmError`s;
+  permission vocabulary grew record.view/create/update/delete +
+  object.manage (matrix now 51 cases). **Scale NFR validated: all p95
+  budgets green at 1,000,000 records / 2M values** through RLS on the
+  app role (bulk-load seeding: drop indexes → batched CTE seed →
+  rebuild); CI benchmarks run at 100k per PR.
+
 - 2026-07-07 — **M1 complete** (TASK-0018 done): API p95 latency budgets
   enforced as benchmark tests over the real stack (single read < 150ms,
   list < 300ms, anonymous context resolution < 150ms — PRD §5), joining
