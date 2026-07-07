@@ -7,8 +7,8 @@ import { initTelemetry } from '@drovano/telemetry';
 
 export const telemetry = initTelemetry({
   serviceName: 'drovano-api',
-  ...(process.env['SENTRY_DSN'] !== undefined && process.env['SENTRY_DSN'] !== ''
-    ? { sentryDsn: process.env['SENTRY_DSN'] }
+  ...(process.env.SENTRY_DSN !== undefined && process.env.SENTRY_DSN !== ''
+    ? { sentryDsn: process.env.SENTRY_DSN }
     : {}),
-  environment: process.env['DEPLOY_ENV'] ?? 'development',
+  environment: process.env.DEPLOY_ENV ?? 'development',
 });
