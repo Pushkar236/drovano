@@ -32,6 +32,7 @@ export {
   type ListEntryView,
   type SetListEntryValuesInput,
 } from './lists.js';
+export { listRecordActivity, type ActivityEntry, type ActivityPage } from './activity.js';
 export { queryRecords, type QueryRecordsInput, type QueryRecordsPage } from './query.js';
 export {
   createSavedView,

@@ -7,6 +7,7 @@ import {
   CrmError,
   getRecord,
   listListEntries,
+  listRecordActivity,
   queryRecords,
   removeRecordFromList,
   seedStandardObjects,
@@ -122,6 +123,19 @@ export const crmRouter = router({
         getRecord(tx, input.recordId).catch(toTrpcError),
       );
     }),
+
+    activity: tenantProcedure
+      .input(
+        z.object({
+          recordId: z.uuid(),
+          cursor: z.string().optional(),
+          limit: z.number().int().positive().max(100).optional(),
+        }),
+      )
+      .query(async ({ ctx, input }) => {
+        authorize(ctx, { type: 'record.view' });
+        return withTenant(ctx.db, ctx.tenantId, (tx) => listRecordActivity(tx, input));
+      }),
 
     create: tenantProcedure
       .input(z.object({ objectId: z.uuid(), values: ValuesSchema }))

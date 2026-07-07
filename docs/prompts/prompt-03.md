@@ -6,6 +6,19 @@
 
 ## Progress log
 
+- **Session 1, timeline+peek (2026-07-07):** TASK-0027 done. M2 at 7/11.
+  Next: **TASK-0028 (CSV import)** — server: an import service in the
+  crm module (parse rows → map columns to attribute keys → validate via
+  the same VALIDATORS → batch-create records; dedupe by a chosen key
+  e.g. email/domain: skip-or-update policy); wire as a mutation taking
+  parsed rows (client parses CSV — keep the server payload structured
+  JSON, cap rows per call, loop batches client-side); UI: upload +
+  column-mapping step + dry-run preview (validate-only mode) + result
+  summary (created/updated/skipped/errors per row). Reuse the bulk-load
+  discipline only if benchmarks demand (normal imports are ≤ thousands
+  of rows; the 50k-CTE path is for seed-scale). Then TASK-0029 public
+  REST + webhooks, 0030/0031 ADRs.
+
 - **Session 1, kanban (2026-07-07):** TASK-0026 done. M2 at 6/11.
   **Bundle is at 230/240 KiB — do route-level code splitting
   (lazy routes) as the FIRST step of the next web change.** Next:

@@ -158,6 +158,23 @@ describe('crm tRPC surface (real database, real sessions)', () => {
     expect(fetched.values).toEqual({ name: 'Board Co' });
   });
 
+  it('activity: the audit trail is the timeline, newest first, delete included', async () => {
+    const record = await ownerCaller.crm.records.create({
+      objectId: companyObjectId,
+      values: { name: 'Trail Co' },
+    });
+    await ownerCaller.crm.records.update({ recordId: record.id, values: { name: 'Trail Corp' } });
+    await ownerCaller.crm.records.delete({ recordId: record.id });
+
+    const activity = await ownerCaller.crm.records.activity({ recordId: record.id });
+    expect(activity.items.map((entry) => entry.action)).toEqual([
+      'record.delete',
+      'record.update',
+      'record.create',
+    ]);
+    expect(activity.items.every((entry) => entry.actorKind === 'human')).toBe(true);
+  });
+
   it('members can work records but not delete them or manage objects', async () => {
     const memberHeaders = await signUp('crm-member@example.com', 'Member');
     const session = await auth.api.getSession({ headers: memberHeaders });

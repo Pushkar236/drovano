@@ -117,11 +117,43 @@ vi.mock('../lib/trpc.js', () => ({
         },
         update: { mutate: updateMutate },
         create: { mutate: createMutate },
+        get: {
+          query: vi.fn().mockImplementation((input: { recordId: string }) => {
+            const row = serverRows.find((candidate) => candidate.id === input.recordId);
+            return row
+              ? Promise.resolve({ ...row, values: { ...row.values } })
+              : Promise.reject(new Error('not found'));
+          }),
+        },
+        activity: {
+          query: vi.fn().mockResolvedValue({
+            items: [
+              {
+                id: 'a-1',
+                action: 'record.update',
+                actorKind: 'human',
+                actorId: 'user-1',
+                detail: { keys: ['name'] },
+                at: '2026-07-07T10:30:00.000Z',
+              },
+              {
+                id: 'a-0',
+                action: 'record.create',
+                actorKind: 'system',
+                actorId: null,
+                detail: null,
+                at: '2026-07-07T09:00:00.000Z',
+              },
+            ],
+            nextCursor: null,
+          }),
+        },
       },
     },
   },
 }));
 
+import { closePeek } from '../lib/peek.js';
 import { createTestRouter } from '../router.js';
 
 const INITIAL_ROWS = serverRows.map((row) => ({ ...row, values: { ...row.values } }));
@@ -131,6 +163,7 @@ beforeEach(() => {
     serverRows.length,
     ...INITIAL_ROWS.map((row) => ({ ...row, values: { ...row.values } })),
   );
+  closePeek(); // the peek store is module-level, like in the app
 });
 
 async function renderRecords() {
@@ -194,6 +227,22 @@ describe('records grid', () => {
     await userEvent.type(editor, 'zzz{Escape}');
     expect(screen.getByText('Globex')).toBeInTheDocument();
     expect(updateMutate).not.toHaveBeenCalledWith(expect.objectContaining({ recordId: 'r-2' }));
+  });
+
+  it('Space opens the peek panel with values and the timeline', async () => {
+    await renderRecords();
+    screen.getByText(/^Acme/).focus();
+    await userEvent.keyboard(' ');
+    const panel = await screen.findByRole('complementary', { name: 'Context panel' });
+    await waitFor(() => {
+      expect(panel.textContent).toContain('Activity');
+    });
+    expect(panel.textContent).toContain('Updated');
+    expect(panel.textContent).toContain('Created');
+    expect(panel.textContent).toContain('(system)');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Close panel' }));
+    expect(screen.queryByRole('complementary', { name: 'Context panel' })).not.toBeInTheDocument();
   });
 
   it('passes axe', async () => {

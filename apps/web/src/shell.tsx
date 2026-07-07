@@ -3,8 +3,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CommandPalette } from './command-palette.js';
 import { commands, type CommandContext } from './commands.js';
+import { PeekPanel } from './components/peek-panel.js';
 import { queryClient } from './data/workspaces.js';
 import { authClient } from './lib/auth-client.js';
+import { usePeekRecordId } from './lib/peek.js';
 import { connectRealtime } from './lib/realtime.js';
 import { applyThemePreference } from './theme.js';
 
@@ -20,6 +22,7 @@ export function Shell() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [railCollapsed, setRailCollapsed] = useState(false);
   const [peekOpen, setPeekOpen] = useState(false);
+  const peekRecordId = usePeekRecordId();
   const paletteInvokerRef = useRef<Element | null>(null);
 
   const commandContext: CommandContext = {
@@ -206,15 +209,21 @@ export function Shell() {
         <Outlet />
       </main>
 
-      {peekOpen && (
+      {(peekOpen || peekRecordId !== null) && (
         <aside
           aria-label="Context panel"
-          className="w-80 border-l border-border-hairline bg-surface-base p-4"
+          className="w-80 overflow-y-auto border-l border-border-hairline bg-surface-base"
         >
-          <h2 className="text-md font-semibold text-text-primary">No record selected</h2>
-          <p className="mt-1 text-base text-text-secondary">
-            Select a record to inspect it here without leaving your view.
-          </p>
+          {peekRecordId !== null ? (
+            <PeekPanel key={peekRecordId} recordId={peekRecordId} />
+          ) : (
+            <div className="p-4">
+              <h2 className="text-md font-semibold text-text-primary">No record selected</h2>
+              <p className="mt-1 text-base text-text-secondary">
+                Select a record and press Space to inspect it here without leaving your view.
+              </p>
+            </div>
+          )}
         </aside>
       )}
 

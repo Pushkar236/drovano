@@ -10,6 +10,15 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Record timeline & peek panel (TASK-0027): the audit trail
+  IS the timeline — `crm.records.activity` reads the same transactional
+  audit rows every mutation already writes (no second write path to
+  drift), newest first, uuidv7-id cursor. The shell's context panel goes
+  live: Space on a grid row (or any surface calling `openPeek`) inspects
+  the record — values plus its activity feed with human action phrasing
+  and non-human actors marked — without leaving the view; Esc-free close
+  button, per-record query caching. 23 web + 25 api tests green.
+
 - 2026-07-07 — Route-level code splitting + live deploy refresh: every
   page component lazy-loads via `lazyRouteComponent`; the bundle budget
   now measures the INITIAL payload (entry + static-import closure walked

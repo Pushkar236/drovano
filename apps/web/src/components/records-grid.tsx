@@ -4,6 +4,7 @@ import { useRef, useState, type KeyboardEvent } from 'react';
 
 import type { AttributeSummary } from '../data/crm.js';
 import type { createRecordsCollection } from '../data/crm.js';
+import { openPeek } from '../lib/peek.js';
 
 const ROW_HEIGHT = 32; // dense context, 4px grid (DESIGN_SYSTEM §5)
 const EDITABLE_TYPES = new Set(['text', 'url', 'email', 'phone', 'number', 'select']);
@@ -95,6 +96,14 @@ export function RecordsGrid({ collection, attributes, onError }: RecordsGridProp
     if (event.key === 'Enter') {
       event.preventDefault();
       beginEdit(active.row, active.col);
+      return;
+    }
+    if (event.key === ' ') {
+      const record = rows[active.row];
+      if (record !== undefined) {
+        event.preventDefault();
+        openPeek(record.id);
+      }
     }
   };
 
