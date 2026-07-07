@@ -7,7 +7,7 @@
 
 ## Problem
 
-Choose the identity foundation for a product whose core domain model *is*
+Choose the identity foundation for a product whose core domain model _is_
 organizations, workspaces, memberships, and (uniquely) **agent
 principals**. Forces: 100k+ organizations makes per-org vendor pricing an
 existential cost axis; SECURITY.md requires argon2id, MFA, and an
@@ -26,7 +26,7 @@ data as domain data.
   server plugin now exists.
 - $0 marginal cost at 100k+ orgs.
 - Auth.js is now part of Better Auth (Sept 2025 maintainer transition) —
-  it *is* the TS-ecosystem default successor.
+  it _is_ the TS-ecosystem default successor.
 - Weaknesses: seed-stage vendor ($5M, Jun 2025); SAML/SCIM plugins young
   and enterprise-unproven.
 - Evidence: research §5 (verified 2026-07-06: better-auth 1.6.23; the

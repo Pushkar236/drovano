@@ -25,6 +25,7 @@ reliability — the combination nobody has shipped (PRD §4).
 ## 2. Core primitives
 
 ### Objects
+
 Typed blueprints for records. **Standard objects** (Person, Company, Deal,
 Meeting, Task, Note, Document) ship with opinionated defaults and
 non-removable system attributes; **custom objects** are user-defined.
@@ -32,15 +33,18 @@ Standard objects can be extended but not broken — module code may rely on
 system attributes existing.
 
 ### Attributes
-Typed columns defined on an object *or on a list* (see Lists). Types (v1):
+
+Typed columns defined on an object _or on a list_ (see Lists). Types (v1):
 text, number, currency, date, timestamp, checkbox, select, multi-select,
 URL, email, phone, user, **relation**, and **AI-computed** (any base type
-+ a prompt-as-formula + refresh policy). Attribute definitions are
-records themselves (metadata is data): id, object/list scope, type,
-constraints, default, archived flag. Attribute *values* are stored
-typed (see §5).
+
+- a prompt-as-formula + refresh policy). Attribute definitions are
+  records themselves (metadata is data): id, object/list scope, type,
+  constraints, default, archived flag. Attribute _values_ are stored
+  typed (see §5).
 
 ### Records
+
 Instances of an object. Every record: `id` (uuidv7), `tenant_id`,
 object id, created/updated provenance (which principal — human, agent, or
 integration), soft-delete state. Merge/dedupe is a first-class operation
@@ -48,6 +52,7 @@ integration), soft-delete state. Merge/dedupe is a first-class operation
 reversible within a retention window).
 
 ### Relations
+
 Typed, **bidirectional** links between records, defined as relation
 attributes (one-to-one, one-to-many, many-to-many). Both directions are
 queryable and viewable. Cross-object by design: a Meeting relates to
@@ -55,6 +60,7 @@ People, a Company, a Deal; a Task relates to anything. This is the "one
 graph" law — context is never trapped in a module.
 
 ### Lists & views
+
 **Lists** are curated subsets of one object's records with **list-scoped
 attributes**: process state (e.g., "Q3 outbound stage") lives on the list
 entry, not the record — entity truth and workflow state never pollute each
@@ -63,6 +69,7 @@ saved configurations (table/kanban; filters, sorts, grouping, visible
 columns) over an object or list. Pipelines are lists with stage semantics.
 
 ### Timeline (the context stream)
+
 Per-record, append-only, multi-channel stream: emails, meeting artifacts,
 notes, calls, attribute changes, task events, **agent actions**. Entries
 carry actor provenance and links to source artifacts (transcript, email).

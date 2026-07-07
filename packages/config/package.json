@@ -1,0 +1,12 @@
+{
+  "name": "@drovano/config",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared TypeScript configuration presets for the Drovano workspace",
+  "exports": {
+    "./tsconfig/*": "./tsconfig/*"
+  },
+  "files": [
+    "tsconfig"
+  ]
+}

@@ -45,12 +45,12 @@ spreadsheets/lightweight CRMs but find enterprise suites heavy, ugly, and
 dumb. Sales-led or founder-led motions with meetings at the center of the
 deal cycle.
 
-| Persona | Role in purchase | What they need from v1 |
-|---|---|---|
-| **Founder / sales lead** | Buyer + daily user | Pipeline truth without nagging the team to update records; follow-ups that never slip |
-| **Account executive / CSM** | Daily user | Meeting prep in one place; notes, follow-ups, and record updates done for them; fast keyboard-first UI |
-| **RevOps / ops lead** | Champion + admin | Custom objects/fields/views without consultants; trustworthy data; reporting that doesn't require export |
-| **AI worker** (non-human) | Operator | Typed, permissioned, audited operations; retrieval scoped to its grantor's permissions |
+| Persona                     | Role in purchase   | What they need from v1                                                                                   |
+| --------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------- |
+| **Founder / sales lead**    | Buyer + daily user | Pipeline truth without nagging the team to update records; follow-ups that never slip                    |
+| **Account executive / CSM** | Daily user         | Meeting prep in one place; notes, follow-ups, and record updates done for them; fast keyboard-first UI   |
+| **RevOps / ops lead**       | Champion + admin   | Custom objects/fields/views without consultants; trustworthy data; reporting that doesn't require export |
+| **AI worker** (non-human)   | Operator           | Typed, permissioned, audited operations; retrieval scoped to its grantor's permissions                   |
 
 The fourth persona is deliberate: every capability below must be specified
 as an operation both a human and an agent can perform (PROJECT.md, law 2).
@@ -130,11 +130,11 @@ Modules build on the shared object graph (`docs/architecture/data-model.md`).
 
 - **AI workers v1 — three named, narrow, trustworthy workers** (breadth >
   depth killed the 2025 agent startups; we ship depth):
-  1. *Record keeper*: maintains the graph from email/calendar/meeting
+  1. _Record keeper_: maintains the graph from email/calendar/meeting
      signals; proposes merges/dedupes; fills AI attributes.
-  2. *Meeting assistant*: everything in §3.3; owns prep briefs and
+  2. _Meeting assistant_: everything in §3.3; owns prep briefs and
      follow-up drafts.
-  3. *Research assistant*: on-demand web research to fill attributes and
+  3. _Research assistant_: on-demand web research to fill attributes and
      answer "tell me about this company" — with cited sources.
 - Agent trust infrastructure (differentiator): per-worker permission
   scopes, session logs (what it read, what it did), reversibility for
@@ -194,18 +194,18 @@ These are product requirements, not aspirations; they are enforced per
 
 **Performance budgets (p95 unless noted):**
 
-| Surface | Budget |
-|---|---|
-| Interaction acknowledgment (any click/keystroke) | < 100 ms perceived (optimistic UI) |
-| Navigation between views (warm) | < 200 ms |
-| Record peek open | < 150 ms |
-| Table scroll | 60 fps, virtualized, no layout shift |
-| ⌘K open | < 50 ms |
-| API reads (single record) | < 150 ms p95 server-side |
-| API list queries (≤ 50 rows) | < 300 ms p95 |
-| AI: streamed first token (assistant surfaces) | < 1.5 s |
-| Meeting artifacts (summary, actions, drafts) | < 2 min after meeting end |
-| Cold full-page load (app shell) | < 2.5 s on mid-tier hardware |
+| Surface                                          | Budget                               |
+| ------------------------------------------------ | ------------------------------------ |
+| Interaction acknowledgment (any click/keystroke) | < 100 ms perceived (optimistic UI)   |
+| Navigation between views (warm)                  | < 200 ms                             |
+| Record peek open                                 | < 150 ms                             |
+| Table scroll                                     | 60 fps, virtualized, no layout shift |
+| ⌘K open                                          | < 50 ms                              |
+| API reads (single record)                        | < 150 ms p95 server-side             |
+| API list queries (≤ 50 rows)                     | < 300 ms p95                         |
+| AI: streamed first token (assistant surfaces)    | < 1.5 s                              |
+| Meeting artifacts (summary, actions, drafts)     | < 2 min after meeting end            |
+| Cold full-page load (app shell)                  | < 2.5 s on mid-tier hardware         |
 
 **Security & privacy:** per `SECURITY.md` in full — RLS backstop, least
 privilege, audit-everything, no training on tenant data, AI retrieval under
@@ -228,7 +228,7 @@ before re-platforming retrieval (exits documented in ADR-0006/0010).
 
 ## 6. Pricing & packaging direction
 
-Not final pricing — the packaging *shape*, chosen against the researched
+Not final pricing — the packaging _shape_, chosen against the researched
 failure modes (credit opacity, seat buckets, pricing-regime whiplash,
 SSO ransom):
 

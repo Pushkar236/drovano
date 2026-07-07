@@ -10,14 +10,14 @@ integration tests that exercise real module boundaries, supported by unit
 tests for pure logic and a thin layer of end-to-end tests for critical
 journeys.
 
-| Layer | What it proves | Where it runs |
-|---|---|---|
-| Static | Types, lint, dead code, dependency rules | Pre-commit + CI |
-| Unit | Pure logic: domain rules, calculators, parsers, reducers | CI, every PR |
-| Integration | Module behavior against a **real Postgres** (Testcontainers), API contracts, authz + tenant isolation | CI, every PR |
-| End-to-end | Critical user journeys in a real browser (Playwright) | CI on main + nightly |
-| Accessibility | Automated axe checks in component/E2E tests + manual keyboard pass per feature | CI + per feature |
-| Performance | Budgets on API latency and frontend bundles/interactions | CI on main + release |
+| Layer         | What it proves                                                                                        | Where it runs        |
+| ------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
+| Static        | Types, lint, dead code, dependency rules                                                              | Pre-commit + CI      |
+| Unit          | Pure logic: domain rules, calculators, parsers, reducers                                              | CI, every PR         |
+| Integration   | Module behavior against a **real Postgres** (Testcontainers), API contracts, authz + tenant isolation | CI, every PR         |
+| End-to-end    | Critical user journeys in a real browser (Playwright)                                                 | CI on main + nightly |
+| Accessibility | Automated axe checks in component/E2E tests + manual keyboard pass per feature                        | CI + per feature     |
+| Performance   | Budgets on API latency and frontend bundles/interactions                                              | CI on main + release |
 
 ## Rules
 

@@ -3,7 +3,7 @@
 > **Status:** v1.0, 2026-07-07. This is the summary; detail documents live
 > in [`docs/architecture/`](docs/architecture/). Every technology choice
 > here is governed by an ADR in [`DECISIONS.md`](DECISIONS.md) — this
-> document states *what*; the ADRs record *why and what else we considered*.
+> document states _what_; the ADRs record _why and what else we considered_.
 > Evidence base: [`docs/research/technology-stack-2026.md`](docs/research/technology-stack-2026.md).
 
 ## Shape of the system
@@ -38,27 +38,27 @@ deployment change, not a rewrite (ADR-0004).
 
 ## Load-bearing decisions (index)
 
-| Concern | Decision | ADR |
-|---|---|---|
-| Language & repo | TypeScript everywhere; pnpm 10 + Turborepo 2.x monorepo, TS project references, Boundaries | [ADR-0001](docs/decisions/adr-0001-typescript-monorepo.md) |
-| Frontend | Vite 8 + React 19.2 + TanStack Router/Query, SPA-first; marketing site separate | [ADR-0002](docs/decisions/adr-0002-frontend-framework.md) |
-| Client data layer | TanStack DB collections + WS invalidation now; ElectricSQL shapes as the upgrade path; no hand-rolled sync engine | [ADR-0003](docs/decisions/adr-0003-client-data-layer.md) |
-| Backend | Modular monolith on Hono 4.x, boundary-enforced module packages | [ADR-0004](docs/decisions/adr-0004-backend-modular-monolith.md) |
-| API strategy | tRPC v11 internal; REST + OpenAPI from Zod v4 public; Speakeasy SDKs; tenant-scoped OAuth MCP server | [ADR-0005](docs/decisions/adr-0005-api-strategy.md) |
-| Database & tenancy | Postgres 18 on Neon; shared schema + `tenant_id` (uuidv7) + RLS; Drizzle ORM + Kysely | [ADR-0006](docs/decisions/adr-0006-database-multi-tenancy.md) |
-| Jobs & durable execution | Trigger.dev v4 (self-hostable) as the single substrate for jobs and AI workers | [ADR-0007](docs/decisions/adr-0007-jobs-durable-execution.md) |
-| Auth | better-auth self-hosted + organization plugin; WorkOS as enterprise SSO/SCIM fallback | [ADR-0008](docs/decisions/adr-0008-authentication.md) |
-| Design-system stack | Tailwind v4 `@theme` + DTCG tokens, Base UI primitives, Motion | [ADR-0009](docs/decisions/adr-0009-design-system-stack.md) |
-| AI layer | Vercel AI SDK v7 + thin loops per Anthropic guidance; Claude Agent SDK for heavyweight workers; contextual + hybrid + reranked RAG on pgvector | [ADR-0010](docs/decisions/adr-0010-ai-layer.md) |
+| Concern                  | Decision                                                                                                                                       | ADR                                                             |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Language & repo          | TypeScript everywhere; pnpm 10 + Turborepo 2.x monorepo, TS project references, Boundaries                                                     | [ADR-0001](docs/decisions/adr-0001-typescript-monorepo.md)      |
+| Frontend                 | Vite 8 + React 19.2 + TanStack Router/Query, SPA-first; marketing site separate                                                                | [ADR-0002](docs/decisions/adr-0002-frontend-framework.md)       |
+| Client data layer        | TanStack DB collections + WS invalidation now; ElectricSQL shapes as the upgrade path; no hand-rolled sync engine                              | [ADR-0003](docs/decisions/adr-0003-client-data-layer.md)        |
+| Backend                  | Modular monolith on Hono 4.x, boundary-enforced module packages                                                                                | [ADR-0004](docs/decisions/adr-0004-backend-modular-monolith.md) |
+| API strategy             | tRPC v11 internal; REST + OpenAPI from Zod v4 public; Speakeasy SDKs; tenant-scoped OAuth MCP server                                           | [ADR-0005](docs/decisions/adr-0005-api-strategy.md)             |
+| Database & tenancy       | Postgres 18 on Neon; shared schema + `tenant_id` (uuidv7) + RLS; Drizzle ORM + Kysely                                                          | [ADR-0006](docs/decisions/adr-0006-database-multi-tenancy.md)   |
+| Jobs & durable execution | Trigger.dev v4 (self-hostable) as the single substrate for jobs and AI workers                                                                 | [ADR-0007](docs/decisions/adr-0007-jobs-durable-execution.md)   |
+| Auth                     | better-auth self-hosted + organization plugin; WorkOS as enterprise SSO/SCIM fallback                                                          | [ADR-0008](docs/decisions/adr-0008-authentication.md)           |
+| Design-system stack      | Tailwind v4 `@theme` + DTCG tokens, Base UI primitives, Motion                                                                                 | [ADR-0009](docs/decisions/adr-0009-design-system-stack.md)      |
+| AI layer                 | Vercel AI SDK v7 + thin loops per Anthropic guidance; Claude Agent SDK for heavyweight workers; contextual + hybrid + reranked RAG on pgvector | [ADR-0010](docs/decisions/adr-0010-ai-layer.md)                 |
 
 ## Detail documents
 
-| Document | Contents |
-|---|---|
-| [`docs/architecture/system-overview.md`](docs/architecture/system-overview.md) | Module map, request lifecycles, deployment topology, observability |
-| [`docs/architecture/multi-tenancy.md`](docs/architecture/multi-tenancy.md) | Tenancy model, RLS mechanics, pooling, scale exits |
-| [`docs/architecture/data-model.md`](docs/architecture/data-model.md) | Object graph: objects/records/attributes/lists, timeline, context stream |
-| [`docs/architecture/ai-system.md`](docs/architecture/ai-system.md) | AI workers, agent trust infrastructure, retrieval pipeline |
+| Document                                                                       | Contents                                                                 |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| [`docs/architecture/system-overview.md`](docs/architecture/system-overview.md) | Module map, request lifecycles, deployment topology, observability       |
+| [`docs/architecture/multi-tenancy.md`](docs/architecture/multi-tenancy.md)     | Tenancy model, RLS mechanics, pooling, scale exits                       |
+| [`docs/architecture/data-model.md`](docs/architecture/data-model.md)           | Object graph: objects/records/attributes/lists, timeline, context stream |
+| [`docs/architecture/ai-system.md`](docs/architecture/ai-system.md)             | AI workers, agent trust infrastructure, retrieval pipeline               |
 
 ## Principles the architecture must never violate
 

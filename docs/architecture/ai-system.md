@@ -46,11 +46,11 @@ not a chatbot layer. Three consequences structure everything below:
 Each is a named principal with a documented scope; depth over breadth
 (the 2025 agent-startup churn lesson).
 
-| Worker | Trigger | Scope (grants) | Consequential gate |
-|---|---|---|---|
-| **Record keeper** | Email/calendar sync events; schedule | read comms signals; create/update People, Companies; propose merges; fill AI attributes | merges & overwrites of human-entered values require acceptance |
-| **Meeting assistant** | Meeting ended; upcoming meeting | read related records + transcript; propose summary, tasks, attribute updates; draft follow-up | everything provisional-until-accepted; **sending email always human-gated** |
-| **Research assistant** | On-demand | web research tools; fill requested attributes with cited sources | writes are provisional; sources attached |
+| Worker                 | Trigger                              | Scope (grants)                                                                                | Consequential gate                                                          |
+| ---------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **Record keeper**      | Email/calendar sync events; schedule | read comms signals; create/update People, Companies; propose merges; fill AI attributes       | merges & overwrites of human-entered values require acceptance              |
+| **Meeting assistant**  | Meeting ended; upcoming meeting      | read related records + transcript; propose summary, tasks, attribute updates; draft follow-up | everything provisional-until-accepted; **sending email always human-gated** |
+| **Research assistant** | On-demand                            | web research tools; fill requested attributes with cited sources                              | writes are provisional; sources attached                                    |
 
 Worker runs are **sessions**: a session log records what was read (queries,
 records, documents), what was proposed, what was accepted/rejected, token
@@ -73,7 +73,7 @@ Per ADR-0010, the researched 2026 consensus:
    freedom) for worker/assistant surfaces; one-shot RAG only for
    latency-sensitive Q&A (⌘K answers).
 4. **Permissions:** every retrieval query runs under the caller's tenant
-   GUC *and* permission filters — an agent can never retrieve what its
+   GUC _and_ permission filters — an agent can never retrieve what its
    grantor couldn't read. This is tested per `TESTING.md` (isolation +
    allow/deny matrices on the retrieval path).
 5. **Exit:** at ~10M+ vectors or hard hybrid-search requirements,

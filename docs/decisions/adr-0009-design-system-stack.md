@@ -7,7 +7,7 @@
 
 ## Problem
 
-`DESIGN_SYSTEM.md` (Strata) defines the design *language*; this ADR fixes
+`DESIGN_SYSTEM.md` (Strata) defines the design _language_; this ADR fixes
 the technology that implements it: token pipeline, styling engine,
 headless primitives, motion. Forces: WCAG 2.2 AA encoded in tokens;
 co-equal dark/light from one primitive set; owned component code with no
@@ -17,7 +17,7 @@ stock aesthetic leaking; a data-grid-heavy product.
 
 ### Option A — DTCG tokens → CSS custom properties via Tailwind v4 `@theme`; Base UI primitives; TanStack-class grid machinery; Motion library
 
-- Tailwind v4 is CSS-first: `@theme` makes design tokens *be* CSS custom
+- Tailwind v4 is CSS-first: `@theme` makes design tokens _be_ CSS custom
   properties — the token system and the styling engine are one artifact,
   OKLCH-native.
 - W3C DTCG token format hit its first stable version (2025.10) — the
@@ -37,7 +37,7 @@ stock aesthetic leaking; a data-grid-heavy product.
 ### Option B — shadcn/ui as the component base
 
 - Fast start, huge mindshare, copy-in ownership model (which we do adopt
-  *as a pattern*).
+  _as a pattern_).
 - Rejected as a base: its Radix underpinnings and recognizable default
   aesthetic violate Strata's "no stock component aesthetic may leak"
   rule; we'd spend the saved time un-styling it.

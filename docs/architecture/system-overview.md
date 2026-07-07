@@ -30,20 +30,20 @@ docs/             This documentation set
 ### Domain modules
 
 Each module is a package exporting: Drizzle schema fragments, Zod
-contracts, a service layer (the *only* write path for its aggregates),
+contracts, a service layer (the _only_ write path for its aggregates),
 tRPC routers, and Trigger.dev tasks. Modules import only each other's
 published interfaces — enforced by Turborepo Boundaries tags + TS project
 references in CI (ADR-0004).
 
-| Module | Owns |
-|---|---|
-| `identity` | Users, sessions, MFA, agent principals |
-| `orgs` | Organizations, workspaces, memberships, invitations, roles |
-| `crm` | Objects, records, attributes, lists, views, pipelines |
-| `work` | Tasks, calendar sync, meetings |
-| `knowledge` | Notes, documents, indexing hooks |
-| `intelligence` | AI workers, automation rules, analytics queries |
-| `platform` | API keys, webhooks, MCP server, integrations |
+| Module         | Owns                                                       |
+| -------------- | ---------------------------------------------------------- |
+| `identity`     | Users, sessions, MFA, agent principals                     |
+| `orgs`         | Organizations, workspaces, memberships, invitations, roles |
+| `crm`          | Objects, records, attributes, lists, views, pipelines      |
+| `work`         | Tasks, calendar sync, meetings                             |
+| `knowledge`    | Notes, documents, indexing hooks                           |
+| `intelligence` | AI workers, automation rules, analytics queries            |
+| `platform`     | API keys, webhooks, MCP server, integrations               |
 
 Cross-cutting packages (`permissions`, `telemetry`/audit, `db`) are
 dependencies of modules, never the reverse.

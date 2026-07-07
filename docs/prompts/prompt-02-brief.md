@@ -20,8 +20,8 @@ production-ready only, no placeholders):
 1. **TASK-0005 / TASK-0006** — monorepo scaffold + CI gates. First PR-able
    unit; everything else builds on it.
 2. **TASK-0007** — `packages/db` with RLS-as-code and the Testcontainers
-   tenant-isolation harness. *The isolation tests are the milestone's
-   soul; do not proceed to auth until they're green.*
+   tenant-isolation harness. _The isolation tests are the milestone's
+   soul; do not proceed to auth until they're green._
 3. **TASK-0008 / TASK-0009 / TASK-0010** — auth + orgs, permission
    service, audit + telemetry.
 4. **TASK-0011 / TASK-0012** — token set and typography (design track can

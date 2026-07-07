@@ -69,8 +69,9 @@ there.
 ## Decision
 
 TypeScript everywhere; pnpm 10 workspaces (with catalogs) + Turborepo 2.x
-+ TypeScript project references; Turborepo Boundaries (tags) as the
-module-constraint enforcement from the first package.
+
+- TypeScript project references; Turborepo Boundaries (tags) as the
+  module-constraint enforcement from the first package.
 
 ## Why this option
 

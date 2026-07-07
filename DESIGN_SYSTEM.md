@@ -46,8 +46,8 @@ requires an ADR.
    not size sprawl. UI body sits at 13–14px in work surfaces.
    (Final typeface selection is TASK-0012 — an evaluation with rendering
    tests across Windows/macOS, not a default to Inter.)
-5. **4px grid, no off-grid values.** Two density contexts — *calm*
-   (marketing, onboarding, empty states: generous whitespace) and *dense*
+5. **4px grid, no off-grid values.** Two density contexts — _calm_
+   (marketing, onboarding, empty states: generous whitespace) and _dense_
    (tables, boards, records: compact rhythm) — one spacing scale.
 6. **Dark and light are co-equal themes.** Both ship at full quality from
    the first screen. Dark is designed (no pure black, elevation via
@@ -76,9 +76,9 @@ requires an ADR.
 
 AI is infrastructure, not a feature to be badged.
 
-- **Placement by task weight:** *embedded* (ghost text, inline suggestions,
-  one-keystroke accept) for light transforms; *assistive* (contextual side
-  panel) for content and analysis work; *immersive* (AI-primary canvas)
+- **Placement by task weight:** _embedded_ (ghost text, inline suggestions,
+  one-keystroke accept) for light transforms; _assistive_ (contextual side
+  panel) for content and analysis work; _immersive_ (AI-primary canvas)
   only for genuinely open-ended work. Chat is the last resort, not the
   default. AI is never exiled to a sidebar that forces context switching
   away from the work.

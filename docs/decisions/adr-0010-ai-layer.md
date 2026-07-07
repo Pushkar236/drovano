@@ -23,7 +23,7 @@ that framework maximalism (LangChain-style) ages badly.
   stable MCP support, reranking API, telemetry.
 - Orchestration per the Anthropic canon (Building Effective Agents,
   context engineering, long-running harnesses): workflow-first, one agent
-  + good tools before multi-agent, invest in tools and context over
+  plus good tools before multi-agent, invest in tools and context over
   framework choice.
 - Claude Agent SDK where a worker genuinely needs an autonomous harness
   (subagents, hooks, compaction) — evaluated per worker, not default.
@@ -90,7 +90,7 @@ per-domain tables with the Turbopuffer exit planned at ~10M+ vectors.
 2. The retrieval pipeline is the published state of the art with primary-
    source evals, and its permission filtering falls out of RLS + the
    permission service rather than a parallel security model.
-3. pgvector-first keeps one database until scale *evidence* (not
+3. pgvector-first keeps one database until scale _evidence_ (not
    anticipation) justifies a second system; the exit is pre-planned, so
    it's a data move, not a redesign.
 4. Every layer is independently swappable: models (AI SDK routing),

@@ -44,7 +44,7 @@ technology well.
 ### Option C — Database-per-tenant
 
 - Strongest isolation; Neon economics make it feasible.
-- Wrong as the *default*: connection/control-plane complexity for 100k
+- Wrong as the _default_: connection/control-plane complexity for 100k
   tenants, cross-tenant analytics pain. Right as the **enterprise-tier
   exit**, which Option A's row discipline keeps open (bridge model).
 
@@ -83,7 +83,7 @@ never DDL.
 1. Only Postgres lets tenancy, vectors, audit, full-text, and CDC-based
    sync compound on one operational competence (ARCHITECTURE.md
    principle 1).
-2. The pool model is the only choice that preserves *every* exit —
+2. The pool model is the only choice that preserves _every_ exit —
    Citus, PlanetScale Postgres, and silo-per-enterprise all key on
    `tenant_id`-on-every-row.
 3. RLS as backstop converts the worst bug class (cross-tenant leak) into

@@ -8,7 +8,7 @@
 ## Problem
 
 The PRD demands < 100 ms perceived interactions and Linear-class speed
-(the researched durable moat users *feel*). That requires optimistic
+(the researched durable moat users _feel_). That requires optimistic
 writes, instant local reads, and live updates. The 2026 question: adopt a
 sync engine, hand-roll one, or structure a conventional cache to grow into
 sync? Forces: sync engines are young; Linear's engine took years of

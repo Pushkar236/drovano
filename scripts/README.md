@@ -10,5 +10,6 @@ Rules:
 - Scripts are idempotent where possible and never destructive without an
   explicit `--force` style flag.
 
-No scripts exist yet — the first (`verify-docs`, a docs/link consistency
-checker) is TASK-0004 in `docs/tasks/BACKLOG.md`.
+| Script                           | Purpose                                                                                                                          | Run                |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `src/verify-docs.ts` (TASK-0004) | Docs consistency: broken relative links, dangling ADR/TASK references, unindexed ADRs. Read-only; exit 1 on defects. Runs in CI. | `pnpm verify-docs` |

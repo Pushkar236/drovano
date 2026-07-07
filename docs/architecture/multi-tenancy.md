@@ -8,7 +8,7 @@
 
 **Pool model: shared schema, `tenant_id` on every row, Postgres Row-Level
 Security as the database-enforced backstop.** The tenant is the
-*organization*; workspaces partition data within a tenant via application
+_organization_; workspaces partition data within a tenant via application
 permissions, not separate RLS scopes.
 
 - `tenant_id` is `uuidv7` (Postgres 18 native) — time-ordered, index-friendly.
@@ -25,21 +25,33 @@ Chosen for compatibility with transaction-mode connection pooling and
 verified against the researched footguns:
 
 ```sql
--- One policy per table, same shape everywhere:
+-- One policy per table, same shape everywhere (authored as Drizzle
+-- pgPolicy in packages/db/src/schema.ts; this is the emitted SQL):
 CREATE POLICY tenant_isolation ON records
-  USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+  AS PERMISSIVE FOR ALL TO drovano_app
+  USING (tenant_id =
+    (select nullif(current_setting('app.current_tenant_id', true), '')::uuid))
+  WITH CHECK (tenant_id =
+    (select nullif(current_setting('app.current_tenant_id', true), '')::uuid));
 
 ALTER TABLE records ENABLE ROW LEVEL SECURITY;
 ALTER TABLE records FORCE ROW LEVEL SECURITY;  -- binds even the table owner
 ```
 
-Per-request, inside a transaction:
+The predicate's three deliberate details: `missing_ok = true` plus
+`nullif(…, '')` make an unset or cleared GUC compare as NULL — zero rows,
+the fail-closed backstop, instead of a query error; and the `(select …)`
+wrapper makes Postgres evaluate it once per query (initplan), not per row.
+
+Per-request, inside a transaction (implemented as `withTenant` in
+`packages/db/src/tenancy.ts` — the one blessed helper):
 
 ```sql
 BEGIN;
-SET LOCAL app.current_tenant_id = '<tenant uuid>';
+-- set_config(…, true) is the parameterizable form of SET LOCAL:
+SELECT set_config('app.current_tenant_id', $1, true);
 -- ... all queries for this request ...
-COMMIT;  -- SET LOCAL scope ends with the transaction
+COMMIT;  -- transaction-local scope ends here; nothing leaks to the pool
 ```
 
 **Non-negotiable rules (each has a bite documented in research):**
@@ -47,7 +59,7 @@ COMMIT;  -- SET LOCAL scope ends with the transaction
 1. `SET LOCAL` inside a transaction only — safe under
    PgBouncer/Neon transaction-mode pooling; no cross-connection leakage.
 2. The application connects as a **non-owner role**; `FORCE ROW LEVEL
-   SECURITY` on every table (owner and superuser silently bypass RLS
+SECURITY` on every table (owner and superuser silently bypass RLS
    otherwise).
 3. **Composite indexes lead with `tenant_id`** — the #1 performance factor
    (~0.3 ms policy overhead at 50M rows/10k tenants when indexed).
@@ -73,16 +85,16 @@ transactions with the same `SET LOCAL` discipline via a shared `db`
 helper — there is one blessed way to get a tenant-scoped connection and it
 is the only exported way. Agent principals additionally pass through the
 permission service with their scoped grants; retrieval queries carry the
-tenant GUC *and* permission filters (see `ai-system.md` §4).
+tenant GUC _and_ permission filters (see `ai-system.md` §4).
 
 ## 4. Known limits & scale exits
 
-| Trigger | Exit | Why it stays open |
-|---|---|---|
-| Whale tenant dominates a table's working set | Partial indexes; table partitioning by `tenant_id` hash | tenant_id on every row |
-| Write volume beyond one primary | Citus (distributes by `tenant_id`; documented at millions of tenants) or PlanetScale Postgres | same |
-| Enterprise isolation/residency demands | Bridge to **silo databases** for that tier: control-plane catalog maps tenant → connection string; Neon database-per-tenant economics documented | one write path per operation makes routing a connection concern |
-| Vectors ≥ ~10M or hybrid-search hardening | Turbopuffer namespace-per-tenant (ADR-0010) | embeddings already in separate per-domain tables |
+| Trigger                                      | Exit                                                                                                                                             | Why it stays open                                               |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| Whale tenant dominates a table's working set | Partial indexes; table partitioning by `tenant_id` hash                                                                                          | tenant_id on every row                                          |
+| Write volume beyond one primary              | Citus (distributes by `tenant_id`; documented at millions of tenants) or PlanetScale Postgres                                                    | same                                                            |
+| Enterprise isolation/residency demands       | Bridge to **silo databases** for that tier: control-plane catalog maps tenant → connection string; Neon database-per-tenant economics documented | one write path per operation makes routing a connection concern |
+| Vectors ≥ ~10M or hybrid-search hardening    | Turbopuffer namespace-per-tenant (ADR-0010)                                                                                                      | embeddings already in separate per-domain tables                |
 
 Honesty note carried from research: there is no named public case study of
 RLS specifically at 100k+ tenants; shared-schema + `tenant_id` scaling is
@@ -98,5 +110,5 @@ treating RLS as backstop, not authorization.
   M1 as operations, not afterthoughts; both are explicit-scoping paths
   with isolation tests.
 - **Backups:** point-in-time for the pool; per-tenant restore = PITR clone
-  + scoped extract (documented runbook before GA; enterprise tier gets
-  per-tenant backup via silo exit).
+  - scoped extract (documented runbook before GA; enterprise tier gets
+    per-tenant backup via silo exit).

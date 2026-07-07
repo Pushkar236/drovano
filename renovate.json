@@ -1,0 +1,12 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":pinAllExceptPeerDependencies"],
+  "rangeStrategy": "pin",
+  "packageRules": [
+    {
+      "description": "ADR-0006: drizzle is pinned to 0.45.x until 1.0 GA; the revisit trigger lives in the ADR.",
+      "matchPackageNames": ["drizzle-orm"],
+      "allowedVersions": "<0.46.0"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@drovano/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Repository automation scripts (TypeScript, run with tsx)",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@drovano/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

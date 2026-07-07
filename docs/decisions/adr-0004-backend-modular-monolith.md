@@ -10,7 +10,7 @@
 Choose the service topology and HTTP framework for a platform that must
 serve 100k+ tenants, host seven domain modules (system-overview.md), and
 keep one write path per operation for humans, API, and agents. Forces:
-small team; strict tenancy discipline; the certainty that *some* work
+small team; strict tenancy discipline; the certainty that _some_ work
 (jobs, AI workers, realtime) runs outside the request path from day one.
 
 ## Alternatives considered
@@ -70,7 +70,7 @@ extracted only on evidence of divergent scaling or compliance needs.
 
 1. One write path per operation (architecture principle 3) is trivially
    auditable in a monolith and painful across services.
-2. Module packages give the *option* of extraction without paying the
+2. Module packages give the _option_ of extraction without paying the
    distributed-systems tax now — boundaries are compile-time-real.
 3. Hono's zod-openapi + tRPC cohabitation directly serves ADR-0005's
    split API strategy on one server.

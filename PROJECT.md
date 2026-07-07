@@ -18,7 +18,7 @@ plus a growing pile of single-purpose AI point solutions. The result:
 - **Manual glue.** People are the integration layer: copying data, updating
   records, writing summaries, chasing follow-ups.
 - **AI bolted on.** Incumbent suites attach chatbots to twenty-year-old data
-  models. The AI can autocomplete an email but cannot *do the work*, because
+  models. The AI can autocomplete an email but cannot _do the work_, because
   the systems it would need to act on were never designed for a non-human
   operator.
 
@@ -55,7 +55,7 @@ Every module obeys three laws:
    audited operation an AI worker can take — with the same authorization
    rules, always attributable, never silent.
 3. **Premium by default.** Fast, keyboard-first, beautiful, accessible.
-   Software people *want* to live in.
+   Software people _want_ to live in.
 
 ## Who it's for
 

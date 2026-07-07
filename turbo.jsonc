@@ -1,0 +1,40 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      // Testcontainers discovers the Docker daemon through these.
+      "passThroughEnv": ["DOCKER_HOST", "TESTCONTAINERS_*", "CI"],
+    },
+  },
+  // Module-boundary enforcement (ADR-0001, ADR-0004). Every package
+  // declares tags in its own turbo.json; these rules define which tags may
+  // depend on which. Domain modules get a "module" tag in M2+ and may only
+  // depend on shared/data — never on apps or each other's internals.
+  "boundaries": {
+    "tags": {
+      "shared": {
+        "dependencies": {
+          "allow": ["shared"],
+        },
+      },
+      "data": {
+        "dependencies": {
+          "allow": ["shared", "data"],
+        },
+      },
+      "tooling": {
+        "dependencies": {
+          "allow": ["shared", "tooling"],
+        },
+      },
+    },
+  },
+}

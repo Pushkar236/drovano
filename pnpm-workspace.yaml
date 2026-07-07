@@ -1,0 +1,29 @@
+packages:
+  - apps/*
+  - packages/*
+  - packages/modules/*
+  - scripts
+
+# Dependency build scripts are blocked by default (supply-chain posture,
+# SECURITY.md); only the allowlisted packages below may run them.
+onlyBuiltDependencies:
+  - esbuild
+
+# Single source of truth for dependency versions across the workspace
+# (ADR-0001). Exact pins; Renovate proposes updates. drizzle-orm is pinned
+# to 0.45.x per ADR-0006 until 1.0 GA.
+catalog:
+  '@testcontainers/postgresql': 12.0.4
+  '@types/node': 26.1.0
+  '@types/pg': 8.20.0
+  drizzle-kit: 0.31.10
+  drizzle-orm: 0.45.2
+  eslint: 10.6.0
+  pg: 8.22.0
+  prettier: 3.9.4
+  tsx: 4.23.0
+  turbo: 2.10.4
+  typescript: 6.0.3
+  typescript-eslint: 8.63.0
+  vitest: 4.1.10
+  zod: 4.4.3

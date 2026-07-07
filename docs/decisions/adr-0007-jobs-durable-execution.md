@@ -21,7 +21,7 @@ is a cost/control hedge; small team → minimize distinct infrastructures.
 
 - TS-native durable execution: journaled steps, checkpoint/resume, no
   task timeouts, waitpoints (approvals), cron, queues — one mental model
-  for jobs *and* agents.
+  for jobs _and_ agents.
 - **Officially supported self-hosting** (Docker Compose + production Helm
   chart) — the exit hatch; cloud pricing sane (free 10k runs/mo, Pro
   $50/mo).

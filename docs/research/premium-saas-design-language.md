@@ -10,27 +10,27 @@
 
 ### 1.1 The meta-principle: restraint + relentless consistency
 
-The consensus across breakdowns of this product class is that "premium" is not an aesthetic ingredient — it is the *absence* of unforced decisions plus total consistency of the few decisions made. "The UI feels expensive because of what it doesn't do… consistency applied to an absurdly narrow palette… fewer design decisions, and the ones made are absolute" ([designsystems.one Geist breakdown](https://www.designsystems.one/design-systems/vercel-geist), [pixeldarts: four design principles behind Stripe/Linear/Vercel](https://www.pixeldarts.com/en/post/four-design-principles-behind-stripe-linear-and-vercel)). The principles reinforce each other: high contrast needs generous whitespace to not feel aggressive; monochrome needs sharp type to not feel bland. Same rules on marketing site, in-product, docs, and help — cross-surface coherence itself is the brand signal ([thebrandstrategylab](https://thebrandstrategylab.com/blog/lessons-for-b2b-saas-from-notion-branding/)).
+The consensus across breakdowns of this product class is that "premium" is not an aesthetic ingredient — it is the _absence_ of unforced decisions plus total consistency of the few decisions made. "The UI feels expensive because of what it doesn't do… consistency applied to an absurdly narrow palette… fewer design decisions, and the ones made are absolute" ([designsystems.one Geist breakdown](https://www.designsystems.one/design-systems/vercel-geist), [pixeldarts: four design principles behind Stripe/Linear/Vercel](https://www.pixeldarts.com/en/post/four-design-principles-behind-stripe-linear-and-vercel)). The principles reinforce each other: high contrast needs generous whitespace to not feel aggressive; monochrome needs sharp type to not feel bland. Same rules on marketing site, in-product, docs, and help — cross-surface coherence itself is the brand signal ([thebrandstrategylab](https://thebrandstrategylab.com/blog/lessons-for-b2b-saas-from-notion-branding/)).
 
 **Implication for Drovano:** define a small number of absolute rules and never break them; treat every exception as a system bug.
 
 ### 1.2 Typography
 
-- **Typeface class:** a sharp, slightly geometric grotesque/neo-grotesque sans for UI — not rounded "friendly" humanist faces; sharpness reads as engineering precision ([pixeldarts](https://www.pixeldarts.com/en/post/four-design-principles-behind-stripe-linear-and-vercel)). Inter is the incumbent default across the class ([fullstop360 SaaS typography survey](https://fullstop360.com/blog/saas-typography-playbook-what-leading-companies-use)) — which is exactly why an original language should consider a *different* grotesque (or a variable face) to avoid "Inter default" sameness, while keeping the class.
+- **Typeface class:** a sharp, slightly geometric grotesque/neo-grotesque sans for UI — not rounded "friendly" humanist faces; sharpness reads as engineering precision ([pixeldarts](https://www.pixeldarts.com/en/post/four-design-principles-behind-stripe-linear-and-vercel)). Inter is the incumbent default across the class ([fullstop360 SaaS typography survey](https://fullstop360.com/blog/saas-typography-playbook-what-leading-companies-use)) — which is exactly why an original language should consider a _different_ grotesque (or a variable face) to avoid "Inter default" sameness, while keeping the class.
 - **Companion monospace with tabular numerals** for IDs, metrics, timestamps, code, table numbers — mono numerals in data read as "engineering-grade" and are a cheap, powerful premium signal ([designsystems.one](https://www.designsystems.one/design-systems/vercel-geist)).
 - **Scale:** small, deliberate scale — UI body ~13–14px in dense apps, ~2 display sizes, weight (not size) doing most hierarchy work ([saasui.design 2026 trends](https://www.saasui.design/blog/7-saas-ui-design-trends-2026), [saasui.design B2B principles](https://www.saasui.design/blog/b2b-saas-design)). Editorial, publishing-like hierarchy conveys intellectual weight ([thebrandstrategylab](https://thebrandstrategylab.com/blog/lessons-for-b2b-saas-from-notion-branding/)).
 
 ### 1.3 Spacing & density
 
 - **One base unit (4px), applied religiously.** Inconsistent spacing is "the fastest way to make a clean design feel cheap" ([saasui.design](https://www.saasui.design/blog/b2b-saas-design)).
-- **Density philosophy:** high information density is premium *when the grid is tight* — dense ≠ cramped ([925studios Linear breakdown](https://www.925studios.co/blog/linear-design-breakdown-saas-ui-2026)). Marketing/onboarding surfaces get doubled whitespace; work surfaces (tables, boards) get compact rhythm. Two density contexts, one grid ([pixeldarts](https://www.pixeldarts.com/en/post/four-design-principles-behind-stripe-linear-and-vercel)).
+- **Density philosophy:** high information density is premium _when the grid is tight_ — dense ≠ cramped ([925studios Linear breakdown](https://www.925studios.co/blog/linear-design-breakdown-saas-ui-2026)). Marketing/onboarding surfaces get doubled whitespace; work surfaces (tables, boards) get compact rhythm. Two density contexts, one grid ([pixeldarts](https://www.pixeldarts.com/en/post/four-design-principles-behind-stripe-linear-and-vercel)).
 - Minimal chrome, maximum work canvas; calm design = minimal default views, advanced options progressively disclosed ([logrocket "linear design"](https://blog.logrocket.com/ux-design/linear-design/), [saasui.design 2026](https://www.saasui.design/blog/7-saas-ui-design-trends-2026)).
 
 ### 1.4 Color
 
 - **Monochrome/neutral-heavy base + one accent used like punctuation.** "One color used sparingly hits harder than five colors used everywhere" ([pixeldarts](https://www.pixeldarts.com/en/post/four-design-principles-behind-stripe-linear-and-vercel)). Accent reserved for primary action, selection, focus, brand moments; semantic colors (success/warn/danger) only for meaning, never decoration.
 - High contrast between text tiers; avoid muddy mid-grays for primary content.
-- Trend evolution: the class has been *desaturating* — earlier gradient-heavy "Linear style" is drifting to near-monochrome with selective accent ([logrocket](https://blog.logrocket.com/ux-design/linear-design/)).
+- Trend evolution: the class has been _desaturating_ — earlier gradient-heavy "Linear style" is drifting to near-monochrome with selective accent ([logrocket](https://blog.logrocket.com/ux-design/linear-design/)).
 
 ### 1.5 Dark mode
 
@@ -44,7 +44,7 @@ The consensus across breakdowns of this product class is that "premium" is not a
 
 - Motion is functional feedback and spatial continuity, never decoration. Skip animation on disabled states, high-frequency updates (table cells, live metrics), and when it delays task completion ([NN/g animation duration](https://www.nngroup.com/articles/animation-duration/), [equal.design 5 rules](https://www.equal.design/blog/5-rules-for-motion-in-ui-transitions)).
 - Durations: instant feedback 50–100ms; micro-interactions 100–200ms; standard transitions 200–300ms ease-out; large surfaces 300–400ms; nothing over ~500ms in-product ([NN/g](https://www.nngroup.com/articles/animation-duration/), [appypie 200ms rule](https://www.appypie.com/blog/mobile-app-animation-guide)).
-- The premium tier animates *less* than average, but what animates is physically plausible (springs) and interruptible.
+- The premium tier animates _less_ than average, but what animates is physically plausible (springs) and interruptible.
 
 ### 1.7 Command palette & keyboard-first UX
 
@@ -75,7 +75,7 @@ The consensus across breakdowns of this product class is that "premium" is not a
 - "Powered by AI" badging, sparkle-everything — the best products have buried the language ([saasui.design 2026](https://www.saasui.design/blog/7-saas-ui-design-trends-2026)).
 - Heavy gradient meshes / saturated glow-on-dark ("2022 Linear clone") — the originators desaturated; the look is a template smell ([logrocket](https://blog.logrocket.com/ux-design/linear-design/)).
 - Full-page glassmorphism, neumorphism, gratuitous 3D/WebGL ([studiomeyer](https://studiomeyer.io/en/blog/webdesign-trends-2026-reality-check)).
-- **The biggest dated-risk is genericness itself:** the Linear-derived template is so copied that following it wholesale makes a product forgettable. Originality lever: keep the *principles* (restraint, density-with-grid, mono numerals, accent discipline) but choose a distinct typeface, a non-defaulted neutral temperature, an owned accent hue, and one signature structural motif.
+- **The biggest dated-risk is genericness itself:** the Linear-derived template is so copied that following it wholesale makes a product forgettable. Originality lever: keep the _principles_ (restraint, density-with-grid, mono numerals, accent discipline) but choose a distinct typeface, a non-defaulted neutral temperature, an owned accent hue, and one signature structural motif.
 
 ---
 
@@ -83,7 +83,7 @@ The consensus across breakdowns of this product class is that "premium" is not a
 
 - **Standard: DTCG.** The W3C Design Tokens Community Group spec reached its first stable version (2025.10, Oct 2025), backed by Adobe/Google/Microsoft/Figma/Salesforce et al.; supports OKLCH/Display-P3/CSS Color 4, aliases/inheritance, cross-platform output ([w3.org DTCG announcement](https://www.w3.org/community/design-tokens/2025/10/28/design-tokens-specification-reaches-first-stable-version/), [designtokens.org](https://www.designtokens.org/)).
 - **Three tiers:** primitive (raw values: `blue-600`, `space-4`) → semantic (intent: `color-text-primary`, `surface-raised`) → component (`button-primary-bg`, references semantic only) ([Nathan Curtis / EightShapes naming](https://medium.com/eightshapes-llc/naming-tokens-in-design-systems-9e86c7444676), [alwaystwisted naming guide](https://www.alwaystwisted.com/articles/design-token-naming-conventions), [thedesignsystem.guide](https://thedesignsystem.guide/design-tokens)).
-- **Naming:** kebab-case `category-property-variant-state`; at semantic/component level name the *why*, not the *what* — intent names survive value changes ([specifyapp](https://specifyapp.com/blog/crafting-consistency-a-thoughtful-approach-for-naming-design-tokens)).
+- **Naming:** kebab-case `category-property-variant-state`; at semantic/component level name the _why_, not the _what_ — intent names survive value changes ([specifyapp](https://specifyapp.com/blog/crafting-consistency-a-thoughtful-approach-for-naming-design-tokens)).
 - **Theming:** light/dark implemented by remapping semantic tokens over the same primitive set; components never know which theme they're in ([penpot dev guide](https://penpot.app/blog/the-developers-guide-to-design-tokens-and-css-variables/)).
 - **Tools:** Style Dictionary v4 has first-class DTCG support; Terrazzo is the other reference implementation ([styledictionary.com/info/dtcg](https://styledictionary.com/info/dtcg/), [terrazzo.app](https://terrazzo.app/docs/guides/dtcg/)).
 - **Tailwind v4 is CSS-first:** tokens live in `@theme` blocks as CSS custom properties, auto-generate utilities, readable at runtime — single source of truth in CSS ([tailwindcss.com v4 blog](https://tailwindcss.com/blog/tailwindcss-v4), [theme docs](https://tailwindcss.com/docs/theme), [pattern discussion](https://github.com/tailwindlabs/tailwindcss/discussions/18471)).
@@ -96,7 +96,7 @@ The consensus across breakdowns of this product class is that "premium" is not a
 - **Radix UI:** the original primitive layer; acquired by WorkOS, maintenance visibly slowed on some components ([logrocket headless comparison](https://blog.logrocket.com/headless-ui-alternatives/), [pkgpulse guide](https://www.pkgpulse.com/guides/shadcn-ui-vs-base-ui-vs-radix-components-2026)).
 - **Base UI (MUI team):** stable v1.0 Dec 2025; actively shipped; covers gaps Radix lacks (combobox, multi-select); currently the safer long-term primitive bet ([greatfrontend 2026 survey](https://www.greatfrontend.com/blog/top-headless-ui-libraries-for-react-in-2026), [shadcnstudio comparison](https://shadcnstudio.com/blog/base-ui-vs-radix-ui/)).
 - **React Aria (Adobe):** deepest a11y primitives; strong where accessibility depth in complex widgets (grids, date pickers) matters ([logrocket](https://blog.logrocket.com/headless-ui-alternatives/)).
-- **shadcn/ui pattern** (copy-in components over headless primitives + Tailwind) is the dominant consumption model and now supports Base UI underneath ([pkgpulse](https://www.pkgpulse.com/guides/shadcn-ui-vs-base-ui-vs-radix-components-2026), [tailkits](https://tailkits.com/blog/base-ui-vs-shadcn-ui-vs-radix-ui-comparison/)). Treat shadcn as *scaffolding pattern* (own the code, restyle 100% via tokens), not as an aesthetic — stock-shadcn look is itself a genericness smell.
+- **shadcn/ui pattern** (copy-in components over headless primitives + Tailwind) is the dominant consumption model and now supports Base UI underneath ([pkgpulse](https://www.pkgpulse.com/guides/shadcn-ui-vs-base-ui-vs-radix-components-2026), [tailkits](https://tailkits.com/blog/base-ui-vs-shadcn-ui-vs-radix-ui-comparison/)). Treat shadcn as _scaffolding pattern_ (own the code, restyle 100% via tokens), not as an aesthetic — stock-shadcn look is itself a genericness smell.
 
 ---
 
@@ -106,7 +106,7 @@ The consensus across breakdowns of this product class is that "premium" is not a
 - **Target Size (2.5.8, AA):** ≥24×24 CSS px pointer targets — critical in dense tables/toolbars; use hit-area expansion rather than growing visuals ([getwcag](https://getwcag.com/en/wcag-2-2-guidelines)).
 - Other 2.2 additions relevant to a business OS: Focus Not Obscured (sticky headers must not cover the focused element), Dragging Movements (every drag has a non-drag alternative), Consistent Help, Redundant Entry, Accessible Authentication ([beaccessible checklist](https://beaccessible.com/post/wcag-2-2-checklist/), [testparty 2.2 guide](https://testparty.ai/blog/wcag-22-new-success-criteria)).
 - **Reduced motion:** honor `prefers-reduced-motion` globally (swap movement for opacity/instant states) ([equal.design](https://www.equal.design/blog/5-rules-for-motion-in-ui-transitions)).
-- Density-specific: full keyboard grid navigation, never color-only status encoding, visible focus at high zoom. Treat AA as floor and encode contrast/target/focus rules *into tokens* so compliance is structural.
+- Density-specific: full keyboard grid navigation, never color-only status encoding, visible focus at high zoom. Treat AA as floor and encode contrast/target/focus rules _into tokens_ so compliance is structural.
 
 ---
 
@@ -147,7 +147,7 @@ The consensus across breakdowns of this product class is that "premium" is not a
 ## 8. Synthesis: candidate first principles for Drovano
 
 1. **Few absolute rules, zero exceptions** — consistency is the brand.
-2. **Neutral-heavy OKLCH palette, one owned accent hue used as punctuation**; semantic color only for meaning. Pick a neutral temperature and accent hue *not* used by the reference class.
+2. **Neutral-heavy OKLCH palette, one owned accent hue used as punctuation**; semantic color only for meaning. Pick a neutral temperature and accent hue _not_ used by the reference class.
 3. **One grotesque + one mono (tabular nums) chosen for distinctiveness**, weight-driven hierarchy, 4px grid, two density contexts (calm marketing / dense work) on one system.
 4. **Dark as co-equal theme**: lightness-based elevation ladder, dedicated dark variants of every semantic token.
 5. **Keyboard-first spine**: ⌘K palette = actions + nav + AI natural-language commands; every action key-reachable.

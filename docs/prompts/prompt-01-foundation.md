@@ -21,20 +21,20 @@ application code:
 
 ## Outputs
 
-| Artifact | Location |
-|---|---|
-| Market research | `docs/research/ai-native-platform-landscape.md` |
-| Stack research | `docs/research/technology-stack-2026.md` |
-| Design research | `docs/research/premium-saas-design-language.md` |
-| Vision + product overview | `PROJECT.md` |
-| PRD | `docs/PRD.md` |
-| Architecture | `ARCHITECTURE.md` + `docs/architecture/` |
-| Decisions | `DECISIONS.md` + `docs/decisions/adr-*.md` |
-| Design philosophy | `DESIGN_SYSTEM.md` + `docs/design-system/` |
-| Engineering standards | `CODING_STANDARDS.md`, `TESTING.md`, `SECURITY.md`, `CONTRIBUTING.md` |
-| Roadmap | `ROADMAP.md` |
-| Backlog | `docs/tasks/BACKLOG.md` |
-| Handoff | `docs/prompts/prompt-02-brief.md` |
+| Artifact                  | Location                                                              |
+| ------------------------- | --------------------------------------------------------------------- |
+| Market research           | `docs/research/ai-native-platform-landscape.md`                       |
+| Stack research            | `docs/research/technology-stack-2026.md`                              |
+| Design research           | `docs/research/premium-saas-design-language.md`                       |
+| Vision + product overview | `PROJECT.md`                                                          |
+| PRD                       | `docs/PRD.md`                                                         |
+| Architecture              | `ARCHITECTURE.md` + `docs/architecture/`                              |
+| Decisions                 | `DECISIONS.md` + `docs/decisions/adr-*.md`                            |
+| Design philosophy         | `DESIGN_SYSTEM.md` + `docs/design-system/`                            |
+| Engineering standards     | `CODING_STANDARDS.md`, `TESTING.md`, `SECURITY.md`, `CONTRIBUTING.md` |
+| Roadmap                   | `ROADMAP.md`                                                          |
+| Backlog                   | `docs/tasks/BACKLOG.md`                                               |
+| Handoff                   | `docs/prompts/prompt-02-brief.md`                                     |
 
 ## Conventions established
 
