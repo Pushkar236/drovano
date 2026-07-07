@@ -6,6 +6,17 @@
 
 ## Progress log
 
+- **Session 4 (2026-07-07):** TASK-0019 complete end-to-end (tRPC
+  contracts + principal-loaded authz on the server; login/onboarding/
+  Workspaces + optimistic collection on the client). TASK-0017 complete:
+  API live on Render (https://drovano-api.onrender.com — note: the repo
+  was made PUBLIC to unblock Render; flipping back to private requires
+  granting Render's GitHub App), UptimeRobot monitors on api+web, keys
+  in `.env.render`. **Remaining M1: TASK-0020 (realtime gateway) and
+  TASK-0018 part 2 (API-latency budgets — a deployed API now exists to
+  measure; note Render free tier cold starts skew p95, measure warm).**
+  M1 closes after those; then write `docs/prompts/prompt-03.md` (M2).
+
 - **Session 3 (2026-07-07):** Credentials received; environments live.
   Neon (Postgres 18.4): migrations applied via the direct endpoint,
   `drovano_app_login` created, RLS verified in production over the

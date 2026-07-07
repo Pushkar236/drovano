@@ -10,6 +10,19 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Client data layer + API live (TASK-0019 done, TASK-0017
+  done): web app signs in (login/sign-up on better-auth client),
+  onboards the first organization, and reads/writes real data through
+  the blessed pattern — TanStack DB collection over the tRPC client with
+  optimistic updates that roll back on server refusal (workspace rename;
+  errors surfaced with the server's decision reason); session-gated
+  shell, Workspaces surface, sign-out command; Vite dev proxy keeps
+  cookies first-party; collection tests prove optimistic-then-converge
+  and automatic rollback with server-faithful stubs. API deployed to
+  Render (https://drovano-api.onrender.com, healthz verified, UptimeRobot
+  monitors on api+web); js bundle budget consciously raised to 240 KiB
+  for the data layer (route splitting planned for M2).
+
 - 2026-07-07 — Environments live (TASK-0017 part 1, TASK-0010 complete):
   Neon Postgres 18.4 migrated (0000–0003) with the `drovano_app_login`
   role and a production RLS smoke test over the pooler (no-GUC → zero

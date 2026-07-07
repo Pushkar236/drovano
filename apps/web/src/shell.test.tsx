@@ -2,7 +2,30 @@ import { RouterProvider } from '@tanstack/react-router';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axe from 'axe-core';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// The shell is session-gated; these tests run it with a signed-in session
+// and one active organization (real auth is covered by the API tests).
+vi.mock('./lib/auth-client.js', () => ({
+  authClient: {
+    useSession: () => ({
+      data: {
+        user: { id: 'user-1', email: 'ada@example.com', name: 'Ada' },
+        session: { activeOrganizationId: 'org-1' },
+      },
+      isPending: false,
+    }),
+    useListOrganizations: () => ({
+      data: [{ id: 'org-1', name: 'Test Org', slug: 'test-org' }],
+      isPending: false,
+    }),
+    organization: {
+      setActive: vi.fn().mockResolvedValue({ data: null, error: null }),
+      create: vi.fn().mockResolvedValue({ data: { id: 'org-1' }, error: null }),
+    },
+    signOut: vi.fn().mockResolvedValue({ data: null, error: null }),
+  },
+}));
 
 import { createTestRouter } from './router.js';
 

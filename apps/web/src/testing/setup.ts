@@ -7,3 +7,6 @@ afterEach(() => {
   localStorage.clear();
   delete document.documentElement.dataset.theme;
 });
+
+// jsdom gap: TanStack Router calls window.scrollTo on navigation.
+window.scrollTo = () => undefined;

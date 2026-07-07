@@ -1,7 +1,10 @@
 {
   "$description": "Gzip budgets for the production bundle (PRD §5: cold app-shell load < 2.5s on mid-tier hardware; TESTING.md performance checks). Raising a budget is a reviewed decision, not a drive-by.",
   "budgets": {
-    "js": { "maxGzipBytes": 122880, "note": "120 KiB — shell currently ~89 KiB" },
-    "css": { "maxGzipBytes": 12288, "note": "12 KiB — currently ~4.7 KiB" }
+    "js": {
+      "maxGzipBytes": 245760,
+      "note": "240 KiB — raised (reviewed) 2026-07-07 for TASK-0019: auth client + tRPC + TanStack DB data layer measured 182 KiB with the shell. Route-level code splitting is planned when module surfaces land (M2); tighten then."
+    },
+    "css": { "maxGzipBytes": 12288, "note": "12 KiB — currently ~5.2 KiB" }
   }
 }

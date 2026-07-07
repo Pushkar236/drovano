@@ -8,6 +8,7 @@ export interface CommandContext {
   setTheme: (theme: 'light' | 'dark' | 'system') => void;
   toggleRail: () => void;
   togglePeek: () => void;
+  signOut: () => void;
 }
 
 export interface Command {
@@ -32,11 +33,27 @@ export const commands: Command[] = [
     },
   },
   {
+    id: 'nav.workspaces',
+    name: 'Go to Workspaces',
+    group: 'navigation',
+    run: (context) => {
+      context.navigate('/workspaces');
+    },
+  },
+  {
     id: 'nav.settings',
     name: 'Go to Settings',
     group: 'navigation',
     run: (context) => {
       context.navigate('/settings');
+    },
+  },
+  {
+    id: 'action.sign-out',
+    name: 'Sign out',
+    group: 'actions',
+    run: (context) => {
+      context.signOut();
     },
   },
   {

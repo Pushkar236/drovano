@@ -1,8 +1,9 @@
-import { Link, Outlet, useNavigate, useRouterState } from '@tanstack/react-router';
+import { Link, Navigate, Outlet, useNavigate, useRouterState } from '@tanstack/react-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CommandPalette } from './command-palette.js';
 import { commands, type CommandContext } from './commands.js';
+import { authClient } from './lib/auth-client.js';
 import { applyThemePreference } from './theme.js';
 
 /**
@@ -13,6 +14,7 @@ import { applyThemePreference } from './theme.js';
 export function Shell() {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const { data: session, isPending: sessionPending } = authClient.useSession();
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [railCollapsed, setRailCollapsed] = useState(false);
   const [peekOpen, setPeekOpen] = useState(false);
@@ -28,6 +30,9 @@ export function Shell() {
     },
     togglePeek: () => {
       setPeekOpen((open) => !open);
+    },
+    signOut: () => {
+      void authClient.signOut().then(() => navigate({ to: '/login' }));
     },
   };
 
@@ -84,6 +89,14 @@ export function Shell() {
     }
   }, [pathname]);
 
+  // Session gate (after all hooks): unauthenticated → login.
+  if (sessionPending) {
+    return <div className="h-dvh" aria-busy="true" />;
+  }
+  if (session === null) {
+    return <Navigate to="/login" />;
+  }
+
   const navLinkClass = (active: boolean): string =>
     `flex min-h-8 items-center gap-2 rounded-md px-2 text-base ${
       active
@@ -118,6 +131,15 @@ export function Shell() {
               aria-current={pathname === '/' ? 'page' : undefined}
             >
               {railCollapsed ? 'H' : 'Home'}
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/workspaces"
+              className={navLinkClass(pathname === '/workspaces')}
+              aria-current={pathname === '/workspaces' ? 'page' : undefined}
+            >
+              {railCollapsed ? 'W' : 'Workspaces'}
             </Link>
           </li>
           <li>
