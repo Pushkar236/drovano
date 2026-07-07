@@ -6,6 +6,13 @@
 
 ## Progress log
 
+- **Session 2, design track (2026-07-07):** TASK-0011 landed:
+  `@drovano/tokens` with the DTCG source of truth, `strata.css` build,
+  and the CI contrast contract (47 tests). Remaining design track:
+  TASK-0012 (typography — shortlist + rendering tests are doable
+  autonomously; the purchase is a user money decision), TASK-0013+
+  (component specs + Storybook), TASK-0014/0015 (interaction, voice).
+
 - **Session 2, continued (2026-07-07):** TASK-0009 landed
   (`@drovano/permissions`, 36-case matrix) and TASK-0010's audit writer
   (`writeAuditEntry` in `@drovano/db`, transactional + fail-closed).

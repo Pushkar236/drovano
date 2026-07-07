@@ -10,6 +10,17 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Strata design tokens (TASK-0011, ADR-0009):
+  `@drovano/tokens` — DTCG `tokens.json` (OKLCH graphite neutrals, single
+  ember accent, semantic status hues, 4px-grid spacing, type scale,
+  motion durations/easings, radii, z-scale; light/dark semantic tiers
+  with enforced parity); OKLCH→sRGB color math; CSS build emitting
+  `strata.css` (primitives + var()-referenced semantics, dark via
+  `data-theme` and `prefers-color-scheme`); **WCAG AA contrast contract
+  in CI** — 17 readable pairs × both themes + gamut + completeness checks
+  (47 tests). The math forced one design rule: accent hover/active darken
+  in both themes. Spec: `docs/design-system/tokens.md`.
+
 - 2026-07-07 — Permission service & audit writer (TASK-0009, TASK-0010
   part 1): `@drovano/permissions` — pure, deny-by-default `can(principal,
 action)` with reasons on every decision, org + workspace role rules,

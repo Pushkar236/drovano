@@ -1,0 +1,23 @@
+{
+  "name": "@drovano/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Strata design tokens: DTCG source of truth, CSS custom-property build, WCAG contrast contract",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./strata.css": "./dist/strata.css"
+  },
+  "scripts": {
+    "build": "tsx src/build.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@drovano/config": "workspace:*",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
