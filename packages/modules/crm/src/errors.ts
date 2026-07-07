@@ -12,7 +12,9 @@ export type CrmErrorCode =
   | 'unknown-object'
   | 'unknown-record'
   | 'unknown-relation-target'
-  | 'wrong-relation-target';
+  | 'wrong-relation-target'
+  | 'unknown-list'
+  | 'object-mismatch';
 
 export class CrmError extends Error {
   readonly code: CrmErrorCode;

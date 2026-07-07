@@ -86,6 +86,12 @@ export type AttributeType = (typeof attributeTypes)[number];
  * settings validated by the crm module: select options, relation target
  * object, currency code. Archived attributes keep their values but stop
  * accepting writes.
+ *
+ * Scope: exactly one of `objectId` (record attribute) or `listId`
+ * (list-scoped attribute — values live on list entries) is set; the CHECK
+ * lives in migration 0007. The FK for listId is added there too (lists is
+ * defined in schema/lists.ts; a drizzle-level reference would be
+ * circular).
  */
 export const attributeDefinitions = pgTable(
   'attribute_definitions',
@@ -96,9 +102,8 @@ export const attributeDefinitions = pgTable(
     tenantId: uuid('tenant_id')
       .notNull()
       .references(() => tenants.id),
-    objectId: uuid('object_id')
-      .notNull()
-      .references(() => objectDefinitions.id, { onDelete: 'cascade' }),
+    objectId: uuid('object_id').references(() => objectDefinitions.id, { onDelete: 'cascade' }),
+    listId: uuid('list_id'),
     key: text('key').notNull(),
     name: text('name').notNull(),
     type: text('type', { enum: attributeTypes }).notNull(),
@@ -113,7 +118,12 @@ export const attributeDefinitions = pgTable(
       .$onUpdate(() => new Date()),
   },
   (table) => [
-    uniqueIndex('attribute_definitions_object_key_uidx').on(table.objectId, table.key),
+    uniqueIndex('attribute_definitions_object_key_uidx')
+      .on(table.objectId, table.key)
+      .where(sql`${table.objectId} is not null`),
+    uniqueIndex('attribute_definitions_list_key_uidx')
+      .on(table.listId, table.key)
+      .where(sql`${table.listId} is not null`),
     index('attribute_definitions_tenant_object_idx').on(table.tenantId, table.objectId),
     pgPolicy('attribute_definitions_tenant_isolation', {
       as: 'permissive',

@@ -6,6 +6,15 @@
 
 ## Progress log
 
+- **Session 1, lists (2026-07-07):** TASK-0024 done — lists + entry-plane
+  typed-EAV + saved views (configs validated; execution engine — turning
+  ViewConfig filters/sorts into SQL over the value tables — deliberately
+  rides TASK-0025 with the table view that consumes it). M2 now 4/11.
+  Next: **TASK-0025 (virtualized table view + keyboard grid)** — the
+  biggest frontend unit; needs the view-config → query executor
+  server-side plus records/lists tRPC routers, then the grid UI per
+  DESIGN_SYSTEM §5 and interaction.md.
+
 - **Session 1, relations (2026-07-07):** TASK-0023 done — write-time
   target integrity, reverse traversal, edge removal on soft delete.
   Many-to-many relation attributes deferred until a feature needs them

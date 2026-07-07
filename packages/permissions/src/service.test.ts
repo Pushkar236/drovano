@@ -39,6 +39,7 @@ const ACTIONS: Action[] = [
   { type: 'record.update' },
   { type: 'record.delete' },
   { type: 'object.manage' },
+  { type: 'list.create' },
 ];
 
 type MatrixKey = string;
@@ -63,6 +64,7 @@ const ORG_ROLE_MATRIX: Record<'owner' | 'admin' | 'member', Record<MatrixKey, bo
     'record.update': true,
     'record.delete': true,
     'object.manage': true,
+    'list.create': true,
   },
   admin: {
     'organization.update': true,
@@ -80,6 +82,7 @@ const ORG_ROLE_MATRIX: Record<'owner' | 'admin' | 'member', Record<MatrixKey, bo
     'record.update': true,
     'record.delete': true,
     'object.manage': true,
+    'list.create': true,
   },
   member: {
     'organization.update': false,
@@ -97,6 +100,7 @@ const ORG_ROLE_MATRIX: Record<'owner' | 'admin' | 'member', Record<MatrixKey, bo
     'record.update': true,
     'record.delete': false,
     'object.manage': false,
+    'list.create': true, // lists are a member-level workflow tool
   },
 };
 

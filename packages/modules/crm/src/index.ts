@@ -19,6 +19,24 @@ export {
   type UpdateRecordValuesInput,
 } from './records.js';
 export {
+  addRecordToList,
+  createList,
+  listListEntries,
+  removeRecordFromList,
+  setListEntryValues,
+  type AddRecordToListInput,
+  type CreateListInput,
+  type ListEntriesPage,
+  type ListEntryView,
+  type SetListEntryValuesInput,
+} from './lists.js';
+export {
+  createSavedView,
+  updateSavedViewConfig,
+  ViewConfig,
+  type CreateSavedViewInput,
+} from './views.js';
+export {
   listIncomingRelations,
   type IncomingRelation,
   type IncomingRelationsPage,

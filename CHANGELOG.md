@@ -10,6 +10,18 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Lists & saved views (TASK-0024): `lists`, `list_entries`,
+  `list_entry_values` (typed-EAV on the ENTRY plane — the Attio-signature
+  separation: process state like pipeline stage lives on list entries,
+  entity truth on records stays untouched, proven by test), and
+  `saved_views` (zod-validated filters/sorts/groupBy/columns over an
+  object or list) — migrations 0006/0007 with scope CHECKs, single-kind
+  CHECK, RLS + FORCE, applied to Neon. attribute_definitions now scopes
+  to object XOR list (partial unique indexes). `list.create` joins the
+  permission matrix (member-level; 54 cases). CRM services:
+  create/add/remove/setEntryValues/listEntries hydrating both value
+  planes per entry.
+
 - 2026-07-07 — Relations (TASK-0023): relation writes verify their target
   exists, isn't deleted, and matches the configured object — cross-tenant
   targets fail identically to nonexistent ones (RLS, nothing leaked);

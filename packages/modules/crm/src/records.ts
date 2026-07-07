@@ -243,7 +243,8 @@ export async function softDeleteRecord(
   });
 }
 
-async function hydrateValues(
+/** Batch-hydrate record values for a set of record ids (shared with lists). */
+export async function hydrateRecordValues(
   tx: TenantTransaction,
   recordIds: string[],
 ): Promise<Map<string, Record<string, AttributeValue>>> {
@@ -283,7 +284,7 @@ export async function getRecord(tx: TenantTransaction, recordId: string): Promis
   if (record === undefined) {
     throw new CrmError('unknown-record', 'That record does not exist.');
   }
-  const values = await hydrateValues(tx, [record.id]);
+  const values = await hydrateRecordValues(tx, [record.id]);
   return {
     id: record.id,
     objectId: record.objectId,
@@ -324,7 +325,7 @@ export async function listRecords(
     .limit(limit + 1);
 
   const items = page.slice(0, limit);
-  const values = await hydrateValues(
+  const values = await hydrateRecordValues(
     tx,
     items.map((record) => record.id),
   );

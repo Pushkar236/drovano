@@ -49,7 +49,10 @@ export type Action =
   | { type: 'record.create' }
   | { type: 'record.update' }
   | { type: 'record.delete' }
-  | { type: 'object.manage' };
+  | { type: 'object.manage' }
+  // Lists are a member-level workflow tool (Attio model); entry mutations
+  // ride record.update semantics in the routers.
+  | { type: 'list.create' };
 
 export interface Decision {
   allowed: boolean;
@@ -118,6 +121,7 @@ export function can(principal: PrincipalContext, action: Action): Decision {
     case 'record.view':
     case 'record.create':
     case 'record.update':
+    case 'list.create':
       // Working the graph is every member's job (PRD §2 personas).
       return allow(`organization ${principal.organizationRole} may ${action.type}`);
 

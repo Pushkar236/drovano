@@ -82,7 +82,9 @@ export async function createObjectDefinition(
 
 export interface CreateAttributeDefinitionInput {
   tenantId: string;
-  objectId: string;
+  /** Exactly one scope: a record attribute (objectId) or list-scoped (listId). */
+  objectId?: string;
+  listId?: string;
   key: string;
   name: string;
   type: AttributeType;
@@ -109,27 +111,36 @@ export async function createAttributeDefinition(
     }
   }
 
-  const [object] = await tx
-    .select({ id: objectDefinitions.id })
-    .from(objectDefinitions)
-    .where(eq(objectDefinitions.id, input.objectId));
-  if (object === undefined) {
-    throw new CrmError('unknown-object', 'That object does not exist.');
+  // Exactly one scope (the database CHECK backs this up).
+  if ((input.objectId === undefined) === (input.listId === undefined)) {
+    throw new CrmError(
+      'invalid-value',
+      'An attribute is defined on exactly one scope: an object or a list.',
+    );
   }
 
+  if (input.objectId !== undefined) {
+    const [object] = await tx
+      .select({ id: objectDefinitions.id })
+      .from(objectDefinitions)
+      .where(eq(objectDefinitions.id, input.objectId));
+    if (object === undefined) {
+      throw new CrmError('unknown-object', 'That object does not exist.');
+    }
+  }
+
+  const scopeCondition =
+    input.objectId !== undefined
+      ? eq(attributeDefinitions.objectId, input.objectId)
+      : eq(attributeDefinitions.listId, input.listId ?? '');
   const [existing] = await tx
     .select({ id: attributeDefinitions.id })
     .from(attributeDefinitions)
-    .where(
-      and(
-        eq(attributeDefinitions.objectId, input.objectId),
-        eq(attributeDefinitions.key, input.key),
-      ),
-    );
+    .where(and(scopeCondition, eq(attributeDefinitions.key, input.key)));
   if (existing !== undefined) {
     throw new CrmError(
       'duplicate-key',
-      `An attribute with the key "${input.key}" already exists on this object.`,
+      `An attribute with the key "${input.key}" already exists on this ${input.objectId !== undefined ? 'object' : 'list'}.`,
     );
   }
 
@@ -137,7 +148,8 @@ export async function createAttributeDefinition(
     .insert(attributeDefinitions)
     .values({
       tenantId: input.tenantId,
-      objectId: input.objectId,
+      objectId: input.objectId ?? null,
+      listId: input.listId ?? null,
       key: input.key,
       name: input.name,
       type: input.type,
@@ -154,7 +166,12 @@ export async function createAttributeDefinition(
     action: 'attribute.create',
     resourceType: 'attribute_definition',
     resourceId: created.id,
-    detail: { objectId: input.objectId, key: input.key, type: input.type },
+    detail: {
+      ...(input.objectId !== undefined ? { objectId: input.objectId } : {}),
+      ...(input.listId !== undefined ? { listId: input.listId } : {}),
+      key: input.key,
+      type: input.type,
+    },
   });
   return created;
 }
