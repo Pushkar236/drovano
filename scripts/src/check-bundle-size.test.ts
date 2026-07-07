@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { evaluateBudgets, measureAssets } from './check-bundle-size.js';
+import { evaluateBudgets, measureAssets, measureInitialAssets } from './check-bundle-size.js';
 
 describe('check-bundle-size', () => {
   let assetsDir: string;
@@ -46,5 +46,31 @@ describe('check-bundle-size', () => {
   it('treats a missing kind as zero bytes (within budget)', () => {
     const reports = evaluateBudgets(new Map(), { js: { maxGzipBytes: 1 } });
     expect(reports[0]?.withinBudget).toBe(true);
+  });
+
+  it('initial-payload walk: entry + static imports + their css; dynamic chunks excluded', () => {
+    const distDir = mkdtempSync(path.join(tmpdir(), 'dist-'));
+    mkdirSync(path.join(distDir, 'assets'), { recursive: true });
+    writeFileSync(path.join(distDir, 'assets', 'entry.js'), 'e'.repeat(4_000));
+    writeFileSync(path.join(distDir, 'assets', 'vendor.js'), 'v'.repeat(4_000));
+    writeFileSync(path.join(distDir, 'assets', 'route.js'), 'r'.repeat(100_000));
+    writeFileSync(path.join(distDir, 'assets', 'entry.css'), 'c'.repeat(1_000));
+    const manifest = {
+      'index.html': {
+        file: 'assets/entry.js',
+        isEntry: true,
+        imports: ['_vendor'],
+        css: ['assets/entry.css'],
+      },
+      _vendor: { file: 'assets/vendor.js' },
+      'src/pages/records.tsx': { file: 'assets/route.js', imports: ['_vendor'] },
+    };
+    const totals = measureInitialAssets(distDir, manifest);
+    const allJs = measureAssets(path.join(distDir, 'assets')).get('js') ?? 0;
+    // Initial js excludes the big dynamic route chunk.
+    expect(totals.get('js')).toBeGreaterThan(0);
+    expect(totals.get('js') ?? 0).toBeLessThan(allJs);
+    expect(totals.get('css')).toBeGreaterThan(0);
+    rmSync(distDir, { recursive: true, force: true });
   });
 });

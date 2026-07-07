@@ -33,6 +33,52 @@ export function measureAssets(assetsDir: string): Map<string, number> {
   return totals;
 }
 
+interface ManifestChunk {
+  file: string;
+  isEntry?: boolean;
+  imports?: string[];
+  css?: string[];
+}
+
+/**
+ * Measure the INITIAL payload — the entry chunk plus its static-import
+ * closure and their css — from Vite's manifest. Route chunks behind
+ * dynamic imports are excluded: the budget guards first load (PRD §5),
+ * not the sum of every lazily-loaded surface.
+ */
+export function measureInitialAssets(
+  distDir: string,
+  manifest: Record<string, ManifestChunk>,
+): Map<string, number> {
+  const totals = new Map<string, number>();
+  const gzipOf = (file: string): number =>
+    gzipSync(readFileSync(path.join(distDir, file))).byteLength;
+
+  const seenChunks = new Set<string>();
+  const seenFiles = new Set<string>();
+  const visit = (key: string): void => {
+    if (seenChunks.has(key)) return;
+    seenChunks.add(key);
+    const chunk = manifest[key];
+    if (chunk === undefined) return;
+    if (!seenFiles.has(chunk.file)) {
+      seenFiles.add(chunk.file);
+      totals.set('js', (totals.get('js') ?? 0) + gzipOf(chunk.file));
+    }
+    for (const cssFile of chunk.css ?? []) {
+      if (seenFiles.has(cssFile)) continue;
+      seenFiles.add(cssFile);
+      totals.set('css', (totals.get('css') ?? 0) + gzipOf(cssFile));
+    }
+    for (const dependency of chunk.imports ?? []) visit(dependency);
+  };
+
+  for (const [key, chunk] of Object.entries(manifest)) {
+    if (chunk.isEntry === true) visit(key);
+  }
+  return totals;
+}
+
 export function evaluateBudgets(
   totals: Map<string, number>,
   budgets: Record<string, Budget>,
@@ -74,7 +120,8 @@ function main(): void {
 
   const root = path.resolve(fileURLToPath(new URL('.', import.meta.url)), '..', '..');
   const webDir = path.join(root, 'apps', 'web');
-  const assetsDir = path.join(webDir, 'dist', 'assets');
+  const distDir = path.join(webDir, 'dist');
+  const assetsDir = path.join(distDir, 'assets');
   if (!existsSync(assetsDir)) {
     console.error(
       'check-bundle-size: apps/web/dist/assets not found — run `pnpm turbo run build` first.',
@@ -86,7 +133,18 @@ function main(): void {
   const budgetFile = JSON.parse(readFileSync(path.join(webDir, 'bundle-budget.json'), 'utf8')) as {
     budgets: Record<string, Budget>;
   };
-  const reports = evaluateBudgets(measureAssets(assetsDir), budgetFile.budgets);
+  const manifestPath = path.join(distDir, '.vite', 'manifest.json');
+  let totals: Map<string, number>;
+  if (existsSync(manifestPath)) {
+    totals = measureInitialAssets(
+      distDir,
+      JSON.parse(readFileSync(manifestPath, 'utf8')) as Record<string, ManifestChunk>,
+    );
+    console.log('  (measuring initial payload from the Vite manifest; route chunks lazy-load)');
+  } else {
+    totals = measureAssets(assetsDir);
+  }
+  const reports = evaluateBudgets(totals, budgetFile.budgets);
 
   let failed = false;
   for (const report of reports) {

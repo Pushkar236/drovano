@@ -10,6 +10,18 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Route-level code splitting + live deploy refresh: every
+  page component lazy-loads via `lazyRouteComponent`; the bundle budget
+  now measures the INITIAL payload (entry + static-import closure walked
+  from the Vite manifest — route chunks are lazy and unbudgeted), and
+  the js budget tightened 240 → 180 KiB (initial payload measured 155.9
+  KiB, down from 230 KiB summed). Web redeployed to Vercel with all M2
+  surfaces and a new `/api/*` rewrite proxying to the Render API — the
+  deployed app now authenticates first-party (verified:
+  `/api/auth/get-session` 200 through the proxy); realtime WS stays
+  direct-to-gateway when it deploys (Vercel rewrites don't proxy
+  websockets).
+
 - 2026-07-07 — Pipelines & kanban (TASK-0026): `createPipeline` (list +
   system `stage` select attribute in one call; API + service + tests);
   `/lists` index with the create-pipeline flow; `/lists/$listId` board —

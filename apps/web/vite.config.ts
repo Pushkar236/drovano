@@ -4,6 +4,8 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  // The manifest drives the bundle budget's initial-payload measurement.
+  build: { manifest: true },
   server: {
     // Same-origin API in development: cookies stay first-party
     // (production runs behind one domain; see apps/api README).
