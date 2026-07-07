@@ -17,6 +17,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "verify-docs": "tsx scripts/src/verify-docs.ts",
+    "check-bundle": "tsx scripts/src/check-bundle-size.ts",
     "prepare": "husky"
   },
   "devDependencies": {

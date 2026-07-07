@@ -10,6 +10,12 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Bundle budgets in CI (TASK-0018 part 1):
+  `scripts/check-bundle-size.ts` enforces gzip budgets from
+  `apps/web/bundle-budget.json` (js 120 KiB — currently 86.3; css 12 KiB
+  — currently 4.6) after the production build; raising a budget is a
+  reviewed change. API-latency budgets follow environments (TASK-0017).
+
 - 2026-07-07 — App shell (TASK-0016, ADR-0002): `@drovano/web` — Vite 8 +
   React 19.2 SPA with TanStack Router; three-zone Strata shell (rail with
   collapse, canvas with focus-on-navigate h1s and skip link, peek panel);
