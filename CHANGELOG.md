@@ -10,6 +10,14 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Permission service & audit writer (TASK-0009, TASK-0010
+  part 1): `@drovano/permissions` — pure, deny-by-default `can(principal,
+action)` with reasons on every decision, org + workspace role rules,
+  agents denied until scoped grants (TASK-0037); 36-case exhaustive
+  allow/deny matrix test with completeness check. `writeAuditEntry` in
+  `@drovano/db`: transactional, append-only, RLS-checked (mismatched
+  tenant fails closed), with rollback and jsonb round-trip tests.
+
 - 2026-07-07 — Authentication & organizations (TASK-0008, ADR-0008,
   ADR-0011): `@drovano/identity` module — better-auth 1.6 with argon2id
   password hashing, TOTP two-factor, email verification, and the

@@ -6,6 +6,16 @@
 
 ## Progress log
 
+- **Session 2, continued (2026-07-07):** TASK-0009 landed
+  (`@drovano/permissions`, 36-case matrix) and TASK-0010's audit writer
+  (`writeAuditEntry` in `@drovano/db`, transactional + fail-closed).
+  TASK-0010's OTel/Sentry wiring is deliberately deferred to pair with
+  TASK-0017 — Sentry DSN and platform accounts are credentials the user
+  must provide; batch those requests. **Remaining M1:** telemetry wiring
+  (0010b), design track (0011–0015), app shell (0016), environments
+  (0017, blocked on credentials), perf budgets (0018), client data layer
+  (0019), realtime gateway (0020).
+
 - **Session 2 (2026-07-07):** TASK-0008 landed and green: better-auth
   1.6.23 in `@drovano/identity` (argon2id, TOTP MFA, organizations,
   invitations), identity tables in `@drovano/db` (global per ADR-0011),

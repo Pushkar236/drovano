@@ -1,0 +1,20 @@
+{
+  "name": "@drovano/permissions",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Centralized permission service: pure, framework-free authorization decisions",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@drovano/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
