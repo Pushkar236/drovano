@@ -98,9 +98,9 @@ export interface QueryRecordsInput {
   objectId: string;
   config: ViewConfig;
   /** 1-based page when sorted; keyset cursor (record id) when unsorted. */
-  page?: number;
-  cursor?: string;
-  limit?: number;
+  page?: number | undefined;
+  cursor?: string | undefined;
+  limit?: number | undefined;
 }
 
 export interface QueryRecordsPage {

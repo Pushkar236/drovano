@@ -215,7 +215,7 @@ export interface ListEntriesPage {
 
 export async function listListEntries(
   tx: TenantTransaction,
-  input: { listId: string; cursor?: string; limit?: number },
+  input: { listId: string; cursor?: string | undefined; limit?: number | undefined },
 ): Promise<ListEntriesPage> {
   const limit = Math.min(input.limit ?? 50, 200);
   const page = await tx

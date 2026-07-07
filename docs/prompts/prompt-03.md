@@ -6,6 +6,23 @@
 
 ## Progress log
 
+- **Session 1, view engine (2026-07-07):** TASK-0025 part 1 done —
+  `queryRecords` (EXISTS-probe filters, correlated-subquery sorts,
+  keyset/offset pagination split). **Part 2 next: the CRM tRPC surface**
+  — per api-contracts README invariant 2, define `crmRouter` IN
+  `@drovano/crm` (module exports its router; needs @trpc/server +
+  @drovano/permissions deps there — check boundaries: module may depend
+  on shared+data only, so the trpc init/context types must come from a
+  shared place… simplest boundary-clean route: keep routers in
+  api-contracts for now (contracts tier may import modules) and revisit
+  when a second consumer appears; do NOT fight the boundary rules).
+  Routers needed: objects.list (definitions+attributes for the tenant),
+  records.query (ViewConfig execution), records.create/update/delete,
+  lists CRUD + entries, views CRUD — each following the rename exemplar
+  (can() + audit in tx + invalidation publish). Part 3: the grid UI
+  (virtualized table per DESIGN_SYSTEM §5, TanStack DB collection per
+  view, inline edit riding records.update).
+
 - **Session 1, lists (2026-07-07):** TASK-0024 done — lists + entry-plane
   typed-EAV + saved views (configs validated; execution engine — turning
   ViewConfig filters/sorts into SQL over the value tables — deliberately

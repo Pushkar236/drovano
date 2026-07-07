@@ -413,6 +413,9 @@ importers:
 
   packages/api-contracts:
     dependencies:
+      '@drovano/crm':
+        specifier: workspace:*
+        version: link:../modules/crm
       '@drovano/db':
         specifier: workspace:*
         version: link:../db

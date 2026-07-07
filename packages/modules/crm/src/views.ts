@@ -40,10 +40,10 @@ export type ViewConfig = z.infer<typeof ViewConfig>;
 export interface CreateSavedViewInput {
   tenantId: string;
   /** Exactly one scope (database CHECK backs this up). */
-  objectId?: string;
-  listId?: string;
+  objectId?: string | undefined;
+  listId?: string | undefined;
   name: string;
-  type?: ViewType;
+  type?: ViewType | undefined;
   config: unknown;
   actor: Actor;
 }
