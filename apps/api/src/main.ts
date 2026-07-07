@@ -1,3 +1,6 @@
+// Telemetry bootstrap must precede all other imports (instrument.ts).
+import { telemetry } from './instrument.js';
+
 import { serve } from '@hono/node-server';
 import { createDb } from '@drovano/db';
 import { createAuth, createDevMailer } from '@drovano/identity';
@@ -21,17 +24,17 @@ const auth = createAuth({
   mailer: createDevMailer(stdout),
 });
 
-const app = createApp({ auth });
+const app = createApp({ auth, telemetry });
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
-  stdout(`drovano api listening on :${String(info.port)}\n`);
+  stdout(`drovano api listening on :${String(info.port)} (${env.DEPLOY_ENV})\n`);
 });
 
-// Graceful shutdown: stop accepting, then release the pool.
+// Graceful shutdown: stop accepting, flush telemetry, release the pool.
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.on(signal, () => {
     server.close(() => {
-      void dbHandle.close().then(() => {
+      void Promise.allSettled([telemetry.shutdown(), dbHandle.close()]).then(() => {
         process.exit(0);
       });
     });

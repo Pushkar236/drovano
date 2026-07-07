@@ -28,3 +28,9 @@ Thumbs.db
 !.vscode/extensions.json
 .idea/
 storybook-static/
+
+# Deploy artifacts & platform link state
+.vercel/
+.deploy/
+api-smoke.log
+api-smoke.err

@@ -10,6 +10,19 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Environments live (TASK-0017 part 1, TASK-0010 complete):
+  Neon Postgres 18.4 migrated (0000–0003) with the `drovano_app_login`
+  role and a production RLS smoke test over the pooler (no-GUC → zero
+  rows; direct tenant INSERT denied); web shell deployed to Vercel
+  (https://drovano-web.vercel.app, SPA rewrites verified);
+  `@drovano/telemetry` — Sentry (OTel-based) behind a service-owned
+  interface, disabled without a DSN, PII off, wired into the API's
+  onError with graceful flush; API production bundle via tsup (workspace
+  source bundled, deps external) verified end-to-end against Neon
+  (healthz + real signup); `render.yaml` blueprint for the API (build,
+  pre-deploy migrations, health check, env contract). TASK-0012 resolved
+  for M1 under the zero-cost constraint (tokenized system stacks).
+
 - 2026-07-07 — Bundle budgets in CI (TASK-0018 part 1):
   `scripts/check-bundle-size.ts` enforces gzip budgets from
   `apps/web/bundle-budget.json` (js 120 KiB — currently 86.3; css 12 KiB

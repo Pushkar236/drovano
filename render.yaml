@@ -1,0 +1,30 @@
+# Render blueprint (TASK-0017, ADR-0006/system-overview deployment
+# topology). Connect via Render dashboard → New → Blueprint → this repo.
+# Secret values are set in the Render dashboard (sync: false) — never here.
+services:
+  - type: web
+    name: drovano-api
+    runtime: node
+    region: ohio # closest Render region to Neon us-east-1
+    plan: free
+    buildCommand: corepack enable && corepack prepare pnpm@10.32.1 --activate && pnpm install --frozen-lockfile && pnpm turbo run build --filter=@drovano/api
+    startCommand: node apps/api/dist/main.js
+    # Migrations run before each deploy goes live, as the owner role over
+    # the DIRECT (non-pooler) endpoint (packages/db/README.md).
+    preDeployCommand: corepack enable && pnpm --filter @drovano/db migrate
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 22.13.1
+      - key: DEPLOY_ENV
+        value: staging
+      - key: DATABASE_URL # app role via the POOLER endpoint
+        sync: false
+      - key: MIGRATE_DATABASE_URL # owner role via the DIRECT endpoint
+        sync: false
+      - key: AUTH_SECRET
+        sync: false
+      - key: BASE_URL
+        sync: false
+      - key: SENTRY_DSN
+        sync: false

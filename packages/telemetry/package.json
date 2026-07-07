@@ -1,0 +1,23 @@
+{
+  "name": "@drovano/telemetry",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Error monitoring and tracing initialization (Sentry over OpenTelemetry semantics)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@sentry/node": "catalog:"
+  },
+  "devDependencies": {
+    "@drovano/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

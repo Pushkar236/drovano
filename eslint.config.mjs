@@ -11,6 +11,8 @@ export default tseslint.config(
       '**/.turbo/**',
       '**/node_modules/**',
       '**/storybook-static/**',
+      '**/.deploy/**',
+      '**/.vercel/**',
       'packages/db/migrations/**',
     ],
   },

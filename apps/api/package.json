@@ -7,18 +7,29 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "dev": "tsx watch src/main.ts"
+    "dev": "tsx watch --env-file=.env src/main.ts",
+    "build": "tsup",
+    "start": "node dist/main.js"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "catalog:",
     "@drovano/db": "workspace:*",
     "@drovano/identity": "workspace:*",
+    "@drovano/telemetry": "workspace:*",
     "@hono/node-server": "catalog:",
+    "@node-rs/argon2": "catalog:",
+    "@sentry/node": "catalog:",
+    "better-auth": "catalog:",
+    "drizzle-orm": "catalog:",
     "hono": "catalog:",
+    "pg": "catalog:",
+    "uuid": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@drovano/config": "workspace:*",
     "@types/node": "catalog:",
+    "tsup": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

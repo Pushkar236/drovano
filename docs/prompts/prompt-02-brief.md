@@ -6,6 +6,20 @@
 
 ## Progress log
 
+- **Session 3 (2026-07-07):** Credentials received; environments live.
+  Neon (Postgres 18.4): migrations applied via the direct endpoint,
+  `drovano_app_login` created, RLS verified in production over the
+  pooler. Web: **https://drovano-web.vercel.app** (project `drovano-web`,
+  prebuilt static deploy from `apps/web/.deploy`, SPA rewrites). Sentry
+  wired via `@drovano/telemetry` (TASK-0010 done). API bundles with tsup
+  and passed an end-to-end smoke against Neon locally. `render.yaml` is
+  ready — **the one remaining human step: Render dashboard → New →
+  Blueprint → connect the GitHub repo**, then set the sync:false env
+  vars (values in `apps/api/.env` on this machine; generate a fresh
+  AUTH_SECRET for staging). TASK-0012: zero-cost → system stacks stay.
+  Remaining M1: 0017 finish (Render connect + BASE_URL/CORS pass),
+  0018 API-latency budgets, 0019, 0020.
+
 - **Session 2, shell (2026-07-07):** TASK-0014/0015 (interaction + voice
   specs) and TASK-0016 (app shell) landed. `@drovano/web` implements
   interaction.md §2/§3/§6; the token build now also emits the Tailwind
