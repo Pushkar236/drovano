@@ -6,6 +6,19 @@
 
 ## Progress log
 
+- **Session 2 (2026-07-07):** TASK-0008 landed and green: better-auth
+  1.6.23 in `@drovano/identity` (argon2id, TOTP MFA, organizations,
+  invitations), identity tables in `@drovano/db` (global per ADR-0011),
+  workspaces + workspace_members (tenant-scoped, RLS), the
+  `provision_tenant()` SECURITY DEFINER primitive, and the first
+  `apps/api` Hono skeleton. 30 tests green workspace-wide.
+  **Next up: TASK-0009 (permission service) and TASK-0010 (audit writer +
+  OTel/Sentry).** Notes: the permission service should model org roles
+  (owner/admin/member, from better-auth `members`) and workspace roles
+  (`workspace_members.role`) behind one `can(principal, action, resource)`
+  interface; audit writer wraps the pattern already used by
+  provision_tenant (insert in the same transaction as the mutation).
+
 - **Session 1 (2026-07-07):** TASK-0004…0007 landed and green
   (commit `080c8af`): monorepo scaffold, CI gates, `@drovano/db` with RLS
   and nine tenant-isolation tests through the app role, and the

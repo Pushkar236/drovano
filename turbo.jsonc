@@ -16,8 +16,7 @@
   },
   // Module-boundary enforcement (ADR-0001, ADR-0004). Every package
   // declares tags in its own turbo.json; these rules define which tags may
-  // depend on which. Domain modules get a "module" tag in M2+ and may only
-  // depend on shared/data — never on apps or each other's internals.
+  // depend on which.
   "boundaries": {
     "tags": {
       "shared": {
@@ -33,6 +32,18 @@
       "tooling": {
         "dependencies": {
           "allow": ["shared", "tooling"],
+        },
+      },
+      // Domain modules may use shared config and the data layer; they may
+      // never import other modules' internals or apps (ADR-0004).
+      "module": {
+        "dependencies": {
+          "allow": ["shared", "data"],
+        },
+      },
+      "app": {
+        "dependencies": {
+          "allow": ["shared", "data", "module"],
         },
       },
     },

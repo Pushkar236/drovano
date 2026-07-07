@@ -29,9 +29,12 @@ docs/             This documentation set
 
 ### Domain modules
 
-Each module is a package exporting: Drizzle schema fragments, Zod
-contracts, a service layer (the _only_ write path for its aggregates),
-tRPC routers, and Trigger.dev tasks. Modules import only each other's
+Each module is a package exporting: Zod contracts, a service layer (the
+_only_ write path for its aggregates), tRPC routers, and Trigger.dev
+tasks. Table definitions live centrally in `packages/db` (one drizzle-kit
+project, one migration history — organized per-domain under
+`src/schema/`); modules import their tables from `@drovano/db`. Modules
+import only each other's
 published interfaces — enforced by Turborepo Boundaries tags + TS project
 references in CI (ADR-0004).
 

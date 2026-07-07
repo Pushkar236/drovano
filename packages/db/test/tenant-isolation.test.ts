@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { auditLog, tenants } from '../src/schema.js';
+import { auditLog, tenants } from '../src/schema/index.js';
 import { InvalidTenantIdError, withTenant } from '../src/tenancy.js';
 import { startTestDatabase, type TestDatabase } from './harness.js';
 

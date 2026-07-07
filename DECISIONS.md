@@ -7,18 +7,19 @@ Decisions are made after research (see `docs/research/`), record the
 alternatives considered, and name their revisit triggers. Changing a
 decision means superseding its ADR, never editing history.
 
-| ADR                                                             | Decision                                                                                                  | Status   | Tags                       |
-| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | -------- | -------------------------- |
-| [ADR-0001](docs/decisions/adr-0001-typescript-monorepo.md)      | TypeScript everywhere; pnpm 10 + Turborepo 2.x monorepo with TS project references and Boundaries         | Accepted | process, backend, frontend |
-| [ADR-0002](docs/decisions/adr-0002-frontend-framework.md)       | Vite 8 + React 19.2 SPA with TanStack Router/Query; marketing site separate                               | Accepted | frontend                   |
-| [ADR-0003](docs/decisions/adr-0003-client-data-layer.md)        | TanStack DB collections + WS invalidation; ElectricSQL shapes as upgrade path; no hand-rolled sync engine | Accepted | frontend, data             |
-| [ADR-0004](docs/decisions/adr-0004-backend-modular-monolith.md) | Modular monolith on Hono 4.x with boundary-enforced module packages                                       | Accepted | backend                    |
-| [ADR-0005](docs/decisions/adr-0005-api-strategy.md)             | tRPC v11 internal; public REST + OpenAPI from Zod v4; Speakeasy SDKs; tenant-scoped OAuth MCP server      | Accepted | backend, ai                |
-| [ADR-0006](docs/decisions/adr-0006-database-multi-tenancy.md)   | Postgres 18 on Neon; shared schema + tenant_id + RLS; Drizzle ORM + Kysely                                | Accepted | data, security, infra      |
-| [ADR-0007](docs/decisions/adr-0007-jobs-durable-execution.md)   | Trigger.dev v4 as the single durable-execution substrate for jobs and AI workers                          | Accepted | backend, ai, infra         |
-| [ADR-0008](docs/decisions/adr-0008-authentication.md)           | better-auth self-hosted with organization plugin; WorkOS as enterprise SSO/SCIM fallback                  | Accepted | security, backend          |
-| [ADR-0009](docs/decisions/adr-0009-design-system-stack.md)      | DTCG tokens via Tailwind v4 `@theme`; Base UI primitives; Motion — implementing Strata                    | Accepted | design, frontend           |
-| [ADR-0010](docs/decisions/adr-0010-ai-layer.md)                 | Vercel AI SDK v7 + thin agent loops; contextual+hybrid+reranked RAG; pgvector → Turbopuffer exit          | Accepted | ai, backend, data          |
+| ADR                                                             | Decision                                                                                                           | Status   | Tags                       |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------- | -------------------------- |
+| [ADR-0001](docs/decisions/adr-0001-typescript-monorepo.md)      | TypeScript everywhere; pnpm 10 + Turborepo 2.x monorepo with TS project references and Boundaries                  | Accepted | process, backend, frontend |
+| [ADR-0002](docs/decisions/adr-0002-frontend-framework.md)       | Vite 8 + React 19.2 SPA with TanStack Router/Query; marketing site separate                                        | Accepted | frontend                   |
+| [ADR-0003](docs/decisions/adr-0003-client-data-layer.md)        | TanStack DB collections + WS invalidation; ElectricSQL shapes as upgrade path; no hand-rolled sync engine          | Accepted | frontend, data             |
+| [ADR-0004](docs/decisions/adr-0004-backend-modular-monolith.md) | Modular monolith on Hono 4.x with boundary-enforced module packages                                                | Accepted | backend                    |
+| [ADR-0005](docs/decisions/adr-0005-api-strategy.md)             | tRPC v11 internal; public REST + OpenAPI from Zod v4; Speakeasy SDKs; tenant-scoped OAuth MCP server               | Accepted | backend, ai                |
+| [ADR-0006](docs/decisions/adr-0006-database-multi-tenancy.md)   | Postgres 18 on Neon; shared schema + tenant_id + RLS; Drizzle ORM + Kysely                                         | Accepted | data, security, infra      |
+| [ADR-0007](docs/decisions/adr-0007-jobs-durable-execution.md)   | Trigger.dev v4 as the single durable-execution substrate for jobs and AI workers                                   | Accepted | backend, ai, infra         |
+| [ADR-0008](docs/decisions/adr-0008-authentication.md)           | better-auth self-hosted with organization plugin; WorkOS as enterprise SSO/SCIM fallback                           | Accepted | security, backend          |
+| [ADR-0009](docs/decisions/adr-0009-design-system-stack.md)      | DTCG tokens via Tailwind v4 `@theme`; Base UI primitives; Motion — implementing Strata                             | Accepted | design, frontend           |
+| [ADR-0010](docs/decisions/adr-0010-ai-layer.md)                 | Vercel AI SDK v7 + thin agent loops; contextual+hybrid+reranked RAG; pgvector → Turbopuffer exit                   | Accepted | ai, backend, data          |
+| [ADR-0011](docs/decisions/adr-0011-identity-tables-global.md)   | Identity-layer tables are global (documented exception to tenant-RLS); workspace membership is the RLS-scoped edge | Accepted | security, data             |
 
 ## Known upcoming decisions (no ADR yet)
 

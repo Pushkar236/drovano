@@ -1,0 +1,26 @@
+{
+  "name": "@drovano/api",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Drovano API — Hono modular monolith (ADR-0004)",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "dev": "tsx watch src/main.ts"
+  },
+  "dependencies": {
+    "@drovano/db": "workspace:*",
+    "@drovano/identity": "workspace:*",
+    "@hono/node-server": "catalog:",
+    "hono": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@drovano/config": "workspace:*",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

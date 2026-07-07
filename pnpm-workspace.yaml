@@ -13,7 +13,14 @@ onlyBuiltDependencies:
 # (ADR-0001). Exact pins; Renovate proposes updates. drizzle-orm is pinned
 # to 0.45.x per ADR-0006 until 1.0 GA.
 catalog:
+  '@better-auth/drizzle-adapter': 1.6.23
+  '@hono/node-server': 2.0.8
+  '@node-rs/argon2': 2.0.2
   '@testcontainers/postgresql': 12.0.4
+  better-auth: 1.6.23
+  hono: 4.12.28
+  otpauth: 9.5.1
+  uuid: 14.0.1
   '@types/node': 26.1.0
   '@types/pg': 8.20.0
   drizzle-kit: 0.31.10

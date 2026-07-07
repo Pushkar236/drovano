@@ -1,0 +1,29 @@
+{
+  "name": "@drovano/identity",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Identity module: better-auth instance (email/password, MFA, organizations), tenant provisioning, mailer boundary",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@better-auth/drizzle-adapter": "catalog:",
+    "@drovano/db": "workspace:*",
+    "@node-rs/argon2": "catalog:",
+    "better-auth": "catalog:",
+    "drizzle-orm": "catalog:",
+    "uuid": "catalog:"
+  },
+  "devDependencies": {
+    "@drovano/config": "workspace:*",
+    "@types/node": "catalog:",
+    "otpauth": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

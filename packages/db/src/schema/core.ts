@@ -12,8 +12,8 @@ import {
 
 /**
  * The application's database role. Non-owner by design: RLS binds it even
- * without FORCE, and it can never run DDL. Created with its grants in
- * migration 0001 (roles are cluster-level; drizzle-kit does not manage it).
+ * without FORCE, and it can never run DDL. Created in migration 0000
+ * (roles are cluster-level; drizzle-kit does not manage it).
  */
 export const appRole = pgRole('drovano_app').existing();
 
@@ -25,17 +25,21 @@ export const appRole = pgRole('drovano_app').existing();
  *   backstop behavior the architecture requires.
  * - Wrapped in `(select …)` so Postgres evaluates it once per query
  *   (initplan), not once per row.
+ *
+ * Exported for use by every tenant-scoped schema file; never build a
+ * different predicate.
  */
-const currentTenantId = sql`(select nullif(current_setting('app.current_tenant_id', true), '')::uuid)`;
+export const currentTenantId = sql`(select nullif(current_setting('app.current_tenant_id', true), '')::uuid)`;
 
 /**
  * Tenancy anchor. One row per organization; every tenant-scoped table
- * references it. The auth layer's organization records (TASK-0008) map
- * 1:1 onto this table rather than replacing it, keeping the RLS anchor
- * independent of any auth vendor's schema.
+ * references it. The auth layer's organization records (schema/auth.ts)
+ * map 1:1 onto this table — same id, created by the provision_tenant()
+ * SECURITY DEFINER function (migration 0003) — rather than replacing it,
+ * keeping the RLS anchor independent of any auth vendor's schema.
  *
- * Row creation (tenant provisioning) is a system-role operation; the app
- * role can only see its own row.
+ * The app role can only ever see its own tenant row; provisioning runs
+ * inside provision_tenant(), so the app role needs no INSERT grant.
  */
 export const tenants = pgTable(
   'tenants',

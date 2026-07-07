@@ -15,6 +15,20 @@
       "when": 1783405840311,
       "tag": "0001_tenancy-hardening",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783407211235,
+      "tag": "0002_identity-and-workspaces",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783407220711,
+      "tag": "0003_identity-hardening",
+      "breakpoints": true
     }
   ]
 }

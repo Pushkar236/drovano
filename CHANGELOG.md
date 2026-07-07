@@ -10,6 +10,20 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — Authentication & organizations (TASK-0008, ADR-0008,
+  ADR-0011): `@drovano/identity` module — better-auth 1.6 with argon2id
+  password hashing, TOTP two-factor, email verification, and the
+  organization plugin; organization creation provisions the tenant row,
+  default "General" workspace, creator membership, and audit entry
+  atomically via the `provision_tenant()` SECURITY DEFINER function;
+  identity tables added to `@drovano/db` as documented-global tables
+  (ADR-0011) with workspaces/workspace_members as RLS-scoped domain
+  tables (migrations 0002/0003); `apps/api` Hono skeleton mounting the
+  auth handler with zod-validated env and graceful shutdown; 11 new
+  integration tests (signup, sign-in failures, provisioning, invitation
+  acceptance with real email-verification flow, TOTP enrolment,
+  workspace tenant isolation, HTTP-level auth routes).
+
 - 2026-07-07 — M1 begins (Prompt 02, TASK-0004…0007): pnpm 10 + Turborepo
   monorepo with catalogs, Boundaries tags, and shared tsconfig presets
   (`@drovano/config`); CI quality gate (format, zero-warning ESLint

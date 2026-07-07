@@ -16,11 +16,19 @@ mechanics: [`docs/architecture/multi-tenancy.md`](../../docs/architecture/multi-
   (Testcontainers, postgres:18) harness with owner and app-role
   connections, used by every integration test in the workspace.
 
+## Schema layout
+
+`src/schema/` is organized per domain: `core.ts` (tenancy anchor, audit
+log, the canonical tenant predicate), `auth.ts` (identity-layer tables —
+global by ADR-0011, consumed by better-auth via `@drovano/identity`),
+`workspaces.ts` (tenant-scoped workspace tables). One drizzle-kit project,
+one migration history.
+
 ## Invariants
 
 1. Every tenant-scoped table: `tenant_id uuid` referencing `tenants`,
    tenant-leading composite indexes, one single-predicate RLS policy
-   (`audit_log` in `src/schema.ts` is the exemplar — copy its shape).
+   (`audit_log` in `src/schema/core.ts` is the exemplar — copy its shape).
 2. The application connects as `drovano_app` (non-owner, no DDL);
    migrations and provisioning run as the privileged system role.
 3. New migrations follow expand-and-contract; `FORCE ROW LEVEL SECURITY`

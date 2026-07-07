@@ -12,9 +12,16 @@ _organization_; workspaces partition data within a tenant via application
 permissions, not separate RLS scopes.
 
 - `tenant_id` is `uuidv7` (Postgres 18 native) — time-ordered, index-friendly.
-- **Every table** carries `tenant_id`, including junction tables, embeddings
-  tables, and the audit log. No exceptions; this discipline is what keeps
-  every scale exit open.
+- **Every table carrying tenant data** has `tenant_id` + RLS, including
+  junction tables, embeddings tables, and the audit log. This discipline is
+  what keeps every scale exit open. The one documented exception is the
+  identity layer (`users`, `sessions`, and the other auth tables): a user
+  spans organizations and authentication precedes tenant context, so those
+  tables are global with compensating controls — see
+  [ADR-0011](../decisions/adr-0011-identity-tables-global.md).
+- Application checks (permission service) are the primary control; RLS is
+  the backstop that turns an application bug into a zero-row result instead
+  of a cross-tenant leak.
 - Application checks (permission service) are the primary control; RLS is
   the backstop that turns an application bug into a zero-row result instead
   of a cross-tenant leak.
