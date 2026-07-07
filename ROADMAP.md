@@ -14,7 +14,7 @@ standards (`CODING_STANDARDS.md`, `TESTING.md`, `SECURITY.md`,
 `CONTRIBUTING.md`), design language (`DESIGN_SYSTEM.md`), this roadmap,
 and the initial backlog. **No application code** (by mandate).
 
-## M1 — Platform skeleton & design system
+## M1 — Platform skeleton & design system ✅ 2026-07-07
 
 **Goal:** a running, deployed, empty-but-real platform: monorepo, CI,
 database with RLS, auth with organizations, the Strata token/component

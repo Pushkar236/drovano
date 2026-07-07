@@ -10,6 +10,12 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-07 — **M1 complete** (TASK-0018 done): API p95 latency budgets
+  enforced as benchmark tests over the real stack (single read < 150ms,
+  list < 300ms, anonymous context resolution < 150ms — PRD §5), joining
+  the bundle budgets in CI. All 17 M1 tasks closed; see
+  `docs/prompts/prompt-03.md` for the M2 mandate.
+
 - 2026-07-07 — Realtime gateway (TASK-0020, ADR-0003): `@drovano/realtime`
   — session-authenticated WebSockets where the server derives the tenant
   from the session's active organization (clients never name a channel;
