@@ -7,7 +7,7 @@ import { seedStandardObjects } from '@drovano/crm';
 import { createDb, withTenant } from '@drovano/db';
 import { createAuth, createDevMailer } from '@drovano/identity';
 import { createWebhookDispatcher } from '@drovano/platform';
-import { createAiEmbedder } from '@drovano/retrieval';
+import { createAiEmbedder, createLocalEmbedder } from '@drovano/retrieval';
 
 import { noopInvalidationPublisher, type WorkerRuns } from '@drovano/api-contracts';
 
@@ -55,7 +55,10 @@ const webhooks = createWebhookDispatcher({
 // AI workers (TASK-0038): available only when a language key exists
 // (ADR-0014); the router prefers Anthropic, else OpenRouter free tiers.
 const modelRouter = createModelRouter(env);
-const embedder = createAiEmbedder(modelRouter);
+// Embeddings: hosted (OpenAI) when its key exists, else the local
+// open-source model (ADR-0015); EMBEDDINGS=off turns dense search off.
+const embedder =
+  env.EMBEDDINGS === 'off' ? undefined : (createAiEmbedder(modelRouter) ?? createLocalEmbedder());
 const workers: WorkerRuns = modelRouter.languageEnabled
   ? {
       recordKeeper: (input) =>

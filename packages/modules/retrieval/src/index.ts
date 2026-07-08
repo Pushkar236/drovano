@@ -8,6 +8,11 @@
  */
 export { chunkText, type ChunkingOptions } from './chunking.js';
 export { createAiEmbedder, type Embedder } from './embedder.js';
+export {
+  createLocalEmbedder,
+  LOCAL_EMBEDDING_MODEL,
+  type LocalEmbedderOptions,
+} from './local-embedder.js';
 export { RetrievalError, type RetrievalErrorCode } from './errors.js';
 export {
   embeddableText,

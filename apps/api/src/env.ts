@@ -15,8 +15,10 @@ const EnvSchema = z.object({
   OPENROUTER_FAST_MODEL: z.string().optional(),
   OPENROUTER_BALANCED_MODEL: z.string().optional(),
   OPENROUTER_FRONTIER_MODEL: z.string().optional(),
-  /** Optional: embeddings (retrieval dense side) disabled without it. */
+  /** Optional: hosted embeddings; without it the LOCAL model serves. */
   OPENAI_API_KEY: z.string().optional(),
+  /** 'off' disables dense retrieval entirely (e.g. memory-tight hosts). */
+  EMBEDDINGS: z.enum(['auto', 'off']).default('auto'),
   DEPLOY_ENV: z.enum(['development', 'staging', 'production']).default('development'),
 });
 

@@ -1,104 +1,111 @@
 {
-    "version":  "7",
-    "dialect":  "postgresql",
-    "entries":  [
-                    {
-                        "idx":  0,
-                        "version":  "7",
-                        "when":  1783405820733,
-                        "tag":  "0000_initial-schema",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  1,
-                        "version":  "7",
-                        "when":  1783405840311,
-                        "tag":  "0001_tenancy-hardening",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  2,
-                        "version":  "7",
-                        "when":  1783407211235,
-                        "tag":  "0002_identity-and-workspaces",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  3,
-                        "version":  "7",
-                        "when":  1783407220711,
-                        "tag":  "0003_identity-hardening",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  4,
-                        "version":  "7",
-                        "when":  1783428565101,
-                        "tag":  "0004_object-graph",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  5,
-                        "version":  "7",
-                        "when":  1783428566275,
-                        "tag":  "0005_object-graph-hardening",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  6,
-                        "version":  "7",
-                        "when":  1783442051151,
-                        "tag":  "0006_lists-and-views",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  7,
-                        "version":  "7",
-                        "when":  1783442052257,
-                        "tag":  "0007_lists-hardening",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  8,
-                        "version":  "7",
-                        "when":  1783490613631,
-                        "tag":  "0008_platform-api-keys-webhooks",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  9,
-                        "version":  "7",
-                        "when":  1783490614631,
-                        "tag":  "0009_platform-hardening",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  10,
-                        "version":  "7",
-                        "when":  1783495428259,
-                        "tag":  "0010_agent-trust",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  11,
-                        "version":  "7",
-                        "when":  1783495429259,
-                        "tag":  "0011_agent-trust-hardening",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  12,
-                        "version":  "7",
-                        "when":  1783510812216,
-                        "tag":  "0012_retrieval",
-                        "breakpoints":  true
-                    },
-                    {
-                        "idx":  13,
-                        "version":  "7",
-                        "when":  1783510813216,
-                        "tag":  "0013_retrieval-hardening",
-                        "breakpoints":  true
-                    }
-                ]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1783405820733,
+      "tag": "0000_initial-schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1783405840311,
+      "tag": "0001_tenancy-hardening",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783407211235,
+      "tag": "0002_identity-and-workspaces",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783407220711,
+      "tag": "0003_identity-hardening",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783428565101,
+      "tag": "0004_object-graph",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783428566275,
+      "tag": "0005_object-graph-hardening",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1783442051151,
+      "tag": "0006_lists-and-views",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1783442052257,
+      "tag": "0007_lists-hardening",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1783490613631,
+      "tag": "0008_platform-api-keys-webhooks",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1783490614631,
+      "tag": "0009_platform-hardening",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1783495428259,
+      "tag": "0010_agent-trust",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1783495429259,
+      "tag": "0011_agent-trust-hardening",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1783510812216,
+      "tag": "0012_retrieval",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1783510813216,
+      "tag": "0013_retrieval-hardening",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1783528199921,
+      "tag": "0014_embedding-dims",
+      "breakpoints": true
+    }
+  ]
 }

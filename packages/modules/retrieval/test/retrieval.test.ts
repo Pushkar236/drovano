@@ -19,17 +19,18 @@ import {
 } from '../src/index.js';
 
 /** Deterministic bag-of-words embedder — shared words → higher cosine. */
+const DIMS = 384; // matches chunks.embedding halfvec(384), ADR-0015
 const stubEmbedder: Embedder = {
   embed: (texts) =>
     Promise.resolve(
       texts.map((text) => {
-        const vector = new Array<number>(1536).fill(0);
+        const vector = new Array<number>(DIMS).fill(0);
         for (const word of text.toLowerCase().match(/[a-z0-9]+/g) ?? []) {
           let hash = 2166136261;
           for (const char of word) {
             hash = ((hash ^ char.charCodeAt(0)) * 16777619) >>> 0;
           }
-          vector[hash % 1536] = (vector[hash % 1536] ?? 0) + 1;
+          vector[hash % DIMS] = (vector[hash % DIMS] ?? 0) + 1;
         }
         const norm = Math.sqrt(vector.reduce((sum, x) => sum + x * x, 0)) || 1;
         return vector.map((x) => x / norm);

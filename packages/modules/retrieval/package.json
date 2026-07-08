@@ -15,6 +15,7 @@
     "@drovano/ai": "workspace:*",
     "@drovano/db": "workspace:*",
     "@drovano/permissions": "workspace:*",
+    "@huggingface/transformers": "catalog:",
     "ai": "catalog:",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"

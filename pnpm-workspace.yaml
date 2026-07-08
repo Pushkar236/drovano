@@ -15,6 +15,7 @@ onlyBuiltDependencies:
 catalog:
   '@ai-sdk/anthropic': 4.0.9
   '@ai-sdk/openai': 4.0.8
+  '@huggingface/transformers': 4.2.0
   ai: 7.0.17
   '@base-ui/react': 1.6.0
   '@better-auth/drizzle-adapter': 1.6.23

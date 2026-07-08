@@ -7,6 +7,31 @@
 
 ## Progress log
 
+- **Session 2, ADR-0015 local embeddings + credentials arrive
+  (2026-07-08):** dense retrieval unblocked at $0 —
+  `createLocalEmbedder()` (bge-small-en-v1.5 via
+  @huggingface/transformers 4.2.0, q8 ONNX, lazy-loaded) behind the
+  Embedder seam; verified live (384 dims; related texts cosine 0.857
+  vs unrelated 0.550; ~6.7s first call incl. model download, fast
+  after). `chunks.embedding` → halfvec(384) via migration 0014
+  (drop/re-add — drizzle's bare ALTER TYPE can't cast across halfvec
+  dims; column was all-NULL everywhere). main.ts precedence: OpenAI
+  hosted if key, else local; `EMBEDDINGS=off` kill-switch for
+  memory-tight hosts (bge adds ~150-200MB peak — Render free tier is
+  512MB, WATCH FOR OOM after deploy; if it OOMs set EMBEDDINGS=off
+  there). CREDENTIALS NOW IN apps/api/.env (gitignored):
+  OPENROUTER_API_KEY, GOOGLE_CLIENT_ID/SECRET (formats verified —
+  **TASK-0032 IS UNBLOCKED**), TRIGGER_SECRET_KEY (tr_dev_…;
+  Trigger.dev scaffolding still needs the project ref `proj_…` from
+  the dashboard). OPENROUTER_API_KEY is also set on the Render
+  service via API. STILL GATED (user must name them): Render deploy
+  of drovano-api (env var alone doesn't redeploy; prod still runs
+  pre-M2 e972146), Neon apply of migration 0014 (0010–0013 are
+  applied and verified). Hermes 3/4 on OpenRouter: `tools: false` —
+  unusable for workers (everything is tool loops); could only serve
+  the no-tool contextualizer seam. NEXT: TASK-0032 Gmail/GCal sync
+  (creds ready), then Trigger.dev scaffolding once proj ref arrives.
+
 - **Session 1, worker trigger wired (2026-07-08):** the record keeper
   is invocable over tRPC — `agents.workers.recordKeeper` (api.manage;
   spend-cap → TOO_MANY_REQUESTS; no key → PRECONDITION_FAILED). The

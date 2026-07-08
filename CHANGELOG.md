@@ -19,6 +19,16 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-08 — Dense retrieval at $0 (ADR-0015): embeddings now come
+  from a local open-source model — `bge-small-en-v1.5` (384 dims,
+  ~35 MB quantized ONNX) through transformers.js, behind the existing
+  `Embedder` seam. No key, no per-call cost, cached after first
+  download. The API prefers hosted OpenAI embeddings when that key
+  exists and `EMBEDDINGS=off` disables dense search on memory-tight
+  hosts. `chunks.embedding` moves to `halfvec(384)` (migration 0014;
+  the column was never populated). Hybrid BM25+dense search is now the
+  default posture, not an upgrade.
+
 - 2026-07-08 — Record keeper is triggerable end-to-end:
   `agents.workers.recordKeeper` tRPC mutation (api.manage-gated — a run
   spends tenant AI budget) invokes the worker through a context-injected

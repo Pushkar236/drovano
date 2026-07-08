@@ -7,9 +7,11 @@
  * search service filters soft-deleted records and runs the caller
  * through can()).
  *
- * Embeddings are nullable — the zero-cost posture indexes BM25-only
- * until an OpenAI key enables dense (ADR-0010); halfvec(1536) matches
- * text-embedding-3-small.
+ * Embeddings are nullable and locally produced by default (ADR-0015:
+ * bge-small-en-v1.5 via transformers.js → 384 dims). Swapping the
+ * embedding model later (e.g. OpenAI text-embedding-3-small, 1536)
+ * requires a dimension migration AND re-embedding — different models
+ * live in different vector spaces, so that cost is inherent.
  */
 import { sql } from 'drizzle-orm';
 import {
@@ -50,7 +52,7 @@ export const chunks = pgTable(
     content: text('content').notNull(),
     /** Contextual-retrieval situating sentence (LLM-generated, optional). */
     context: text('context'),
-    embedding: halfvec('embedding', { dimensions: 1536 }),
+    embedding: halfvec('embedding', { dimensions: 384 }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [

@@ -23,6 +23,7 @@ decision means superseding its ADR, never editing history.
 | [ADR-0012](docs/decisions/adr-0012-meeting-capture-vendor.md)   | Buy meeting capture (Recall.ai, usage-priced) behind an owned MeetingCapture interface; native capture rejected    | Accepted | ai, backend, infra         |
 | [ADR-0013](docs/decisions/adr-0013-enrichment-providers.md)     | Enrichment via an owned waterfall over direct providers: People Data Labs first, Apollo second when metrics demand | Accepted | ai, backend, data          |
 | [ADR-0014](docs/decisions/adr-0014-openrouter-free-routing.md)  | Language models via OpenRouter free tier until a first-party (Anthropic) key exists; router prefers Anthropic      | Accepted | ai, infra                  |
+| [ADR-0015](docs/decisions/adr-0015-local-embeddings.md)         | Embeddings via local open-source bge-small-en-v1.5 (transformers.js, 384d); OpenAI key replaces it when provided   | Accepted | ai, data, infra            |
 
 ## Known upcoming decisions (no ADR yet)
 
