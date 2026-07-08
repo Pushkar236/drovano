@@ -3,8 +3,10 @@ import { cleanup, configure } from '@testing-library/react';
 import { afterEach } from 'vitest';
 
 // Routes lazy-load (code splitting): page mounts are async chunks now, and
-// CI runners need more than the 1s findBy/waitFor default.
-configure({ asyncUtilTimeout: 5000 });
+// CI runners need more than the 1s findBy/waitFor default. The first test
+// in a file pays cold-import costs on top — 5s flaked on CI (2026-07-08),
+// so this sits well clear of it. Keep vitest's testTimeout above this.
+configure({ asyncUtilTimeout: 10_000 });
 
 afterEach(() => {
   cleanup();
