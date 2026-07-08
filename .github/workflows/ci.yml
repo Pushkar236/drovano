@@ -59,3 +59,27 @@ jobs:
         run: |
           curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz | tar -xz gitleaks
           ./gitleaks git --redact --no-banner --exit-code=1 .
+
+  deploy:
+    name: Deploy API (Render)
+    # Only green main builds reach production — CI is the deploy gate.
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [quality, test, secrets]
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-api
+      cancel-in-progress: false
+    steps:
+      - name: Trigger Render deploy
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          if [ -z "$RENDER_API_KEY" ]; then
+            echo "RENDER_API_KEY secret not set — skipping deploy (no-op until provisioned)."
+            exit 0
+          fi
+          curl -sSf -X POST \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            https://api.render.com/v1/services/srv-d96ek36q1p3s73c0qufg/deploys
