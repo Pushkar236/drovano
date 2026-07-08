@@ -7,6 +7,19 @@
 
 ## Progress log
 
+- **Session 1, worker trigger wired (2026-07-08):** the record keeper
+  is invocable over tRPC — `agents.workers.recordKeeper` (api.manage;
+  spend-cap → TOO_MANY_REQUESTS; no key → PRECONDITION_FAILED). The
+  seam is `WorkerRuns` on the request context, injected by main.ts
+  (workers compose modules, so they cannot live at the contracts
+  tier); main.ts now builds createModelRouter(env) + createAiEmbedder
+  and passes `runRecordKeeper` bound to the fast tier. env.ts gained
+  the optional AI keys. Tested by injecting the REAL worker with a
+  stub model through the same seam main.ts uses. PRODUCTION NOTE: the
+  Render service is still running a pre-M2 build and has no
+  OPENROUTER_API_KEY env var — a live production run needs BOTH the
+  redeploy AND the env var set (deploy-gated, user asks).
+
 - **Session 1, ADR-0014 + production migrations (2026-07-08):** the
   founder supplied an OPENROUTER key ("use free and good models") — no
   Anthropic key exists. ADR-0014: router precedence Anthropic >

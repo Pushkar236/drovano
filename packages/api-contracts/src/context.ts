@@ -11,12 +11,31 @@ export interface SessionUser {
   name: string;
 }
 
+/**
+ * Worker entry points, injected by the app tier (workers compose
+ * modules, so they cannot live at this tier). A missing entry means
+ * the capability is disabled (e.g. no language-model key) — routers
+ * answer PRECONDITION_FAILED, boot never fails (ADR-0014 posture).
+ */
+export interface WorkerRuns {
+  recordKeeper?:
+    | ((input: {
+        tenantId: string;
+        agentId: string;
+        recordId: string;
+        instruction?: string | undefined;
+      }) => Promise<{ text: string; steps: number; proposalIds: string[] }>)
+    | undefined;
+}
+
 export interface RequestContext {
   db: Database;
   /** Publishes coarse cache-invalidation events after mutations (ADR-0003). */
   invalidation: InvalidationPublisher;
   /** Delivers signed webhook events after record mutations (TASK-0029). */
   webhooks: WebhookDispatcher;
+  /** App-tier worker entry points (TASK-0038); absent → disabled. */
+  workers: WorkerRuns;
   session: {
     user: SessionUser;
     /** The organization the session is acting in (better-auth org plugin). */
@@ -32,6 +51,7 @@ export interface CreateRequestContextInput {
   headers: Headers;
   invalidation?: InvalidationPublisher;
   webhooks?: WebhookDispatcher;
+  workers?: WorkerRuns;
 }
 
 /**
@@ -45,10 +65,11 @@ export async function createRequestContext({
   headers,
   invalidation = noopInvalidationPublisher,
   webhooks = noopWebhookDispatcher,
+  workers = {},
 }: CreateRequestContextInput): Promise<RequestContext> {
   const sessionResult = await auth.api.getSession({ headers });
   if (sessionResult === null) {
-    return { db, invalidation, webhooks, session: null, principal: null };
+    return { db, invalidation, webhooks, workers, session: null, principal: null };
   }
 
   const activeOrganizationId = sessionResult.session.activeOrganizationId ?? null;
@@ -69,5 +90,5 @@ export async function createRequestContext({
           tenantId: activeOrganizationId,
         });
 
-  return { db, invalidation, webhooks, session, principal };
+  return { db, invalidation, webhooks, workers, session, principal };
 }

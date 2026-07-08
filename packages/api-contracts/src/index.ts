@@ -23,6 +23,7 @@ export {
   type CreateRequestContextInput,
   type RequestContext,
   type SessionUser,
+  type WorkerRuns,
 } from './context.js';
 export {
   INVALIDATION_CHANNEL_PREFIX,

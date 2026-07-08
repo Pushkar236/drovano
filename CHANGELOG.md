@@ -19,6 +19,14 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-08 — Record keeper is triggerable end-to-end:
+  `agents.workers.recordKeeper` tRPC mutation (api.manage-gated — a run
+  spends tenant AI budget) invokes the worker through a context-injected
+  seam; without a language key the endpoint answers PRECONDITION_FAILED
+  and boot never fails. `main.ts` wires the model router (ADR-0014
+  precedence) and the retrieval embedder into the worker; spend-cap
+  violations map to TOO_MANY_REQUESTS.
+
 - 2026-07-08 — Language models live at zero cost (ADR-0014): the model
   router now falls back to OpenRouter's free, tool-capable models when
   no Anthropic key exists (`fast` = gpt-oss-20b, `balanced` =

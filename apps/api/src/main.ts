@@ -2,16 +2,19 @@
 import { telemetry } from './instrument.js';
 
 import { serve } from '@hono/node-server';
+import { createModelRouter } from '@drovano/ai';
 import { seedStandardObjects } from '@drovano/crm';
 import { createDb, withTenant } from '@drovano/db';
 import { createAuth, createDevMailer } from '@drovano/identity';
 import { createWebhookDispatcher } from '@drovano/platform';
+import { createAiEmbedder } from '@drovano/retrieval';
 
-import { noopInvalidationPublisher } from '@drovano/api-contracts';
+import { noopInvalidationPublisher, type WorkerRuns } from '@drovano/api-contracts';
 
 import { createApp } from './app.js';
 import { loadEnv } from './env.js';
 import { createRedisInvalidationPublisher } from './invalidation.js';
+import { runRecordKeeper } from './workers/record-keeper.js';
 
 const env = loadEnv();
 const dbHandle = createDb({ connectionString: env.DATABASE_URL });
@@ -49,7 +52,21 @@ const webhooks = createWebhookDispatcher({
   },
 });
 
-const app = createApp({ auth, db: dbHandle.db, telemetry, invalidation, webhooks });
+// AI workers (TASK-0038): available only when a language key exists
+// (ADR-0014); the router prefers Anthropic, else OpenRouter free tiers.
+const modelRouter = createModelRouter(env);
+const embedder = createAiEmbedder(modelRouter);
+const workers: WorkerRuns = modelRouter.languageEnabled
+  ? {
+      recordKeeper: (input) =>
+        runRecordKeeper(
+          { db: dbHandle.db, model: modelRouter.languageModel('fast'), embedder },
+          input,
+        ),
+    }
+  : {};
+
+const app = createApp({ auth, db: dbHandle.db, telemetry, invalidation, webhooks, workers });
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
   stdout(`drovano api listening on :${String(info.port)} (${env.DEPLOY_ENV})\n`);

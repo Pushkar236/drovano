@@ -35,7 +35,9 @@ function toTrpcError(error: unknown): never {
           ? 'CONFLICT'
           : error.code === 'not-permitted'
             ? 'FORBIDDEN'
-            : 'BAD_REQUEST';
+            : error.code === 'spend-cap-exceeded'
+              ? 'TOO_MANY_REQUESTS'
+              : 'BAD_REQUEST';
     throw new TRPCError({ code, message: error.message });
   }
   if (error instanceof CrmError) {
@@ -91,6 +93,34 @@ export const agentsRouter = router({
         setAgentGrants(tx, { tenantId: ctx.tenantId, ...input, actor }).catch(toTrpcError),
       );
     }),
+
+  workers: router({
+    /**
+     * Manual worker trigger (TASK-0038 v1; Trigger.dev wraps this once
+     * durable execution lands). The worker only STAGES proposals, so
+     * running it is safe — but it consumes tenant AI budget, hence the
+     * api.manage gate (standing access, like keys and agents).
+     */
+    recordKeeper: tenantProcedure
+      .input(
+        z.object({
+          agentId: z.uuid(),
+          recordId: z.uuid(),
+          instruction: z.string().trim().min(1).max(500).optional(),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        authorize(ctx, { type: 'api.manage' });
+        const run = ctx.workers.recordKeeper;
+        if (run === undefined) {
+          throw new TRPCError({
+            code: 'PRECONDITION_FAILED',
+            message: 'AI is disabled: no language-model key is configured (ADR-0014).',
+          });
+        }
+        return run({ tenantId: ctx.tenantId, ...input }).catch(toTrpcError);
+      }),
+  }),
 
   proposals: router({
     list: tenantProcedure

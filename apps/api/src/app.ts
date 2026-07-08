@@ -3,6 +3,7 @@ import {
   createRequestContext,
   noopInvalidationPublisher,
   type InvalidationPublisher,
+  type WorkerRuns,
 } from '@drovano/api-contracts';
 import type { Database } from '@drovano/db';
 import type { Auth } from '@drovano/identity';
@@ -19,6 +20,7 @@ export interface CreateAppOptions {
   telemetry?: Telemetry;
   invalidation?: InvalidationPublisher;
   webhooks?: WebhookDispatcher;
+  workers?: WorkerRuns;
 }
 
 /**
@@ -32,6 +34,7 @@ export function createApp({
   telemetry,
   invalidation = noopInvalidationPublisher,
   webhooks,
+  workers,
 }: CreateAppOptions): Hono {
   const app = new Hono();
 
@@ -59,6 +62,7 @@ export function createApp({
           headers: c.req.raw.headers,
           invalidation,
           ...(webhooks !== undefined ? { webhooks } : {}),
+          ...(workers !== undefined ? { workers } : {}),
         })) as unknown as Record<string, unknown>,
     }),
   );

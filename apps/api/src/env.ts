@@ -9,6 +9,14 @@ const EnvSchema = z.object({
   SENTRY_DSN: z.string().optional(),
   /** Optional: realtime invalidation is a no-op without it (ADR-0003). */
   REDIS_URL: z.string().optional(),
+  /** Optional: language models disabled without one of these (ADR-0014). */
+  ANTHROPIC_API_KEY: z.string().optional(),
+  OPENROUTER_API_KEY: z.string().optional(),
+  OPENROUTER_FAST_MODEL: z.string().optional(),
+  OPENROUTER_BALANCED_MODEL: z.string().optional(),
+  OPENROUTER_FRONTIER_MODEL: z.string().optional(),
+  /** Optional: embeddings (retrieval dense side) disabled without it. */
+  OPENAI_API_KEY: z.string().optional(),
   DEPLOY_ENV: z.enum(['development', 'staging', 'production']).default('development'),
 });
 

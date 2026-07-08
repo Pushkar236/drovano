@@ -1,13 +1,16 @@
 import { randomUUID } from 'node:crypto';
 
 import { createProposal } from '@drovano/agents';
-import { createCaller, createRequestContext } from '@drovano/api-contracts';
+import { createStubLanguageModel, textResponse, toolCallResponse } from '@drovano/ai/testing';
+import { createCaller, createRequestContext, type WorkerRuns } from '@drovano/api-contracts';
 import { seedStandardObjects } from '@drovano/crm';
 import { auditLog, members, withTenant } from '@drovano/db';
 import { startTestDatabase, type TestDatabase } from '@drovano/db/testing';
 import { createAuth, type Auth } from '@drovano/identity';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+
+import { runRecordKeeper } from '../src/workers/record-keeper.js';
 
 const PASSWORD = 'a-long-test-password-1';
 
@@ -20,6 +23,7 @@ describe('agents tRPC surface (real database, real sessions)', () => {
   let testDb: TestDatabase;
   let auth: Auth;
   let ownerCaller: Awaited<ReturnType<typeof callerFor>>;
+  let ownerHeaders: Headers;
   let ownerUserId: string;
   let organizationId: string;
   let tenantId: string;
@@ -58,7 +62,7 @@ describe('agents tRPC surface (real database, real sessions)', () => {
         ),
     });
 
-    const ownerHeaders = await signUp('agents-owner@example.com', 'Owner');
+    ownerHeaders = await signUp('agents-owner@example.com', 'Owner');
     const ownerSession = await auth.api.getSession({ headers: ownerHeaders });
     ownerUserId = ownerSession?.user.id ?? '';
     const organization = await auth.api.createOrganization({
@@ -200,6 +204,46 @@ describe('agents tRPC surface (real database, real sessions)', () => {
 
     const fetched = await ownerCaller.crm.records.get({ recordId: record.id });
     expect(fetched.values).toEqual({ name: 'Globex' });
+  });
+
+  it('workers.recordKeeper: disabled without a model, runs the real worker with one', async () => {
+    const record = await ownerCaller.crm.records.create({
+      objectId: companyObjectId,
+      values: { name: 'Initech' },
+    });
+    const agent = await ownerCaller.agents.create({ name: 'Keeper', worker: 'record-keeper' });
+    await ownerCaller.agents.setGrants({
+      agentId: agent.id,
+      actions: ['record.view', 'record.update'],
+    });
+
+    // Default context carries no workers → the capability is disabled.
+    await expect(
+      ownerCaller.agents.workers.recordKeeper({ agentId: agent.id, recordId: record.id }),
+    ).rejects.toMatchObject({ code: 'PRECONDITION_FAILED' });
+
+    // Inject the real worker with a stub model — the exact main.ts shape.
+    const model = createStubLanguageModel([
+      toolCallResponse('stage_proposal', {
+        changes: { name: 'Initech LLC' },
+        rationale: 'Stub evidence.',
+      }),
+      textResponse('Staged.'),
+    ]);
+    const workers: WorkerRuns = {
+      recordKeeper: (input) => runRecordKeeper({ db: testDb.app.db, model }, input),
+    };
+    const workerCaller = createCaller(
+      await createRequestContext({ db: testDb.app.db, auth, headers: ownerHeaders, workers }),
+    );
+    const run = await workerCaller.agents.workers.recordKeeper({
+      agentId: agent.id,
+      recordId: record.id,
+    });
+    expect(run.proposalIds).toHaveLength(1);
+
+    const pending = await ownerCaller.agents.proposals.list({ status: 'pending' });
+    expect(pending.map((p) => p.id)).toContain(run.proposalIds[0]);
   });
 
   it('review of a missing proposal is NOT_FOUND', async () => {
