@@ -1,0 +1,94 @@
+<svg width="1280" height="440" viewBox="0 0 1280 440" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Drovano — an AI-native Business Operating System">
+  <defs>
+    <radialGradient id="ambient" cx="82%" cy="18%" r="60%">
+      <stop offset="0%" stop-color="#E07A54" stop-opacity="0.10"/>
+      <stop offset="55%" stop-color="#E07A54" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#E07A54" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#101317"/>
+      <stop offset="100%" stop-color="#0C0E11"/>
+    </linearGradient>
+    <clipPath id="frame"><rect width="1280" height="440" rx="0"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <!-- base surface: graphite, never pure black -->
+    <rect width="1280" height="440" fill="url(#floor)"/>
+    <rect width="1280" height="440" fill="url(#ambient)"/>
+
+    <!-- hairline grid: structure drawn with light, not decoration -->
+    <g stroke="#191D23" stroke-width="1">
+      <line x1="80" y1="0" x2="80" y2="440"/>
+      <line x1="160" y1="0" x2="160" y2="440"/>
+      <line x1="240" y1="0" x2="240" y2="440"/>
+      <line x1="320" y1="0" x2="320" y2="440"/>
+      <line x1="400" y1="0" x2="400" y2="440"/>
+      <line x1="480" y1="0" x2="480" y2="440"/>
+      <line x1="560" y1="0" x2="560" y2="440"/>
+      <line x1="640" y1="0" x2="640" y2="440"/>
+      <line x1="880" y1="0" x2="880" y2="440"/>
+      <line x1="960" y1="0" x2="960" y2="440"/>
+      <line x1="1040" y1="0" x2="1040" y2="440"/>
+      <line x1="1120" y1="0" x2="1120" y2="440"/>
+      <line x1="1200" y1="0" x2="1200" y2="440"/>
+      <line x1="0" y1="88" x2="1280" y2="88"/>
+      <line x1="0" y1="352" x2="1280" y2="352"/>
+    </g>
+    <!-- zone seam between wordmark and the graph -->
+    <line x1="740" y1="72" x2="740" y2="368" stroke="#23272E" stroke-width="1"/>
+
+    <!-- ===== the unified business graph (product motif) ===== -->
+    <g>
+      <!-- edges -->
+      <g stroke="#2A2F37" stroke-width="1.25" fill="none">
+        <line x1="1010" y1="220" x2="892" y2="176"/>
+        <line x1="1010" y1="220" x2="946" y2="308"/>
+        <line x1="1010" y1="220" x2="1096" y2="122"/>
+        <line x1="1010" y1="220" x2="1168" y2="214"/>
+        <line x1="1010" y1="220" x2="1092" y2="316"/>
+        <line x1="892" y1="176" x2="1096" y2="122"/>
+        <line x1="946" y1="308" x2="1092" y2="316"/>
+        <line x1="1168" y1="214" x2="1096" y2="122"/>
+      </g>
+      <!-- satellite nodes: graphite -->
+      <g>
+        <circle cx="892" cy="176" r="6" fill="#2E343D" stroke="#454C57" stroke-width="1.25"/>
+        <circle cx="1096" cy="122" r="5" fill="#2E343D" stroke="#454C57" stroke-width="1.25"/>
+        <circle cx="1168" cy="214" r="6" fill="#2E343D" stroke="#454C57" stroke-width="1.25"/>
+        <circle cx="1092" cy="316" r="5" fill="#2E343D" stroke="#454C57" stroke-width="1.25"/>
+        <circle cx="946" cy="308" r="5" fill="#2E343D" stroke="#454C57" stroke-width="1.25"/>
+      </g>
+      <!-- hub: the AI worker, marked with the branded accent focus ring -->
+      <circle cx="1010" cy="220" r="18" fill="none" stroke="#E07A54" stroke-width="1.5" stroke-opacity="0.45"/>
+      <circle cx="1010" cy="220" r="10" fill="#E07A54"/>
+      <circle cx="1010" cy="220" r="10" fill="none" stroke="#F3A182" stroke-width="1" stroke-opacity="0.6"/>
+    </g>
+
+    <!-- ===== brand lockup ===== -->
+    <!-- Strata mark: layers of work, active layer in ember -->
+    <g transform="translate(80,120)">
+      <rect x="12" y="0"  width="40" height="10" rx="3" fill="#E07A54"/>
+      <rect x="8"  y="14" width="48" height="10" rx="3" fill="#3B414B"/>
+      <rect x="4"  y="28" width="56" height="10" rx="3" fill="#2C313A"/>
+      <rect x="0"  y="42" width="64" height="10" rx="3" fill="#23272E"/>
+    </g>
+
+    <!-- wordmark -->
+    <text x="164" y="168" font-family="'Segoe UI Semibold','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif" font-size="76" font-weight="600" letter-spacing="-2.5" fill="#F5F6F7">Drovano</text>
+
+    <!-- tagline -->
+    <text x="82" y="232" font-family="'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif" font-size="24" font-weight="400" letter-spacing="-0.2" fill="#C9CDD4">An AI-native Business Operating System.</text>
+
+    <!-- description -->
+    <text x="82" y="272" font-family="'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif" font-size="15.5" font-weight="400" fill="#868C96">One graph. One permission model. Humans direct the work;</text>
+    <text x="82" y="296" font-family="'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif" font-size="15.5" font-weight="400" fill="#868C96">an audited AI workforce does it.</text>
+
+    <!-- mono meta strip -->
+    <text x="82" y="392" font-family="ui-monospace,'SF Mono','JetBrains Mono',Consolas,'Liberation Mono',monospace" font-size="12.5" letter-spacing="2.5" fill="#6B7580">ONE&#160;GRAPH</text>
+    <text x="196" y="392" font-family="ui-monospace,'SF Mono','JetBrains Mono',Consolas,monospace" font-size="12.5" fill="#E07A54">·</text>
+    <text x="214" y="392" font-family="ui-monospace,'SF Mono','JetBrains Mono',Consolas,'Liberation Mono',monospace" font-size="12.5" letter-spacing="2.5" fill="#6B7580">AGENT-OPERABLE</text>
+    <text x="400" y="392" font-family="ui-monospace,'SF Mono','JetBrains Mono',Consolas,monospace" font-size="12.5" fill="#E07A54">·</text>
+    <text x="418" y="392" font-family="ui-monospace,'SF Mono','JetBrains Mono',Consolas,'Liberation Mono',monospace" font-size="12.5" letter-spacing="2.5" fill="#6B7580">PREMIUM&#160;BY&#160;DEFAULT</text>
+  </g>
+</svg>
