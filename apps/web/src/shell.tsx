@@ -1,14 +1,19 @@
 import { Link, Navigate, Outlet, useNavigate, useRouterState } from '@tanstack/react-router';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 
 import { CommandPalette } from './command-palette.js';
 import { commands, type CommandContext } from './commands.js';
-import { PeekPanel } from './components/peek-panel.js';
-import { queryClient } from './data/workspaces.js';
 import { authClient } from './lib/auth-client.js';
 import { usePeekRecordId } from './lib/peek.js';
+import { queryClient } from './lib/query.js';
 import { connectRealtime } from './lib/realtime.js';
 import { applyThemePreference } from './theme.js';
+
+// Lazy: the peek panel pulls @drovano/ui (→ @base-ui/react) — route-chunk
+// weight that must stay out of the initial payload (bundle-budget.json).
+const PeekPanel = lazy(() =>
+  import('./components/peek-panel.js').then((module) => ({ default: module.PeekPanel })),
+);
 
 /**
  * The three-zone shell (DESIGN_SYSTEM.md §5, interaction.md §6):
@@ -215,7 +220,9 @@ export function Shell() {
           className="w-80 overflow-y-auto border-l border-border-hairline bg-surface-base"
         >
           {peekRecordId !== null ? (
-            <PeekPanel key={peekRecordId} recordId={peekRecordId} />
+            <Suspense fallback={<div className="p-4" aria-busy="true" />}>
+              <PeekPanel key={peekRecordId} recordId={peekRecordId} />
+            </Suspense>
           ) : (
             <div className="p-4">
               <h2 className="text-md font-semibold text-text-primary">No record selected</h2>

@@ -4,3 +4,6 @@
 # the immutable history.
 e3c54762304e22e860ceb4c1fbde9c8cbc857ce0:apps/api/test/app.test.ts:generic-api-key:36
 e3c54762304e22e860ceb4c1fbde9c8cbc857ce0:packages/modules/identity/test/identity.test.ts:generic-api-key:57
+# Fake API-key display prefix ('drv_ef56ab78') in a settings test fixture;
+# the line now carries an inline gitleaks:allow for future edits.
+8dc38c12e7ff2436547d1e35082ca72025dfd280:apps/web/src/pages/settings.test.tsx:generic-api-key:72

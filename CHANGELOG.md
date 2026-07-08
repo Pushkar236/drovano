@@ -8,6 +8,15 @@ pre-application milestones are dated entries.
 
 ## [Unreleased]
 
+### Fixed
+
+- 2026-07-08 — Initial payload 203 → 107.9 KiB: the shell was dragging
+  @tanstack/db into the entry through `data/workspaces.ts` (it only
+  needed the query client — now in `lib/query.ts`) and @base-ui/react
+  through the statically-imported peek panel (now `React.lazy`, loaded
+  when a peek first opens). Also pinned a gitleaks false positive
+  (fake `drv_…` prefix in a test fixture) by fingerprint.
+
 ### Added
 
 - 2026-07-08 — Public API v1 + webhook skeleton (TASK-0029): REST read

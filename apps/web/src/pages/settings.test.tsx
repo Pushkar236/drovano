@@ -58,7 +58,7 @@ describe('settings page — api access', () => {
         {
           id: 'key-1',
           name: 'CI key',
-          keyPrefix: 'drv_ab12cd34',
+          keyPrefix: 'drv_ab12cd34', // gitleaks:allow — fake test fixture
           lastUsedAt: null,
           revokedAt: null,
           createdAt: '2026-07-08T00:00:00.000Z',
@@ -69,7 +69,7 @@ describe('settings page — api access', () => {
       Promise.resolve({
         id: 'key-2',
         name: 'New key',
-        keyPrefix: 'drv_ef56ab78',
+        keyPrefix: 'drv_ef56ab78', // gitleaks:allow — fake test fixture
         secret: 'drv_' + 'e'.repeat(48),
         lastUsedAt: null,
         revokedAt: null,

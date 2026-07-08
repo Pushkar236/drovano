@@ -1,17 +1,13 @@
 import type { WorkspaceListItem } from '@drovano/api-contracts';
 import { queryCollectionOptions } from '@tanstack/query-db-collection';
 import { createCollection } from '@tanstack/react-db';
-import { QueryClient } from '@tanstack/react-query';
 
+import { queryClient } from '../lib/query.js';
 import { trpc } from '../lib/trpc.js';
 
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-    },
-  },
-});
+// Re-exported for route-chunk consumers; the definition lives in
+// lib/query.ts so the shell can import it without @tanstack/db.
+export { queryClient };
 
 export interface WorkspaceCollectionDeps {
   list: () => Promise<WorkspaceListItem[]>;
