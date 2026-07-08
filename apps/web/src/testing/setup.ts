@@ -4,9 +4,11 @@ import { afterEach } from 'vitest';
 
 // Routes lazy-load (code splitting): page mounts are async chunks now, and
 // CI runners need more than the 1s findBy/waitFor default. The first test
-// in a file pays cold-import costs on top — 5s flaked on CI (2026-07-08),
-// so this sits well clear of it. Keep vitest's testTimeout above this.
-configure({ asyncUtilTimeout: 10_000 });
+// in a file pays cold-import costs on top, and the web suite shares the
+// 2-core CI runner with several Testcontainers suites — 5s flaked on CI,
+// then 10s once more container suites landed (2026-07-08). Keep vitest's
+// testTimeout above this.
+configure({ asyncUtilTimeout: 20_000 });
 
 afterEach(() => {
   cleanup();
