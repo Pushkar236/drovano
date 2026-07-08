@@ -209,6 +209,9 @@ importers:
       '@better-auth/drizzle-adapter':
         specifier: 'catalog:'
         version: 1.6.23(@better-auth/core@1.6.23(@better-auth/utils@0.4.2)(@better-fetch/fetch@1.3.1)(@opentelemetry/api@1.9.1)(better-call@1.3.7(zod@4.4.3))(jose@6.2.3)(kysely@0.29.3)(nanostores@1.4.0))(@better-auth/utils@0.4.2)(drizzle-orm@0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(kysely@0.29.3)(pg@8.22.0))
+      '@drovano/agents':
+        specifier: workspace:*
+        version: link:../../packages/modules/agents
       '@drovano/api-contracts':
         specifier: workspace:*
         version: link:../../packages/api-contracts
@@ -459,6 +462,9 @@ importers:
 
   packages/api-contracts:
     dependencies:
+      '@drovano/agents':
+        specifier: workspace:*
+        version: link:../modules/agents
       '@drovano/crm':
         specifier: workspace:*
         version: link:../modules/crm
@@ -520,6 +526,34 @@ importers:
       drizzle-kit:
         specifier: 'catalog:'
         version: 0.31.10
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.0)(jsdom@29.1.1(@noble/hashes@2.2.0))(vite@8.1.3(@types/node@26.1.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/modules/agents:
+    dependencies:
+      '@drovano/ai':
+        specifier: workspace:*
+        version: link:../../ai
+      '@drovano/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@drovano/permissions':
+        specifier: workspace:*
+        version: link:../../permissions
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(kysely@0.29.3)(pg@8.22.0)
+    devDependencies:
+      '@drovano/config':
+        specifier: workspace:*
+        version: link:../../config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 26.1.0
       typescript:
         specifier: 'catalog:'
         version: 6.0.3

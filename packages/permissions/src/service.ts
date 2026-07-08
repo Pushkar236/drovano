@@ -22,8 +22,9 @@ export type WorkspaceRole = 'admin' | 'member';
 export interface PrincipalContext {
   /**
    * Agents are first-class principals (PROJECT.md law 2) but hold scoped
-   * grants, not roles. Until the grant system lands (M3, TASK-0037),
-   * agents are denied everything — fail closed, never pseudo-human.
+   * GRANTS, not roles (TASK-0037): an agent may do exactly what appears
+   * in `agentGrants`, and only actions in GRANTABLE_ACTIONS may appear
+   * there — everything else fails closed, never pseudo-human.
    */
   kind: 'human' | 'agent';
   userId: string;
@@ -31,6 +32,8 @@ export interface PrincipalContext {
   organizationRole: OrganizationRole | null;
   /** workspaceId → role, for workspaces the principal is a member of. */
   workspaceRoles: ReadonlyMap<string, WorkspaceRole>;
+  /** Action types granted to an agent principal (agent_grants rows). */
+  agentGrants?: ReadonlySet<string>;
 }
 
 export type Action =
@@ -63,6 +66,18 @@ export interface Decision {
   reason: string;
 }
 
+/**
+ * The only action types an agent grant can carry (ai-system.md):
+ * member-level graph work. Destructive and administrative actions are
+ * structurally ungrantable — adding one here is a security review.
+ */
+export const GRANTABLE_ACTIONS: ReadonlySet<string> = new Set([
+  'record.view',
+  'record.create',
+  'record.update',
+  'list.create',
+]);
+
 const allow = (reason: string): Decision => ({ allowed: true, reason });
 const deny = (reason: string): Decision => ({ allowed: false, reason });
 
@@ -72,7 +87,12 @@ function isOrganizationManager(principal: PrincipalContext): boolean {
 
 export function can(principal: PrincipalContext, action: Action): Decision {
   if (principal.kind === 'agent') {
-    return deny('agent principals have no grants yet (scoped grants land in M3, TASK-0037)');
+    if (!GRANTABLE_ACTIONS.has(action.type)) {
+      return deny(`'${action.type}' is not grantable to agents — fail closed`);
+    }
+    return principal.agentGrants?.has(action.type) === true
+      ? allow(`agent holds the '${action.type}' grant`)
+      : deny(`agent lacks the '${action.type}' grant`);
   }
   if (principal.organizationRole === null) {
     return deny('principal is not a member of this organization');

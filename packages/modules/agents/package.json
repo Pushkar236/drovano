@@ -1,0 +1,26 @@
+{
+  "name": "@drovano/agents",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Agent trust module: agent principals, scoped grants, run logs, and the proposal (provisional-until-accepted) surface",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@drovano/ai": "workspace:*",
+    "@drovano/db": "workspace:*",
+    "@drovano/permissions": "workspace:*",
+    "drizzle-orm": "catalog:"
+  },
+  "devDependencies": {
+    "@drovano/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@drovano/agents": "workspace:*",
     "@drovano/crm": "workspace:*",
     "@drovano/db": "workspace:*",
     "@drovano/identity": "workspace:*",

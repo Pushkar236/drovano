@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "catalog:",
+    "@drovano/agents": "workspace:*",
     "@drovano/api-contracts": "workspace:*",
     "@drovano/crm": "workspace:*",
     "@drovano/db": "workspace:*",

@@ -7,6 +7,69 @@
 
 ## Progress log
 
+- **Session 1, TASK-0037 done (2026-07-08):** shipped as designed
+  (entry below) with two deltas. (1) Error codes grew `not-permitted`
+  (agent lacks the record.update grant when proposing — the module
+  itself runs `can()`, defense in depth below the router) and
+  `unknown-record` (proposal targets checked against live records, not
+  left to the FK). (2) The module suite seeds its proposal-target
+  record at the schema level (raw `object_definitions`/`records`
+  inserts) because modules must not import modules even in tests —
+  the full crm-composed path is covered in the api router suite
+  instead. Verified end-to-end: accepting a proposal writes the values
+  AND stamps `record.update` audit with the HUMAN reviewer's id;
+  rejecting leaves the record untouched; reviews are terminal
+  (CONFLICT on the second decision). 13 new tests (8 module, 5 api
+  router), 60 permission tests carried. Migrations 0010/0011 are in
+  the tree and proven by every Testcontainers run; the PRODUCTION
+  Neon apply is staged in a scratchpad script but deploy-class actions
+  are permission-gated this session — batched as a user ask alongside
+  the Render/Vercel redeploys. Next: TASK-0035 (retrieval, stub-first)
+  or TASK-0038 (record keeper — can now stage real proposals).
+
+- **Session 1, TASK-0037 design locked (2026-07-08):** new module
+  `packages/modules/agents` (@drovano/agents) + migration 0010/0011
+  (companion) with three tenant-scoped RLS-normal tables copying the
+  audit exemplar: `agents` (id uuidv7, tenant_id, name, worker — e.g.
+  'record-keeper', active bool, created_by, created_at),
+  `agent_grants` (tenant_id, agent_id FK cascade, action text,
+  granted_by, created_at, unique (agent_id, action)), `ai_runs`
+  (tenant_id, agent_id, model, steps, input_tokens, output_tokens,
+  total_tokens, outcome text, error_message, created_at; index
+  (tenant_id, created_at)). Permissions: `PrincipalContext` gains
+  optional `agentGrants: ReadonlySet<string>`; the agent branch in
+  `can()` changes from deny-all to: allow IFF the action type is in
+  GRANTABLE_ACTIONS (exactly 'record.view' | 'record.create' |
+  'record.update' | 'list.create' — never delete/manage actions) AND in
+  the principal's grant set; reason strings name the grant. Matrix test
+  gains agent rows (granted → allow for the four; everything else deny
+  even when granted — fail closed on non-grantable). Services in the
+  module: createAgent (audit agent.create), setAgentGrants (replace-set
+  w/ audit agent.grants-set, validates grantable list), listAgents,
+  `loadAgentPrincipal(tx, {tenantId, agentId})` → PrincipalContext
+  (kind 'agent', grants loaded), `createDbRunRecorder(db)` implementing
+  @drovano/ai's RunRecorder → inserts ai_runs inside withTenant,
+  `spendThisMonth(tx, tenantId)` + `assertSpendWithinCap` (cap constant
+  AI_MONTHLY_TOKEN_CAP = 5_000_000 v1, config later). Proposals
+  (provisional-until-accepted): `proposals` table rides the SAME
+  migration: (tenant_id, record_id FK, changes jsonb {attributeKey:
+  value}, rationale text, proposed_by_agent FK, status
+  'pending'|'accepted'|'rejected', reviewed_by, reviewed_at,
+  created_at; index (tenant_id, status)); services createProposal
+  (agent-only path, audit proposal.create), reviewProposal (human,
+  can() record.update; accept applies via crm updateRecordValues with
+  the HUMAN actor so provenance shows the acceptor, then audit
+  proposal.accept/reject). tRPC `agents` router (api.manage for
+  create/grants; record.view for list; record.update for review);
+  proposals surface: agents.proposals.list/review. Tests: module
+  Testcontainers suite (grants round-trip, agent principal allow/deny
+  matrix vs granted set, run recording + monthly spend sum, proposal
+  accept applies values + audit chain, RLS isolation for all four
+  tables), api router suite (member can review proposals? no — review
+  requires record.update which members hold; creating agents requires
+  api.manage → member FORBIDDEN). UI deferred to the worker tasks
+  (0038 renders proposals inline).
+
 - **Session 1, TASK-0034 done (2026-07-08):** `@drovano/ai` shipped —
   router (tiers → Anthropic models `claude-haiku-4-5-20251001` /
   `claude-sonnet-5` / `claude-opus-4-8`; embeddings →

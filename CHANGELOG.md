@@ -19,6 +19,21 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-08 — Agent trust infrastructure (TASK-0037): agents are
+  first-class principals with SCOPED GRANTS, never roles —
+  `@drovano/agents` (create/list agents, replace-set grants,
+  `loadAgentPrincipal` feeding the same `can()` gate humans use, with a
+  `GRANTABLE_ACTIONS` allowlist that fails closed and strips all grants
+  from inactive agents), session logs (`ai_runs` via a best-effort
+  `RunRecorder` + 5M-token/month tenant spend cap), and the
+  provisional-until-accepted surface: agent writes land as `proposals`
+  and become record values only when a human reviewer accepts — the
+  status flip and the crm `updateRecordValues` (as the HUMAN actor)
+  share one transaction at the contracts tier. New `agents` tRPC router
+  (manage under `api.manage`, review under `record.update`), RLS-forced
+  migrations 0010/0011, 13 new integration tests. Production Neon apply
+  is staged (deploy-class action — awaiting approval).
+
 - 2026-07-08 — AI harness (M3 opens: TASK-0034, eval scaffolding from
   TASK-0036): `@drovano/ai` — tier-based model router (`fast`/`balanced`/
   `frontier` → Anthropic; embeddings → OpenAI; missing keys disable the

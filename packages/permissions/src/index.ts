@@ -1,5 +1,6 @@
 export {
   can,
+  GRANTABLE_ACTIONS,
   type Action,
   type Decision,
   type OrganizationRole,

@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { can, type Action, type OrganizationRole, type PrincipalContext } from './service.js';
+import {
+  can,
+  GRANTABLE_ACTIONS,
+  type Action,
+  type OrganizationRole,
+  type PrincipalContext,
+} from './service.js';
 
 const WORKSPACE = '0197a000-0000-7000-8000-000000000001';
 const OTHER_WORKSPACE = '0197a000-0000-7000-8000-000000000002';
@@ -170,7 +176,7 @@ describe('fail-closed defaults', () => {
     }
   });
 
-  it('agent principals are denied everything until scoped grants exist (TASK-0037)', () => {
+  it('agent principals without grants are denied everything', () => {
     const agent: PrincipalContext = {
       kind: 'agent',
       userId: '0197a000-0000-7000-8000-00000000000c',
@@ -181,7 +187,53 @@ describe('fail-closed defaults', () => {
     for (const action of ACTIONS) {
       const decision = can(agent, action);
       expect(decision.allowed).toBe(false);
-      expect(decision.reason).toContain('TASK-0037');
+      expect(decision.reason.length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('agent grants (TASK-0037)', () => {
+  function agentPrincipal(grants: readonly string[]): PrincipalContext {
+    return {
+      kind: 'agent',
+      userId: '0197a000-0000-7000-8000-00000000000c',
+      tenantId: '0197a000-0000-7000-8000-00000000000b',
+      organizationRole: null,
+      workspaceRoles: new Map(),
+      agentGrants: new Set(grants),
+    };
+  }
+
+  it('a granted action is allowed; ungranted grantable actions stay denied', () => {
+    const agent = agentPrincipal(['record.view', 'record.update']);
+    expect(can(agent, { type: 'record.view' }).allowed).toBe(true);
+    expect(can(agent, { type: 'record.update' }).allowed).toBe(true);
+    expect(can(agent, { type: 'record.create' }).allowed).toBe(false);
+    expect(can(agent, { type: 'list.create' }).allowed).toBe(false);
+  });
+
+  it('non-grantable actions are denied even when (mis)present in the grant set', () => {
+    const agent = agentPrincipal([
+      'record.delete',
+      'object.manage',
+      'api.manage',
+      'organization.delete',
+      'workspace.create',
+    ]);
+    expect(can(agent, { type: 'record.delete' }).allowed).toBe(false);
+    expect(can(agent, { type: 'object.manage' }).allowed).toBe(false);
+    expect(can(agent, { type: 'api.manage' }).allowed).toBe(false);
+    expect(can(agent, { type: 'organization.delete' }).allowed).toBe(false);
+    expect(can(agent, { type: 'workspace.create' }).allowed).toBe(false);
+    expect(can(agent, { type: 'record.delete' }).reason).toContain('not grantable');
+  });
+
+  it('GRANTABLE_ACTIONS is exactly the member-level graph vocabulary', () => {
+    expect([...GRANTABLE_ACTIONS].sort()).toEqual([
+      'list.create',
+      'record.create',
+      'record.update',
+      'record.view',
+    ]);
   });
 });
