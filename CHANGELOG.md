@@ -19,6 +19,17 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-08 — Language models live at zero cost (ADR-0014): the model
+  router now falls back to OpenRouter's free, tool-capable models when
+  no Anthropic key exists (`fast` = gpt-oss-20b, `balanced` =
+  nemotron-3-super-120b, `frontier` = gpt-oss-120b; all `:free`,
+  per-tier env overrides for catalog rotation). Anthropic still wins
+  automatically once its key arrives. Verified with a live tool-loop
+  smoke test through OpenRouter. Embeddings remain OpenAI-only —
+  retrieval stays BM25-only for now. Production migrations 0010–0013
+  applied to Neon (agent trust + retrieval; pgvector 0.8.1, FORCE RLS
+  and grants verified).
+
 - 2026-07-08 — Record keeper worker core (TASK-0038 begins): the first
   real worker assembly, composed at the app tier — `runRecordKeeper`
   runs the bounded tool loop as an agent principal with three tools

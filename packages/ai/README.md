@@ -5,10 +5,13 @@ routing, a bounded tool loop, run recording, and eval scaffolding.
 Orchestration lives in workers (Trigger.dev durable steps), never here.
 
 - **Router** — call sites ask for a tier (`fast` / `balanced` /
-  `frontier`), the router picks the wire model. Anthropic serves
-  language; OpenAI serves embeddings (Anthropic has no embeddings API).
-  Missing keys disable the capability (`AiDisabledError`), boot never
-  fails — same posture as `SENTRY_DSN`/`REDIS_URL`.
+  `frontier`), the router picks the wire model. Language providers in
+  precedence order: Anthropic (`ANTHROPIC_API_KEY`), else OpenRouter
+  free tool-capable models (`OPENROUTER_API_KEY`; per-tier
+  `OPENROUTER_*_MODEL` overrides — ADR-0014). OpenAI serves embeddings
+  (neither Anthropic nor OpenRouter has an embeddings API). Missing
+  keys disable the capability (`AiDisabledError`), boot never fails —
+  same posture as `SENTRY_DSN`/`REDIS_URL`.
 - **Tool loop** — `runToolLoop` wraps `generateText` with hard per-run
   caps (`maxSteps`, `maxOutputTokens` — ai-system.md spend rules) and
   records every run (tenant, worker, model, tokens, outcome) through the

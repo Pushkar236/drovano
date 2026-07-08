@@ -32,6 +32,30 @@ describe('model router', () => {
     expect(router.embeddingsEnabled).toBe(false); // embeddings need OpenAI
   });
 
+  it('falls back to OpenRouter free models when only that key exists (ADR-0014)', () => {
+    const router = createModelRouter({ OPENROUTER_API_KEY: 'sk-or-test' }); // gitleaks:allow — fake
+    expect(router.languageEnabled).toBe(true);
+    const model = router.languageModel('balanced');
+    expect(typeof model === 'string' ? model : model.modelId).toContain(':free');
+    expect(router.embeddingsEnabled).toBe(false); // OpenRouter has no embeddings API
+  });
+
+  it('Anthropic outranks OpenRouter, and tier models are env-overridable', () => {
+    const both = createModelRouter({
+      ANTHROPIC_API_KEY: 'sk-test', // gitleaks:allow — fake
+      OPENROUTER_API_KEY: 'sk-or-test', // gitleaks:allow — fake
+    });
+    const model = both.languageModel('fast');
+    expect(typeof model === 'string' ? model : model.modelId).toContain('haiku');
+
+    const overridden = createModelRouter({
+      OPENROUTER_API_KEY: 'sk-or-test', // gitleaks:allow — fake
+      OPENROUTER_FAST_MODEL: 'qwen/qwen3-coder:free',
+    });
+    const fast = overridden.languageModel('fast');
+    expect(typeof fast === 'string' ? fast : fast.modelId).toBe('qwen/qwen3-coder:free');
+  });
+
   it('test overrides serve models without any provider key', async () => {
     const stub = createStubLanguageModel([textResponse('hello')]);
     const router = createModelRouter({}, { languageModels: { balanced: stub } });

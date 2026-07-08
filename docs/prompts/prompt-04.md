@@ -7,6 +7,31 @@
 
 ## Progress log
 
+- **Session 1, ADR-0014 + production migrations (2026-07-08):** the
+  founder supplied an OPENROUTER key ("use free and good models") — no
+  Anthropic key exists. ADR-0014: router precedence Anthropic >
+  OpenRouter; free tool-capable tier defaults (fast
+  openai/gpt-oss-20b:free, balanced
+  nvidia/nemotron-3-super-120b-a12b:free, frontier
+  openai/gpt-oss-120b:free) with OPENROUTER_*_MODEL env overrides —
+  free listings rotate and 429 under congestion (observed live:
+  gpt-oss-120b upstream-rate-limited during the smoke test; retry or
+  override). OpenRouter is wired via @ai-sdk/openai `.chat()` (NOT the
+  default responses API). Key lives in apps/api/.env (gitignored) and
+  the transcript only — NEVER commit it; .env.example documents the
+  variables. Live smoke test through runToolLoop: fast tier executed a
+  tool call + answered (507 tokens, $0). Free-account budget ≈50
+  req/day without balance — evals must respect it. Embeddings still
+  need OPENAI_API_KEY (OpenRouter has none) → retrieval stays
+  BM25-only. ALSO: user approved the production Neon apply —
+  migrations 0010–0013 applied via the HTTPS SQL workaround and
+  verified (FORCE RLS + policies + 4 grants on agents/agent_grants/
+  ai_runs/proposals/chunks; pgvector 0.8.1; all chunk indexes). NEXT
+  UNBLOCKED: wire createModelRouter(process.env) into apps/api main
+  and expose the record-keeper trigger (context-injected), then
+  TASK-0036 scheduled evals within the free budget; 0039 research
+  assistant still needs a web-search supply.
+
 - **Session 1, TASK-0038 worker core shipped (2026-07-08, task stays
   In progress):** `apps/api/src/workers/record-keeper.ts` —
   `runRecordKeeper(deps, {tenantId, agentId, recordId, instruction?})`
