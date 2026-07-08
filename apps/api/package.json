@@ -19,6 +19,7 @@
     "@hono/trpc-server": "catalog:",
     "@trpc/server": "catalog:",
     "@drovano/identity": "workspace:*",
+    "@drovano/platform": "workspace:*",
     "@drovano/telemetry": "workspace:*",
     "@hono/node-server": "catalog:",
     "@node-rs/argon2": "catalog:",

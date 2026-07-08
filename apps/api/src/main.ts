@@ -5,6 +5,7 @@ import { serve } from '@hono/node-server';
 import { seedStandardObjects } from '@drovano/crm';
 import { createDb, withTenant } from '@drovano/db';
 import { createAuth, createDevMailer } from '@drovano/identity';
+import { createWebhookDispatcher } from '@drovano/platform';
 
 import { noopInvalidationPublisher } from '@drovano/api-contracts';
 
@@ -38,7 +39,17 @@ const auth = createAuth({
     ),
 });
 
-const app = createApp({ auth, db: dbHandle.db, telemetry, invalidation });
+// Webhook deliveries are fire-and-forget in v1; failures go to telemetry.
+const webhooks = createWebhookDispatcher({
+  db: dbHandle.db,
+  onError: (error, url) => {
+    telemetry.captureError(error instanceof Error ? error : new Error(String(error)), {
+      webhookUrl: url,
+    });
+  },
+});
+
+const app = createApp({ auth, db: dbHandle.db, telemetry, invalidation, webhooks });
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
   stdout(`drovano api listening on :${String(info.port)} (${env.DEPLOY_ENV})\n`);

@@ -6,15 +6,19 @@ import {
 } from '@drovano/api-contracts';
 import type { Database } from '@drovano/db';
 import type { Auth } from '@drovano/identity';
+import type { WebhookDispatcher } from '@drovano/platform';
 import type { Telemetry } from '@drovano/telemetry';
 import { trpcServer } from '@hono/trpc-server';
 import { Hono } from 'hono';
+
+import { createRestApi } from './rest.js';
 
 export interface CreateAppOptions {
   auth: Auth;
   db: Database;
   telemetry?: Telemetry;
   invalidation?: InvalidationPublisher;
+  webhooks?: WebhookDispatcher;
 }
 
 /**
@@ -27,6 +31,7 @@ export function createApp({
   db,
   telemetry,
   invalidation = noopInvalidationPublisher,
+  webhooks,
 }: CreateAppOptions): Hono {
   const app = new Hono();
 
@@ -34,6 +39,9 @@ export function createApp({
 
   // better-auth owns everything under /api/auth/* (ADR-0008).
   app.on(['GET', 'POST'], '/api/auth/*', (c) => auth.handler(c.req.raw));
+
+  // Public REST API v1 (ADR-0005): bearer API keys, read paths (rest.ts).
+  app.route('/v1', createRestApi(db));
 
   // Internal tRPC surface (ADR-0005) — the dashboard's contract.
   app.use(
@@ -50,6 +58,7 @@ export function createApp({
           auth,
           headers: c.req.raw.headers,
           invalidation,
+          ...(webhooks !== undefined ? { webhooks } : {}),
         })) as unknown as Record<string, unknown>,
     }),
   );

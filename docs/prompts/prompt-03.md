@@ -6,6 +6,44 @@
 
 ## Progress log
 
+- **Session 1, TASK-0029 done (2026-07-08):** shipped as designed with
+  two deviations worth recording. (1) The dispatcher HTTP impl lives in
+  `@drovano/platform` (not apps/api) — the module owns domain logic and
+  the Testcontainers test proves the signature against a live local
+  receiver; apps/api only wires `createWebhookDispatcher({db, onError})`
+  into the request context. (2) Migrations 0008/0009 were applied to
+  Neon over the HTTPS SQL endpoint (`https://<endpoint-host>/sql`,
+  `neon-connection-string` header) because the local network RESET every
+  TLS connection to port 5432 that day — the applier replicated
+  drizzle's bookkeeping exactly (sha256 of file text +
+  journal `when` into `drizzle.__drizzle_migrations`), then production
+  state was verified (FORCE RLS + policy + grants). Keep that trick for
+  future 5432 outages. M2 at 9/11. Next: **TASK-0030/0031 — research
+  ADRs** (meeting-bot vendor vs native capture; enrichment providers) —
+  research → decide → write `docs/adr/`; then the M2 milestone review +
+  write prompt-04 (M3: zero-entry, AI workers).
+
+- **Session 1, TASK-0029 in progress (2026-07-07):** design locked:
+  `api_keys` table is GLOBAL per ADR-0011 precedent (bearer-hash lookup
+  happens before the tenant is known — same reasoning as identity
+  tables): id, tenant_id, name, key_prefix (display), key_hash (sha256),
+  created_by, last_used_at, revoked_at. `webhooks` table is
+  tenant-scoped RLS-normal: url, events jsonb, secret, active,
+  created_by. Key format `drv_<48 hex>`; secret shown once at creation.
+  New permission action `api.manage` (owner+admin only) + matrix rows.
+  tRPC: `platform.apiKeys.create/list/revoke`,
+  `platform.webhooks.create/list/remove`. REST on the Hono app:
+  GET /v1/objects, /v1/records?object=<key>, /v1/records/:id — bearer
+  auth middleware hashes the token, looks up api_keys, sets tenant via
+  withTenant, reuses crm services; JSON errors {error:{code,message}}.
+  Webhooks v1: `ctx.webhooks.dispatch(tenantId, {event, recordId})` on
+  RequestContext (noop default; HTTP impl in apps/api) called next to
+  invalidation.publish in record create/update/delete; HMAC-SHA256 of
+  the body in X-Drovano-Signature (sha256=hex); fire-and-forget, NO
+  retries in v1 (documented). Tests: REST auth (401 bad key, 200 +
+  tenant-scoped data, revoked key rejected), member denied api.manage,
+  dispatcher signature verified against a local http server.
+
 - **Session 1, csv import (2026-07-07):** TASK-0028 done. M2 at 8/11.
   Next: **TASK-0029 (public API v1 read paths + webhook skeleton,
   ADR-0005)** — REST read endpoints on the Hono app (`/v1/objects`,

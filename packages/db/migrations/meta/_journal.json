@@ -57,6 +57,20 @@
       "when": 1783442052257,
       "tag": "0007_lists-hardening",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1783490613631,
+      "tag": "0008_platform-api-keys-webhooks",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1783490614631,
+      "tag": "0009_platform-hardening",
+      "breakpoints": true
     }
   ]
 }

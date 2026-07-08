@@ -10,6 +10,23 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-08 — Public API v1 + webhook skeleton (TASK-0029): REST read
+  paths on the Hono app — `GET /v1/objects`, `/v1/records?object=<key>`,
+  `/v1/records/:id` — reusing the SAME crm services as tRPC, behind
+  bearer API keys (`drv_<48 hex>`, sha256 hash stored, secret shown
+  once). New `@drovano/platform` module owns keys + webhooks; `api_keys`
+  is the documented GLOBAL exception (ADR-0011 reasoning: the hash
+  lookup IS tenant discovery) while `webhooks` is tenant-scoped under
+  FORCE RLS (migrations 0008/0009, applied to production). New
+  `api.manage` permission (owner/admin; matrix now 57 cases).
+  `platform.apiKeys.*` / `platform.webhooks.*` tRPC routers + settings
+  UI (secrets shown once, revoke/remove). Record create/update/delete
+  dispatch signed webhook events (HMAC-SHA256 of the body in
+  `X-Drovano-Signature: sha256=<hex>`) next to cache invalidation —
+  fire-and-forget, no retries in v1 (documented; queue lands with M3
+  automations). 6 platform + 34 api + 33 web + 57 permission tests
+  green; dispatcher signature verified against a live local receiver.
+
 - 2026-07-07 — CSV import (TASK-0028): `crm.records.import` takes
   structured rows (client parses + maps columns) so validation, dedupe,
   and writes go through the SAME services as manual entry — no bulk side

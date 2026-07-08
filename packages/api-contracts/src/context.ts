@@ -1,6 +1,7 @@
 import type { Database } from '@drovano/db';
 import { loadPrincipalContext, type Auth } from '@drovano/identity';
 import type { PrincipalContext } from '@drovano/permissions';
+import { noopWebhookDispatcher, type WebhookDispatcher } from '@drovano/platform';
 
 import { noopInvalidationPublisher, type InvalidationPublisher } from './invalidation.js';
 
@@ -14,6 +15,8 @@ export interface RequestContext {
   db: Database;
   /** Publishes coarse cache-invalidation events after mutations (ADR-0003). */
   invalidation: InvalidationPublisher;
+  /** Delivers signed webhook events after record mutations (TASK-0029). */
+  webhooks: WebhookDispatcher;
   session: {
     user: SessionUser;
     /** The organization the session is acting in (better-auth org plugin). */
@@ -28,6 +31,7 @@ export interface CreateRequestContextInput {
   auth: Auth;
   headers: Headers;
   invalidation?: InvalidationPublisher;
+  webhooks?: WebhookDispatcher;
 }
 
 /**
@@ -40,10 +44,11 @@ export async function createRequestContext({
   auth,
   headers,
   invalidation = noopInvalidationPublisher,
+  webhooks = noopWebhookDispatcher,
 }: CreateRequestContextInput): Promise<RequestContext> {
   const sessionResult = await auth.api.getSession({ headers });
   if (sessionResult === null) {
-    return { db, invalidation, session: null, principal: null };
+    return { db, invalidation, webhooks, session: null, principal: null };
   }
 
   const activeOrganizationId = sessionResult.session.activeOrganizationId ?? null;
@@ -64,5 +69,5 @@ export async function createRequestContext({
           tenantId: activeOrganizationId,
         });
 
-  return { db, invalidation, session, principal };
+  return { db, invalidation, webhooks, session, principal };
 }

@@ -1,5 +1,6 @@
 import { crmRouter } from './routers/crm.js';
 import { meRouter } from './routers/me.js';
+import { platformRouter } from './routers/platform.js';
 import { workspacesRouter } from './routers/workspaces.js';
 import { createCallerFactory, router } from './trpc.js';
 
@@ -7,6 +8,7 @@ export const appRouter = router({
   me: meRouter,
   workspaces: workspacesRouter,
   crm: crmRouter,
+  platform: platformRouter,
 });
 
 export type AppRouter = typeof appRouter;

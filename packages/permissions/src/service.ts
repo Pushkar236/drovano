@@ -52,7 +52,10 @@ export type Action =
   | { type: 'object.manage' }
   // Lists are a member-level workflow tool (Attio model); entry mutations
   // ride record.update semantics in the routers.
-  | { type: 'list.create' };
+  | { type: 'list.create' }
+  // Platform surface (TASK-0029): API keys and webhooks grant standing
+  // programmatic access to the whole tenant — an admin concern.
+  | { type: 'api.manage' };
 
 export interface Decision {
   allowed: boolean;
@@ -136,6 +139,12 @@ export function can(principal: PrincipalContext, action: Action): Decision {
       return isOrganizationManager(principal)
         ? allow(`organization ${principal.organizationRole} may manage object definitions`)
         : deny('only organization owners/admins may manage object definitions');
+
+    case 'api.manage':
+      // Keys/webhooks are standing tenant-wide access: managers only.
+      return isOrganizationManager(principal)
+        ? allow(`organization ${principal.organizationRole} may manage API keys and webhooks`)
+        : deny('only organization owners/admins may manage API keys and webhooks');
 
     case 'workspace.update':
     case 'workspace.manage-members': {

@@ -147,6 +147,10 @@ export const crmRouter = router({
           createRecord(tx, { tenantId: ctx.tenantId, ...input, actor }).catch(toTrpcError),
         );
         await ctx.invalidation.publish(ctx.tenantId, { resource: 'records' });
+        await ctx.webhooks.dispatch(ctx.tenantId, {
+          event: 'record.created',
+          recordId: result.id,
+        });
         return result;
       }),
 
@@ -158,6 +162,10 @@ export const crmRouter = router({
           updateRecordValues(tx, { tenantId: ctx.tenantId, ...input, actor }).catch(toTrpcError),
         );
         await ctx.invalidation.publish(ctx.tenantId, { resource: 'records' });
+        await ctx.webhooks.dispatch(ctx.tenantId, {
+          event: 'record.updated',
+          recordId: input.recordId,
+        });
       }),
 
     import: tenantProcedure
@@ -198,6 +206,10 @@ export const crmRouter = router({
           ),
         );
         await ctx.invalidation.publish(ctx.tenantId, { resource: 'records' });
+        await ctx.webhooks.dispatch(ctx.tenantId, {
+          event: 'record.deleted',
+          recordId: input.recordId,
+        });
       }),
   }),
 
