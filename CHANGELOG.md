@@ -19,6 +19,20 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-08 — Retrieval pipeline (TASK-0035, ai-system.md §4):
+  `@drovano/retrieval` — recursive chunking (256–512-token targets,
+  word-boundary overlap, pure function), indexing into a pgvector-backed
+  `chunks` table (halfvec(1536) + HNSW for dense, expression GIN
+  tsvector for BM25), hybrid search fusing both pools with reciprocal
+  rank fusion, and seams that light up with keys: contextual-retrieval
+  situating sentences (language model), dense embeddings (OpenAI), and
+  cross-encoder rerank — without keys the pipeline runs BM25-only
+  (zero-cost posture). Retrieval is exposed as an agent tool bound to a
+  tenant + principal at construction; every query passes `can()`
+  (record.view) and drops chunks anchored to soft-deleted records. Test
+  harness now runs `pgvector/pgvector:pg18`. Migrations 0012/0013,
+  12 new tests.
+
 - 2026-07-08 — Agent trust infrastructure (TASK-0037): agents are
   first-class principals with SCOPED GRANTS, never roles —
   `@drovano/agents` (create/list agents, replace-set grants,

@@ -1,0 +1,28 @@
+{
+  "name": "@drovano/retrieval",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Retrieval pipeline: contextual chunking, hybrid BM25+dense search over pgvector, rerank seam, permission-filtered retrieval tools",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@drovano/ai": "workspace:*",
+    "@drovano/db": "workspace:*",
+    "@drovano/permissions": "workspace:*",
+    "ai": "catalog:",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@drovano/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

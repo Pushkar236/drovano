@@ -7,6 +7,37 @@
 
 ## Progress log
 
+- **Session 1, TASK-0035 done (2026-07-08):** `@drovano/retrieval`
+  shipped stub-first per the zero-cost posture. Schema: one `chunks`
+  table (migration 0012 + 0013 hardening; audit_log RLS exemplar) —
+  `source_type` ('email'|'note'|'transcript'|'document') + `source_id`
+  address the owning domain (no FK; those modules arrive later),
+  `record_id` is the permission anchor, `embedding halfvec(1536)`
+  NULLABLE (text-embedding-3-small dims) with HNSW halfvec_cosine_ops,
+  BM25 via an expression GIN index on
+  `to_tsvector('english', coalesce(context,'') || ' ' || content)` —
+  queries repeat the exact expression so the planner matches it. The
+  test harness image moved postgres:18-alpine →
+  **pgvector/pgvector:pg18** (same PG18 + the extension; migration 0012
+  runs CREATE EXTENSION, which Neon supports natively). Pipeline:
+  recursive chunker (paragraph→sentence→word, ~4 chars/token, ≈384-token
+  target, 15% word-boundary overlap; word-packed units cap at
+  maxChars−overlap so overlap always fits); `indexSource` replace-set
+  per source with optional Contextualizer (situating sentence — needs a
+  language key) and optional Embedder (`createAiEmbedder(router)` —
+  undefined when embeddings are disabled); `searchChunks` gates on
+  can(record.view) (agents need the 0037 grant), pools BM25 +
+  cosine-dense candidates (default 50), fuses with RRF k=60, and passes
+  through the Reranker seam (passthrough default; Cohere later).
+  `createRetrievalTool` binds db+tenant+principal at construction —
+  a harness run can never search as anyone else. 12 tests (6 pure
+  chunking, 6 Testcontainers incl. RLS isolation, soft-delete
+  filtering, agent-grant denial, tool tenant-binding). Neon apply of
+  0012/0013 rides the same staged script as 0010/0011 (deploy-gated).
+  NOTE for the next session: one full-suite run hit a transient
+  @drovano/api failure under six concurrent Testcontainers pulls —
+  passed clean on re-run; watch whether CI (serialized) ever shows it.
+
 - **Session 1, TASK-0037 done (2026-07-08):** shipped as designed
   (entry below) with two deltas. (1) Error codes grew `not-permitted`
   (agent lacks the record.update grant when proposing — the module
