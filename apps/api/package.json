@@ -19,6 +19,7 @@
     "@drovano/crm": "workspace:*",
     "@drovano/retrieval": "workspace:*",
     "@drovano/db": "workspace:*",
+    "@drovano/google": "workspace:*",
     "@hono/trpc-server": "catalog:",
     "@trpc/server": "catalog:",
     "@drovano/identity": "workspace:*",

@@ -6,6 +6,7 @@ import { createModelRouter } from '@drovano/ai';
 import { seedStandardObjects } from '@drovano/crm';
 import { createDb, withTenant } from '@drovano/db';
 import { createAuth, createDevMailer } from '@drovano/identity';
+import { createTokenCipher } from '@drovano/google';
 import { createWebhookDispatcher } from '@drovano/platform';
 import { createAiEmbedder, createLocalEmbedder } from '@drovano/retrieval';
 
@@ -31,6 +32,9 @@ const auth = createAuth({
   db: dbHandle.db,
   secret: env.AUTH_SECRET,
   baseUrl: env.BASE_URL,
+  // The deployed SPA calls the auth endpoints cross-origin (Vercel →
+  // Render); better-auth rejects untrusted origins by default (CSRF).
+  ...(env.WEB_ORIGIN !== undefined ? { trustedOrigins: [env.WEB_ORIGIN] } : {}),
   // Dev mailer until an email provider is provisioned (needs credentials —
   // see docs/prompts/prompt-02-brief.md, open items).
   mailer: createDevMailer(stdout),
@@ -69,7 +73,34 @@ const workers: WorkerRuns = modelRouter.languageEnabled
     }
   : {};
 
-const app = createApp({ auth, db: dbHandle.db, telemetry, invalidation, webhooks, workers });
+// Google integration (TASK-0032): mounted only when the OAuth client
+// is configured; tokens rest encrypted under a key derived from
+// AUTH_SECRET.
+const google =
+  env.GOOGLE_CLIENT_ID !== undefined &&
+  env.GOOGLE_CLIENT_ID !== '' &&
+  env.GOOGLE_CLIENT_SECRET !== undefined &&
+  env.GOOGLE_CLIENT_SECRET !== ''
+    ? {
+        oauth: {
+          clientId: env.GOOGLE_CLIENT_ID,
+          clientSecret: env.GOOGLE_CLIENT_SECRET,
+          redirectUri: `${env.BASE_URL}/api/integrations/google/callback`,
+        },
+        cipher: createTokenCipher(env.AUTH_SECRET),
+        stateSecret: env.AUTH_SECRET,
+      }
+    : undefined;
+
+const app = createApp({
+  auth,
+  db: dbHandle.db,
+  telemetry,
+  invalidation,
+  webhooks,
+  workers,
+  ...(google !== undefined ? { google } : {}),
+});
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
   stdout(`drovano api listening on :${String(info.port)} (${env.DEPLOY_ENV})\n`);

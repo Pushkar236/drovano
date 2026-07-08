@@ -12,6 +12,10 @@ import type { Telemetry } from '@drovano/telemetry';
 import { trpcServer } from '@hono/trpc-server';
 import { Hono } from 'hono';
 
+import {
+  createGoogleIntegrationRoutes,
+  type GoogleIntegrationConfig,
+} from './integrations/google.js';
 import { createRestApi } from './rest.js';
 
 export interface CreateAppOptions {
@@ -21,6 +25,8 @@ export interface CreateAppOptions {
   invalidation?: InvalidationPublisher;
   webhooks?: WebhookDispatcher;
   workers?: WorkerRuns;
+  /** Present only when the Google OAuth client is configured. */
+  google?: Omit<GoogleIntegrationConfig, 'db' | 'auth'>;
 }
 
 /**
@@ -35,6 +41,7 @@ export function createApp({
   invalidation = noopInvalidationPublisher,
   webhooks,
   workers,
+  google,
 }: CreateAppOptions): Hono {
   const app = new Hono();
 
@@ -42,6 +49,11 @@ export function createApp({
 
   // better-auth owns everything under /api/auth/* (ADR-0008).
   app.on(['GET', 'POST'], '/api/auth/*', (c) => auth.handler(c.req.raw));
+
+  // Google OAuth connect flow (TASK-0032) — mounted only when configured.
+  if (google !== undefined) {
+    app.route('/api/integrations/google', createGoogleIntegrationRoutes({ ...google, db, auth }));
+  }
 
   // Public REST API v1 (ADR-0005): bearer API keys, read paths (rest.ts).
   app.route('/v1', createRestApi(db));

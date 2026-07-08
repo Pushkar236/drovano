@@ -7,6 +7,36 @@
 
 ## Progress log
 
+- **Session 2, TASK-0032 phase 1 shipped (2026-07-08):**
+  `@drovano/google` module + `google_connections` table (migrations
+  0015/0016, RLS-forced; unique (tenant_id, email); cursors
+  gmail_history_id + calendar_sync_token on the row). Tokens NEVER
+  rest in plaintext: AES-256-GCM, key = HKDF(AUTH_SECRET,
+  'drovano-google-tokens') — rotating AUTH_SECRET fails safe (users
+  reconnect). OAuth: read-only scopes (gmail.readonly,
+  calendar.readonly, openid email), access_type=offline +
+  prompt=consent (refresh token every time), account email resolved
+  via the openid userinfo endpoint. Clients are PLAIN FETCH
+  (injectable; no googleapis SDK — supply-chain posture): Gmail
+  metadata-format messages + history.list incremental (404 →
+  'sync-token-expired'), Calendar events + syncToken (410 → same).
+  App tier: /api/integrations/google/connect (302 to consent) +
+  /callback (HMAC state, 10-min TTL, session-bound; audits
+  integration.google-connect). ALSO per user ask: better-auth
+  trustedOrigins now configurable — WEB_ORIGIN env (Vercel URL) wired
+  in main.ts; createAuth gained optional trustedOrigins. Render
+  deploy EXPLICITLY AUTHORIZED this session ("deploy on render also
+  keep it up to date") — WEB_ORIGIN + deploy trigger next. PHASE 2
+  REMAINING (design intent): app-tier ingestion composing
+  @drovano/google + crm + retrieval — upsert Person records by sender
+  email (match on person email attribute, create if absent),
+  auto-link Company by domain, indexSource each message
+  (sourceType 'email', recordId = person) for retrieval, cursor
+  advance per batch; calendar events → indexSource 'transcript'-like?
+  NO — events get their own sourceType later; tRPC surface
+  integrations.google.list/sync under api.manage; Trigger.dev
+  schedule wraps the sync once proj ref exists.
+
 - **Session 2, ADR-0015 local embeddings + credentials arrive
   (2026-07-08):** dense retrieval unblocked at $0 —
   `createLocalEmbedder()` (bge-small-en-v1.5 via

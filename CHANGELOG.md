@@ -19,6 +19,20 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-08 — Google connection layer (TASK-0032 begins):
+  `@drovano/google` — OAuth connect flow (offline access, read-only
+  Gmail/Calendar scopes, HMAC-signed state bound to the starting
+  session), tokens at rest as AES-256-GCM ciphertext under a key
+  derived from the app secret, and plain-fetch API clients with
+  resumable cursors (Gmail `historyId`, Calendar `syncToken`; expired
+  cursors surface as a typed `sync-token-expired` for full resync).
+  Browser endpoints `/api/integrations/google/connect|callback` mount
+  only when the OAuth client is configured. The web app's origin is
+  now trusted for cross-origin auth calls via `WEB_ORIGIN`
+  (better-auth `trustedOrigins`). 15 new tests, all Google traffic
+  stubbed. Next: mapping ingested messages/events onto the record
+  graph.
+
 - 2026-07-08 — Dense retrieval at $0 (ADR-0015): embeddings now come
   from a local open-source model — `bge-small-en-v1.5` (384 dims,
   ~35 MB quantized ONNX) through transformers.js, behind the existing

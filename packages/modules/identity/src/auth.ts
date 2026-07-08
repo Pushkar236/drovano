@@ -24,6 +24,8 @@ export interface CreateAuthOptions {
   secret: string;
   /** Public origin the auth endpoints are served from. */
   baseUrl: string;
+  /** Cross-origin frontends allowed to call the auth endpoints (CSRF). */
+  trustedOrigins?: string[];
   mailer: Mailer;
   appName?: string;
   /**
@@ -56,6 +58,7 @@ export function createAuth(options: CreateAuthOptions) {
     appName,
     baseURL: options.baseUrl,
     secret: options.secret,
+    ...(options.trustedOrigins !== undefined ? { trustedOrigins: options.trustedOrigins } : {}),
     telemetry: { enabled: false },
     database: drizzleAdapter(db, {
       provider: 'pg',
