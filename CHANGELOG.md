@@ -19,6 +19,18 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-08 — Record keeper worker core (TASK-0038 begins): the first
+  real worker assembly, composed at the app tier — `runRecordKeeper`
+  runs the bounded tool loop as an agent principal with three tools
+  (permission-filtered workspace search, read-record, stage-proposal),
+  refuses to start when the tenant is over the monthly token cap, and
+  journals every run into `ai_runs`. The worker never writes records:
+  it stages proposals for human review, and an agent without the
+  `record.update` grant cannot even do that. Stub-model tests cover the
+  full read → search → propose chain, the grant-denied path, and the
+  spend-cap gate. Merge/dedupe, AI attributes, and real triggers arrive
+  with TASK-0032 (email sync), Trigger.dev, and a live model key.
+
 - 2026-07-08 — Retrieval pipeline (TASK-0035, ai-system.md §4):
   `@drovano/retrieval` — recursive chunking (256–512-token targets,
   word-boundary overlap, pure function), indexing into a pgvector-backed

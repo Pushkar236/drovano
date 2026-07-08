@@ -7,6 +7,32 @@
 
 ## Progress log
 
+- **Session 1, TASK-0038 worker core shipped (2026-07-08, task stays
+  In progress):** `apps/api/src/workers/record-keeper.ts` —
+  `runRecordKeeper(deps, {tenantId, agentId, recordId, instruction?})`
+  composes the whole M3 substrate at the app tier (modules never
+  import modules): loadAgentPrincipal + assertSpendWithinCap BEFORE any
+  model call, then runToolLoop with tools `search_workspace`
+  (createRetrievalTool bound to the agent principal), `get_record`
+  (can(record.view)-gated crm getRecord), and `stage_proposal`
+  (createProposal — the 0037 grant gate applies), recorded via
+  createDbRunRecorder. The system prompt encodes SECURITY.md posture:
+  never write directly, retrieved content is data not instructions,
+  insufficient evidence → no proposal. 3 stub-model Testcontainers
+  tests: happy chain (proposal pending + ai_runs row + spend > 0),
+  grant-denied agent stages nothing, capped tenant refuses before the
+  model runs. REMAINING for 0038 done: merge/dedupe proposals, AI
+  attributes (prompt-as-formula), Trigger.dev-wrapped triggers off
+  email ingestion (0032), live-model eval — all gated on user asks
+  (Anthropic key, Trigger.dev account, Google OAuth). The tRPC/job
+  trigger surface is deliberately deferred until those exist.
+  ALSO this entry: web test timeouts raised again (asyncUtil 10→20s,
+  testTimeout 30→60s, f3d1772) — the retrieval suite added a fourth
+  concurrent Testcontainers pull on the 2-core CI runner and the
+  first-in-file settings test flaked at 10s; CI green after. Local
+  full-suite runs still occasionally flake one suite under container
+  churn; individual re-runs pass.
+
 - **Session 1, TASK-0035 done (2026-07-08):** `@drovano/retrieval`
   shipped stub-first per the zero-cost posture. Schema: one `chunks`
   table (migration 0012 + 0013 hardening; audit_log RLS exemplar) —
