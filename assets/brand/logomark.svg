@@ -1,0 +1,10 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Drovano logo mark">
+  <rect width="128" height="128" rx="28" fill="#101317"/>
+  <rect x="0.75" y="0.75" width="126.5" height="126.5" rx="27.25" fill="none" stroke="#23272E" stroke-width="1.5"/>
+  <g transform="translate(30,34)">
+    <rect x="16" y="0"  width="36" height="12" rx="4" fill="#E07A54"/>
+    <rect x="11" y="16" width="46" height="12" rx="4" fill="#3B414B"/>
+    <rect x="6"  y="32" width="56" height="12" rx="4" fill="#2C313A"/>
+    <rect x="0"  y="48" width="68" height="12" rx="4" fill="#23272E"/>
+  </g>
+</svg>

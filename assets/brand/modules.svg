@@ -1,0 +1,57 @@
+<svg width="1280" height="150" viewBox="0 0 1280 150" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Drovano modules: Foundation, Relationships, Work, Knowledge, Intelligence, Platform">
+  <defs>
+    <linearGradient id="mfloor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#101317"/>
+      <stop offset="100%" stop-color="#0C0E11"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="150" fill="url(#mfloor)"/>
+  <line x1="0" y1="0.5" x2="1280" y2="0.5" stroke="#23272E" stroke-width="1"/>
+  <line x1="0" y1="149.5" x2="1280" y2="149.5" stroke="#23272E" stroke-width="1"/>
+
+  <!-- 6 hairline chips on a strict rhythm -->
+  <g font-family="'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif">
+    <!-- Foundation -->
+    <g transform="translate(40,45)">
+      <rect x="0" y="0" width="176" height="60" rx="10" fill="#141821" stroke="#262B33" stroke-width="1"/>
+      <rect x="0" y="0" width="4" height="60" rx="2" fill="#E07A54"/>
+      <text x="24" y="28" font-size="16" font-weight="600" fill="#EDEFF2">Foundation</text>
+      <text x="24" y="47" font-size="11.5" fill="#7B8290" font-family="ui-monospace,Consolas,monospace">identity · audit</text>
+    </g>
+    <!-- Relationships -->
+    <g transform="translate(236,45)">
+      <rect x="0" y="0" width="176" height="60" rx="10" fill="#141821" stroke="#262B33" stroke-width="1"/>
+      <rect x="0" y="0" width="4" height="60" rx="2" fill="#3B414B"/>
+      <text x="24" y="28" font-size="16" font-weight="600" fill="#EDEFF2">Relationships</text>
+      <text x="24" y="47" font-size="11.5" fill="#7B8290" font-family="ui-monospace,Consolas,monospace">the CRM module</text>
+    </g>
+    <!-- Work -->
+    <g transform="translate(432,45)">
+      <rect x="0" y="0" width="176" height="60" rx="10" fill="#141821" stroke="#262B33" stroke-width="1"/>
+      <rect x="0" y="0" width="4" height="60" rx="2" fill="#3B414B"/>
+      <text x="24" y="28" font-size="16" font-weight="600" fill="#EDEFF2">Work</text>
+      <text x="24" y="47" font-size="11.5" fill="#7B8290" font-family="ui-monospace,Consolas,monospace">tasks · calendar</text>
+    </g>
+    <!-- Knowledge -->
+    <g transform="translate(628,45)">
+      <rect x="0" y="0" width="176" height="60" rx="10" fill="#141821" stroke="#262B33" stroke-width="1"/>
+      <rect x="0" y="0" width="4" height="60" rx="2" fill="#3B414B"/>
+      <text x="24" y="28" font-size="16" font-weight="600" fill="#EDEFF2">Knowledge</text>
+      <text x="24" y="47" font-size="11.5" fill="#7B8290" font-family="ui-monospace,Consolas,monospace">docs · retrieval</text>
+    </g>
+    <!-- Intelligence -->
+    <g transform="translate(824,45)">
+      <rect x="0" y="0" width="176" height="60" rx="10" fill="#191219" stroke="#4A2E22" stroke-width="1"/>
+      <rect x="0" y="0" width="4" height="60" rx="2" fill="#E07A54"/>
+      <text x="24" y="28" font-size="16" font-weight="600" fill="#F3D9CD">Intelligence</text>
+      <text x="24" y="47" font-size="11.5" fill="#C98A6E" font-family="ui-monospace,Consolas,monospace">the AI workforce</text>
+    </g>
+    <!-- Platform -->
+    <g transform="translate(1020,45)">
+      <rect x="0" y="0" width="220" height="60" rx="10" fill="#141821" stroke="#262B33" stroke-width="1"/>
+      <rect x="0" y="0" width="4" height="60" rx="2" fill="#3B414B"/>
+      <text x="24" y="28" font-size="16" font-weight="600" fill="#EDEFF2">Platform</text>
+      <text x="24" y="47" font-size="11.5" fill="#7B8290" font-family="ui-monospace,Consolas,monospace">API · SDKs · marketplace</text>
+    </g>
+  </g>
+</svg>
