@@ -19,6 +19,17 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-08 — AI harness (M3 opens: TASK-0034, eval scaffolding from
+  TASK-0036): `@drovano/ai` — tier-based model router (`fast`/`balanced`/
+  `frontier` → Anthropic; embeddings → OpenAI; missing keys disable the
+  capability instead of failing boot), `runToolLoop` (bounded
+  `generateText` over typed tools with hard `maxSteps`/`maxOutputTokens`
+  caps and a `RunRecorder` seam for TASK-0037 session logs),
+  `defineScenario`/`runScenarios` eval scaffolding, and stub-model
+  testing exports — CI never calls a live model (TESTING.md AI rules).
+  8 stubbed-model tests green. Live runs await an Anthropic API key
+  (batched user ask).
+
 - 2026-07-08 — Decision records closing M2 (TASK-0030/0031): ADR-0012
   buys meeting capture (Recall.ai — $0.50/hr usage-only, market-leading
   coverage) behind an owned `MeetingCapture` interface after the native

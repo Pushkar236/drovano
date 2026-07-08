@@ -7,7 +7,23 @@
 
 ## Progress log
 
-(append entries here, newest first)
+- **Session 1, TASK-0034 done (2026-07-08):** `@drovano/ai` shipped —
+  router (tiers → Anthropic models `claude-haiku-4-5-20251001` /
+  `claude-sonnet-5` / `claude-opus-4-8`; embeddings →
+  OpenAI `text-embedding-3-small`; both key-gated, disabled ≠ crashed),
+  `runToolLoop` with per-run hard caps + `RunRecorder` (noop default;
+  TASK-0037 plugs session logs/spend accounting into that seam),
+  scenario runner (the TASK-0036 scaffolding; **0036 stays open** until
+  scheduled real-model evals exist — needs the API key), stub-model
+  testing exports over `ai/test` MockLanguageModelV4. AI SDK pins:
+  ai 7.0.17, @ai-sdk/anthropic 4.0.9, @ai-sdk/openai 4.0.8 (V4 provider
+  spec: usage is nested `{inputTokens:{total,…}}`, finishReason is
+  `{unified,raw}` — the testing helpers encode this). Next:
+  **TASK-0032 (Gmail/GCal sync)** is BLOCKED on Google OAuth creds;
+  **TASK-0035 (retrieval)** needs pgvector migration + chunking — can
+  start stub-first; **TASK-0037 (agent trust)** is implementable now
+  (permissions + db work, no keys needed) — prefer 0037 next so workers
+  land on real grants.
 
 ## M2 milestone review (2026-07-08)
 
