@@ -6,6 +6,25 @@
 
 ## Progress log
 
+- **Session 1, TASK-0030/0031 done (2026-07-08):** the two research ADRs
+  are written and Accepted — ADR-0012 (meeting capture: buy Recall.ai,
+  own the `MeetingCapture` interface; native capture rejected on ~3-5
+  engineer cost and Google Meet's missing media API) and ADR-0013
+  (enrichment: owned waterfall executor over direct providers, PDL
+  first with pay-per-match credits, Apollo as the second step when
+  match-rate data demands; aggregators rejected on fixed platform cost
+  and provenance opacity). Both carry revisit triggers. **M2 is 11/11 —
+  milestone complete.** Also this session: CI hardening (gitleaks
+  fingerprint for a fake test prefix; web test asyncUtilTimeout 5s → 10s
+  after first-in-file flakes) and an initial-payload fix — the shell was
+  dragging @tanstack/db (via data/workspaces' queryClient) and
+  @base-ui/react (via the static peek panel) into the entry: queryClient
+  moved to lib/query.ts, PeekPanel went React.lazy, initial payload
+  203 → 107.9 KiB. Next: M2 milestone review → write and execute
+  prompt-04 (M3: zero-entry, AI workers). PENDING USER: Vercel prod
+  redeploy + Render redeploy (permission-gated this session; Render's
+  live deploy still predates the entire M2 API surface).
+
 - **Session 1, TASK-0029 done (2026-07-08):** shipped as designed with
   two deviations worth recording. (1) The dispatcher HTTP impl lives in
   `@drovano/platform` (not apps/api) — the module owns domain logic and

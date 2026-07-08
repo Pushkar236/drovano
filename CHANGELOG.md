@@ -19,6 +19,16 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-08 — Decision records closing M2 (TASK-0030/0031): ADR-0012
+  buys meeting capture (Recall.ai — $0.50/hr usage-only, market-leading
+  coverage) behind an owned `MeetingCapture` interface after the native
+  path priced out at ~3-5 engineers with no official Google Meet media
+  API; ADR-0013 supplies enrichment through an owned waterfall over
+  direct providers — People Data Labs first (pay-per-match, free dev
+  tier), Apollo second when measured match rates justify it — rejecting
+  aggregator subscriptions and enterprise-only Clearbit on bundle unit
+  economics and provenance.
+
 - 2026-07-08 — Public API v1 + webhook skeleton (TASK-0029): REST read
   paths on the Hono app — `GET /v1/objects`, `/v1/records?object=<key>`,
   `/v1/records/:id` — reusing the SAME crm services as tRPC, behind
