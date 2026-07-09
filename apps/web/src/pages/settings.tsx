@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { ApiAccessSettings } from '../components/api-access.js';
+import { GoogleConnectionsSettings } from '../components/google-connections.js';
 import { applyThemePreference, readThemePreference, type ThemePreference } from '../theme.js';
 
 const THEME_OPTIONS: { value: ThemePreference; label: string; description: string }[] = [
@@ -45,6 +46,7 @@ export function SettingsPage() {
           ))}
         </div>
       </fieldset>
+      <GoogleConnectionsSettings />
       <ApiAccessSettings />
     </div>
   );

@@ -35,7 +35,13 @@ import {
   type Actor,
   type HydratedRecord,
 } from '@drovano/crm';
-import { objectDefinitions, withTenant, type Database, type TenantTransaction } from '@drovano/db';
+import {
+  objectDefinitions,
+  organizations,
+  withTenant,
+  type Database,
+  type TenantTransaction,
+} from '@drovano/db';
 import { indexSource, type Embedder } from '@drovano/retrieval';
 import { inArray } from 'drizzle-orm';
 import { v5 as uuidv5 } from 'uuid';
@@ -292,4 +298,58 @@ export async function syncGmailConnection(
 
     return { mode, fetched: messages.length, cursor, ...counters };
   });
+}
+
+export interface SyncAllRun {
+  tenantId: string;
+  connectionId: string;
+  email: string;
+  result?: GmailSyncResult | undefined;
+  error?: string | undefined;
+}
+
+export interface SyncAllResult {
+  connections: number;
+  succeeded: number;
+  failed: number;
+  runs: SyncAllRun[];
+}
+
+/**
+ * Sweep every tenant's connections (the scheduled entry point). One
+ * failing mailbox never blocks the others — its error is recorded and
+ * the sweep continues; the next run retries it from its cursor.
+ */
+export async function syncAllGoogleConnections(deps: GoogleSyncDeps): Promise<SyncAllResult> {
+  // Organizations are the tenant registry (auth tables, not
+  // tenant-scoped); each tenant's connections load under its own RLS
+  // context.
+  const tenants = await deps.db.select({ id: organizations.id }).from(organizations);
+  const runs: SyncAllRun[] = [];
+  for (const tenant of tenants) {
+    const connections = await withTenant(deps.db, tenant.id, (tx) => listConnections(tx));
+    for (const connection of connections) {
+      try {
+        const result = await syncGmailConnection(deps, {
+          tenantId: tenant.id,
+          connectionId: connection.id,
+        });
+        runs.push({
+          tenantId: tenant.id,
+          connectionId: connection.id,
+          email: connection.email,
+          result,
+        });
+      } catch (error) {
+        runs.push({
+          tenantId: tenant.id,
+          connectionId: connection.id,
+          email: connection.email,
+          error: error instanceof Error ? error.message : String(error),
+        });
+      }
+    }
+  }
+  const failed = runs.filter((run) => run.error !== undefined).length;
+  return { connections: runs.length, succeeded: runs.length - failed, failed, runs };
 }

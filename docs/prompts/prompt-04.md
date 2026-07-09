@@ -7,6 +7,33 @@
 
 ## Progress log
 
+- **Session 3, TASK-0032 phase 2 COMPLETE — UI + schedule (2026-07-09):**
+  the Gmail loop is now closed end to end IN PRODUCTION: the user
+  connected pdkirange236@gmail.com (connection row verified in prod;
+  org 'Pushkar Kirange' created after the workspace-missing diagnosis).
+  Shipped on top of the core: (1) web Settings panel
+  `GoogleConnectionsSettings` — list (api.manage; members see the
+  denial reason), Connect anchor to /api/integrations/google/connect
+  (same-origin navigation through the Vercel proxy), Sync now button
+  with plain-language result + query invalidation; settings.test.tsx
+  trpc mock EXTENDED with integrations (any new router used by the
+  settings page must be added there or unrelated tests crash). (2)
+  `syncAllGoogleConnections` sweep — enumerates organizations (auth
+  table, tenant registry), per-tenant listConnections under RLS,
+  per-connection error isolation (failure recorded in runs[], sweep
+  continues). (3) Trigger.dev `schedules.task` id 'google-sync', cron
+  */10 * * * *, skips gracefully when no Google client configured;
+  per-run composition identical to record-keeper task. Loaded the
+  project trigger-authoring-tasks skill (apps/api/.claude/skills)
+  before authoring, per apps/api/CLAUDE.md. NOTE: the schedule only
+  runs once tasks are DEPLOYED to Trigger cloud (needs prod env vars
+  in the Trigger dashboard incl. Render's AUTH_SECRET — local
+  AUTH_SECRET ≠ Render's, verified by hash) or while `pnpm
+dev:trigger` is running locally against dev. REMAINING for 0032:
+  calendar events ingestion (own sourceType), Trigger cloud prod
+  deploy decision; web Vercel redeploy needed for the panel to appear
+  (deploy path for web still manual/user-side).
+
 - **Session 3, TASK-0032 phase 2 core shipped (2026-07-09):**
   `syncGmailConnection` at the app tier (apps/api/src/integrations/
   google-sync.ts) composes google + crm + retrieval per the phase-1

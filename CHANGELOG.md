@@ -19,6 +19,15 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-09 — Gmail sync runs itself and has a face: a **Google
+  accounts** panel in Settings (owner/admin) lists connections with
+  their sync state, offers Connect (the OAuth walk) and **Sync now**
+  with a plain-language result ("Synced 12 messages — 4 people and 2
+  companies created…"), and a Trigger.dev schedule (`google-sync`,
+  every 10 minutes) sweeps every tenant's connections — one failing
+  mailbox is recorded and skipped, never blocking the rest. 5 new
+  tests (4 web, 1 sweep-isolation).
+
 - 2026-07-09 — Gmail builds the graph (TASK-0032 phase 2): syncing a
   connection maps each message onto the record graph — the
   counterparty becomes a Person (matched by email, created when

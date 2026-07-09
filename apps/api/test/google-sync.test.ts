@@ -6,7 +6,12 @@
  * domains excluded), idempotent re-indexing, cursor advancement,
  * expired-cursor fallback, and the tRPC surface with its gates.
  */
-import { createTokenCipher, saveConnection, type ConnectionSummary } from '@drovano/google';
+import {
+  createTokenCipher,
+  removeConnection,
+  saveConnection,
+  type ConnectionSummary,
+} from '@drovano/google';
 import { createCaller, createRequestContext } from '@drovano/api-contracts';
 import { queryRecords, seedStandardObjects } from '@drovano/crm';
 import { chunks, members, objectDefinitions, withTenant } from '@drovano/db';
@@ -16,7 +21,11 @@ import { randomUUID } from 'node:crypto';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { syncGmailConnection, type GoogleSyncDeps } from '../src/integrations/google-sync.js';
+import {
+  syncAllGoogleConnections,
+  syncGmailConnection,
+  type GoogleSyncDeps,
+} from '../src/integrations/google-sync.js';
 
 const SECRET = 'integration-test-secret-at-least-32-chars-long'; // gitleaks:allow — fake
 const PASSWORD = 'a-long-test-password-1';
@@ -315,6 +324,39 @@ describe('gmail sync (real database, stubbed Gmail)', () => {
     const adaChunks = await chunksFor(ada?.id ?? '');
     // m1 re-indexed replace-set + m3 untouched: still exactly 2 sources.
     expect(new Set(adaChunks.map((chunk) => chunk.sourceId)).size).toBe(2);
+  });
+
+  it('sweeps all connections and isolates a failing mailbox', async () => {
+    // A second connection whose access token is expired: the refresh
+    // hits the (unstubbed) token endpoint and fails — that failure must
+    // not block the healthy mailbox.
+    const broken = await withTenant(testDb.app.db, tenantId, (tx) =>
+      saveConnection(tx, {
+        tenantId,
+        userId: 'irrelevant-for-sync',
+        tokens: {
+          accessToken: 'at-stale',
+          refreshToken: 'rt-stale',
+          expiresAt: new Date(Date.now() - 1_000),
+          scope: 'gmail.readonly',
+          email: 'second@corp.example',
+        },
+        cipher,
+      }),
+    );
+
+    mailbox.history = [];
+    const sweep = await syncAllGoogleConnections(deps);
+
+    expect(sweep.connections).toBe(2);
+    expect(sweep.succeeded).toBe(1);
+    expect(sweep.failed).toBe(1);
+    const failedRun = sweep.runs.find((run) => run.connectionId === broken.id);
+    expect(failedRun?.error).toBeDefined();
+    const healthyRun = sweep.runs.find((run) => run.connectionId === connection.id);
+    expect(healthyRun?.result?.mode).toBe('incremental');
+
+    await withTenant(testDb.app.db, tenantId, (tx) => removeConnection(tx, broken.id));
   });
 
   it('exposes the surface over tRPC behind api.manage', async () => {

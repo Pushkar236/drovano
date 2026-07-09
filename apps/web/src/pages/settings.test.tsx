@@ -19,15 +19,25 @@ vi.mock('../lib/auth-client.js', () => ({
   },
 }));
 
-const { keysList, keysCreate, keysRevoke, webhooksList, webhooksCreate, webhooksRemove } =
-  vi.hoisted(() => ({
-    keysList: vi.fn(),
-    keysCreate: vi.fn(),
-    keysRevoke: vi.fn().mockResolvedValue(undefined),
-    webhooksList: vi.fn(),
-    webhooksCreate: vi.fn(),
-    webhooksRemove: vi.fn().mockResolvedValue(undefined),
-  }));
+const {
+  keysList,
+  keysCreate,
+  keysRevoke,
+  webhooksList,
+  webhooksCreate,
+  webhooksRemove,
+  googleList,
+  googleSync,
+} = vi.hoisted(() => ({
+  keysList: vi.fn(),
+  keysCreate: vi.fn(),
+  keysRevoke: vi.fn().mockResolvedValue(undefined),
+  webhooksList: vi.fn(),
+  webhooksCreate: vi.fn(),
+  webhooksRemove: vi.fn().mockResolvedValue(undefined),
+  googleList: vi.fn(),
+  googleSync: vi.fn(),
+}));
 
 vi.mock('../lib/trpc.js', () => ({
   trpc: {
@@ -41,6 +51,12 @@ vi.mock('../lib/trpc.js', () => ({
         list: { query: webhooksList },
         create: { mutate: webhooksCreate },
         remove: { mutate: webhooksRemove },
+      },
+    },
+    integrations: {
+      google: {
+        list: { query: googleList },
+        sync: { mutate: googleSync },
       },
     },
   },
@@ -97,6 +113,7 @@ describe('settings page — api access', () => {
         createdAt: '2026-07-08T00:00:00.000Z',
       }),
     );
+    googleList.mockImplementation(() => Promise.resolve([]));
   });
 
   async function renderSettings() {
