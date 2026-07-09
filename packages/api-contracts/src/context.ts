@@ -26,6 +26,18 @@ export interface WorkerRuns {
         instruction?: string | undefined;
       }) => Promise<{ text: string; steps: number; proposalIds: string[] }>)
     | undefined;
+  /** Gmail → record graph ingestion (TASK-0032 phase 2); absent when
+   * the Google OAuth client is not configured. */
+  googleSync?:
+    | ((input: { tenantId: string; connectionId: string }) => Promise<{
+        mode: 'full' | 'incremental';
+        fetched: number;
+        indexed: number;
+        peopleCreated: number;
+        companiesCreated: number;
+        cursor: string | null;
+      }>)
+    | undefined;
 }
 
 export interface RequestContext {

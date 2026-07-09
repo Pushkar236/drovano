@@ -14,6 +14,7 @@ import { noopInvalidationPublisher, type WorkerRuns } from '@drovano/api-contrac
 
 import { createApp } from './app.js';
 import { loadEnv } from './env.js';
+import { syncGmailConnection } from './integrations/google-sync.js';
 import { createRedisInvalidationPublisher } from './invalidation.js';
 import { runRecordKeeper } from './workers/record-keeper.js';
 
@@ -63,16 +64,6 @@ const modelRouter = createModelRouter(env);
 // open-source model (ADR-0015); EMBEDDINGS=off turns dense search off.
 const embedder =
   env.EMBEDDINGS === 'off' ? undefined : (createAiEmbedder(modelRouter) ?? createLocalEmbedder());
-const workers: WorkerRuns = modelRouter.languageEnabled
-  ? {
-      recordKeeper: (input) =>
-        runRecordKeeper(
-          { db: dbHandle.db, model: modelRouter.languageModel('fast'), embedder },
-          input,
-        ),
-    }
-  : {};
-
 // Google integration (TASK-0032): mounted only when the OAuth client
 // is configured; tokens rest encrypted under a key derived from
 // AUTH_SECRET.
@@ -94,6 +85,27 @@ const google =
         stateSecret: env.AUTH_SECRET,
       }
     : undefined;
+
+const workers: WorkerRuns = {
+  ...(modelRouter.languageEnabled
+    ? {
+        recordKeeper: (input: Parameters<NonNullable<WorkerRuns['recordKeeper']>>[0]) =>
+          runRecordKeeper(
+            { db: dbHandle.db, model: modelRouter.languageModel('fast'), embedder },
+            input,
+          ),
+      }
+    : {}),
+  ...(google !== undefined
+    ? {
+        googleSync: (input: Parameters<NonNullable<WorkerRuns['googleSync']>>[0]) =>
+          syncGmailConnection(
+            { db: dbHandle.db, oauth: google.oauth, cipher: google.cipher, embedder },
+            input,
+          ),
+      }
+    : {}),
+};
 
 const app = createApp({
   auth,

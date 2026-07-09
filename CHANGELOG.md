@@ -19,6 +19,21 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-09 — Gmail builds the graph (TASK-0032 phase 2): syncing a
+  connection maps each message onto the record graph — the
+  counterparty becomes a Person (matched by email, created when
+  absent), a Company is matched/created by the email domain (stored
+  canonically as `https://<domain>`; consumer providers never imply an
+  employer) and linked, and the message metadata is indexed for
+  permission-filtered retrieval anchored to the person. Incremental
+  via the Gmail history cursor with automatic full-window fallback
+  when it expires; each batch commits atomically with its cursor, so
+  a crash replays the same window (indexing is replace-set — no
+  duplicates). Deterministic sync writes directly as the system
+  actor; inference stays proposal-gated. New tRPC surface
+  `integrations.google.list|sync` behind api.manage. 5 new
+  integration tests, Gmail stubbed at the fetch seam.
+
 - 2026-07-09 — Trigger.dev v4 scaffold (ADR-0007 durable workers
   begin): `trigger.config.ts` in apps/api bound to the cloud project,
   and a first durable task — `record-keeper` — wrapping the existing

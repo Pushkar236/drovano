@@ -13,6 +13,8 @@ export default tseslint.config(
       '**/storybook-static/**',
       '**/.deploy/**',
       '**/.vercel/**',
+      '**/.trigger/**',
+      'research/**',
       'packages/db/migrations/**',
     ],
   },

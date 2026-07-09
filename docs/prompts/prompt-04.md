@@ -7,6 +7,45 @@
 
 ## Progress log
 
+- **Session 3, TASK-0032 phase 2 core shipped (2026-07-09):**
+  `syncGmailConnection` at the app tier (apps/api/src/integrations/
+  google-sync.ts) composes google + crm + retrieval per the phase-1
+  design: counterparty (sender unless it IS the mailbox — then first
+  other recipient) → Person by email eq (queryRecords probe; created
+  with name when absent); Company by domain — STORED CANONICALLY AS
+  `https://<domain>` because the domain attribute is url-typed and
+  z.url() rejects bare domains (every writer must use this form);
+  CONSUMER_DOMAINS (gmail/yahoo/outlook/…) never create companies.
+  Existing people get company BACKFILLED only when unset — sync never
+  overwrites values (record keeper proposals do that). Chunks:
+  sourceId = uuidv5(`gmail:<connectionId>:<messageId>`, fixed
+  namespace) since chunks.source_id is uuid and Gmail ids are hex;
+  recordId anchor = person. Cursor: incremental listAddedSince,
+  sync-token-expired → full-window fallback; full-mode cursor = max
+  message historyId (BigInt compare); batch + cursor advance commit
+  in ONE tx (crash = replay same window; replace-set dedupes).
+  Google I/O happens OUTSIDE transactions. tRPC:
+  integrations.google.list|sync (api.manage; sync via
+  ctx.workers.googleSync — PRECONDITION_FAILED when Google not
+  configured; unknown-connection → NOT_FOUND, api-error/refresh →
+  BAD_GATEWAY); api-contracts gained @drovano/google dep. main.ts
+  wires googleSync when the OAuth client exists. 5 new tests (51
+  total in @drovano/api). ALSO fixed this session: OAuth callback now
+  rides WEB_ORIGIN (f2775ce) — production serves the SPA + API behind
+  the Vercel /api proxy (apps/web/.deploy/vercel.json rewrites), so
+  cookies are first-party on drovano-web.vercel.app and NOTHING
+  auth'd works on the bare onrender.com origin (users: connect via
+  https://drovano-web.vercel.app/api/integrations/google/connect;
+  Google console redirect URI must be the vercel.app form). Diagnosed
+  the user's "Loading your objects failed": their gmail-address
+  account has NO org membership in prod (the one org 'Test' belongs
+  to their pccoepune.org account) — they must create a workspace on
+  the home page or sign in with the other account. eslint ignores
+  gained **/.trigger/** (build cache) and research/ (user scratch).
+  REMAINING for 0032: calendar events ingestion, Trigger.dev schedule
+  wrapping sync (load trigger-authoring-tasks skill first — see
+  apps/api/CLAUDE.md), web settings UI for connections.
+
 - **Session 3, ops gates cleared + Trigger.dev scaffold (2026-07-09):**
   user named all three held actions in one message — ALL EXECUTED:
   (1) `RENDER_API_KEY` GitHub Actions secret created → the CI deploy

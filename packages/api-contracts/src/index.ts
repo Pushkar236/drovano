@@ -1,5 +1,6 @@
 import { agentsRouter } from './routers/agents.js';
 import { crmRouter } from './routers/crm.js';
+import { integrationsRouter } from './routers/integrations.js';
 import { meRouter } from './routers/me.js';
 import { platformRouter } from './routers/platform.js';
 import { workspacesRouter } from './routers/workspaces.js';
@@ -11,6 +12,7 @@ export const appRouter = router({
   crm: crmRouter,
   platform: platformRouter,
   agents: agentsRouter,
+  integrations: integrationsRouter,
 });
 
 export type AppRouter = typeof appRouter;

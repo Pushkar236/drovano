@@ -14,6 +14,7 @@
     "@drovano/agents": "workspace:*",
     "@drovano/crm": "workspace:*",
     "@drovano/db": "workspace:*",
+    "@drovano/google": "workspace:*",
     "@drovano/identity": "workspace:*",
     "@drovano/permissions": "workspace:*",
     "@drovano/platform": "workspace:*",

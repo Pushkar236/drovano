@@ -516,6 +516,9 @@ importers:
       '@drovano/db':
         specifier: workspace:*
         version: link:../db
+      '@drovano/google':
+        specifier: workspace:*
+        version: link:../modules/google
       '@drovano/identity':
         specifier: workspace:*
         version: link:../modules/identity
