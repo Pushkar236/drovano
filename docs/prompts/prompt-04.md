@@ -7,6 +7,35 @@
 
 ## Progress log
 
+- **Session 3, ops gates cleared + Trigger.dev scaffold (2026-07-09):**
+  user named all three held actions in one message — ALL EXECUTED:
+  (1) `RENDER_API_KEY` GitHub Actions secret created → the CI deploy
+  job is armed; every green main build now auto-deploys to Render.
+  (2) Migrations 0014–0016 applied to production Neon via the HTTPS
+  SQL script and verified (chunks.embedding = halfvec(384);
+  google_connections has FORCE RLS, 1 policy, 4 drovano_app grants).
+  (3) GOOGLE_CLIENT_ID/SECRET + REDIS_URL (Upstash, user-provided)
+  set on the Render service and a deploy triggered — production now
+  has Google connect mounted and Redis invalidation live. Upstash
+  REST url/token also parked in apps/api/.env for later. Trigger.dev
+  project ref arrived (`proj_rgmhezbieidrowrzmatd`) → scaffolded at
+  the app tier: apps/api/trigger.config.ts (dirs src/trigger, node
+  runtime, 3-attempt exponential retries) + first durable task
+  `record-keeper` wrapping runRecordKeeper with PER-RUN composition
+  (own createDb pool closed in finally — task containers must not
+  share the server pool; AbortTaskRunError when no language key =
+  permanent, no retry). @trigger.dev/sdk 4.5.2 (dep) +
+  @trigger.dev/build 4.5.2 (devDep) via catalog; `.trigger/`
+  gitignored; `dev:trigger`/`deploy:trigger` scripts. NOTE: `trigger
+dev`/`deploy` CLI needs interactive login or a tr_pat_ token — user
+  runs those. Also: README + brand assets merged to main by the user
+  (332576b, their work). REMAINING USER ASKS: add the Render callback
+  URL as a Google OAuth redirect URI; run `npx trigger.dev@latest
+dev` once to verify the task registers; email provider; Neon
+  password rotation; repo visibility. NEXT: TASK-0032 phase 2
+  ingestion (design below in the phase-1 entry), then a Trigger.dev
+  schedule wrapping the sync.
+
 - **Session 2, TASK-0032 phase 1 shipped (2026-07-08):**
   `@drovano/google` module + `google_connections` table (migrations
   0015/0016, RLS-forced; unique (tenant_id, email); cursors

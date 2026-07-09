@@ -8,6 +8,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "dev": "tsx watch --env-file=.env src/main.ts",
+    "dev:trigger": "trigger dev --env-file .env",
+    "deploy:trigger": "trigger deploy",
     "build": "tsup",
     "start": "node dist/main.js"
   },
@@ -24,6 +26,7 @@
     "@drovano/db": "workspace:*",
     "@drovano/google": "workspace:*",
     "@hono/trpc-server": "catalog:",
+    "@trigger.dev/sdk": "catalog:",
     "@trpc/server": "catalog:",
     "@drovano/identity": "workspace:*",
     "@drovano/permissions": "workspace:*",
@@ -43,6 +46,7 @@
   },
   "devDependencies": {
     "@drovano/config": "workspace:*",
+    "@trigger.dev/build": "catalog:",
     "@types/node": "catalog:",
     "tsup": "catalog:",
     "tsx": "catalog:",

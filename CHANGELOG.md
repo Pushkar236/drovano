@@ -19,6 +19,15 @@ pre-application milestones are dated entries.
 
 ### Added
 
+- 2026-07-09 — Trigger.dev v4 scaffold (ADR-0007 durable workers
+  begin): `trigger.config.ts` in apps/api bound to the cloud project,
+  and a first durable task — `record-keeper` — wrapping the existing
+  app-tier worker with per-run composition (own pg pool, model
+  router, embedder; released on completion). Retries/observability
+  belong to Trigger.dev; the worker itself stays framework-free and
+  keeps its test suite. Run locally with `pnpm --filter @drovano/api
+dev:trigger`.
+
 - 2026-07-08 — Google connection layer (TASK-0032 begins):
   `@drovano/google` — OAuth connect flow (offline access, read-only
   Gmail/Calendar scopes, HMAC-signed state bound to the starting

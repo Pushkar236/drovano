@@ -32,5 +32,6 @@ storybook-static/
 # Deploy artifacts & platform link state
 .vercel/
 .deploy/
+.trigger/
 api-smoke.log
 api-smoke.err
