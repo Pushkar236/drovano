@@ -85,7 +85,10 @@ const google =
         oauth: {
           clientId: env.GOOGLE_CLIENT_ID,
           clientSecret: env.GOOGLE_CLIENT_SECRET,
-          redirectUri: `${env.BASE_URL}/api/integrations/google/callback`,
+          // The browser flow rides the web origin's /api proxy so the
+          // session cookie stays first-party; Google must send the user
+          // back through the same front door.
+          redirectUri: `${env.WEB_ORIGIN ?? env.BASE_URL}/api/integrations/google/callback`,
         },
         cipher: createTokenCipher(env.AUTH_SECRET),
         stateSecret: env.AUTH_SECRET,
