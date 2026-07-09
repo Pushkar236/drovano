@@ -54,6 +54,7 @@ catalog:
   '@sentry/node': 10.63.0
   '@trigger.dev/sdk': 4.5.2
   '@trigger.dev/build': 4.5.2
+  trigger.dev: 4.5.2
   better-auth: 1.6.23
   tsup: 8.5.1
   hono: 4.12.28

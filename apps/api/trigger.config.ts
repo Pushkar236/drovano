@@ -8,6 +8,11 @@ export default defineConfig({
   dirs: ['./src/trigger'],
   runtime: 'node',
   maxDuration: 600,
+  build: {
+    // The local embedder (ADR-0015) rides on native ONNX binaries —
+    // esbuild cannot bundle .node files; resolve them at runtime.
+    external: ['@huggingface/transformers', 'onnxruntime-node', 'sharp'],
+  },
   retries: {
     enabledInDev: false,
     default: {

@@ -8,8 +8,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "dev": "tsx watch --env-file=.env src/main.ts",
-    "dev:trigger": "trigger dev --env-file .env",
-    "deploy:trigger": "trigger deploy",
+    "dev:trigger": "trigger dev --env-file .env --skip-update-check",
+    "deploy:trigger": "trigger deploy --skip-update-check",
     "build": "tsup",
     "start": "node dist/main.js"
   },
@@ -47,6 +47,7 @@
   "devDependencies": {
     "@drovano/config": "workspace:*",
     "@trigger.dev/build": "catalog:",
+    "trigger.dev": "catalog:",
     "@types/node": "catalog:",
     "tsup": "catalog:",
     "tsx": "catalog:",
